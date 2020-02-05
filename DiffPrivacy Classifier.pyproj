@@ -25,7 +25,19 @@
     <Compile Include="exceptions.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="exporter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="importer.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="main.py" />
+    <Compile Include="protecter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="settings.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
