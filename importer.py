@@ -1,5 +1,4 @@
-import os
-import csv
+import os, csv
 
 
 def import_dataset(file_path):
