@@ -1,5 +1,5 @@
 
-DATASET_PATH = ""
+DATASET_PATH = "winequality-white.csv"
 TAXO_TREE_PATH = ""
 
 RECORD_PATH = "result/dp_dataset.json"
