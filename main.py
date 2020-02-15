@@ -1,3 +1,5 @@
+import traceback
+
 from exceptions import BaseException
 from importer import import_dataset, import_taxonomy_tree
 from exporter import export_dataset
@@ -14,5 +16,7 @@ try:
 except BaseException as e:
     print("{} - {}".format(e.code, e.detail))
 except:
-    print("Uncatched exeption")
+    print("Uncatched exception")
+    traceback.print_exc()
+
 
