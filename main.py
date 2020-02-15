@@ -12,7 +12,7 @@ try:
         )
     export_dataset(RECORD_PATH, private_dataset)
 except BaseException as e:
-    print("{}: {}".format(e.code, e.detail))
+    print("{} - {}".format(e.code, e.detail))
 except:
     print("Uncatched exeption")
 
