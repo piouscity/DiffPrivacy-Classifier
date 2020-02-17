@@ -2,9 +2,13 @@ import os, csv
 from exceptions import OpenFileException, UnsupportedFileTypeException
 
 
+CSV_EXT = ".csv"
+JSON_EXT = ".json"
+
+
 def import_dataset(file_path):
     file_name, file_ext = os.path.splitext(file_path)
-    if file_ext == ".csv":
+    if file_ext == CSV_EXT:
         return import_csv_dataset(file_path)
     else:
         raise UnsupportedFileTypeException(file_path)
@@ -30,4 +34,12 @@ def import_csv_dataset(file_path):
 
 
 def import_taxonomy_tree(file_path):
-    return {}
+    file_name, file_ext = os.path.splitext(file_path)
+    if file_ext == JSON_EXT:
+        return import_taxonomy_tree_from_json(file_path)
+    else:
+         raise UnsupportedFileTypeException(file_path)
+
+
+def import_taxonomy_tree_from_json(file_path):
+    pass
