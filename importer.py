@@ -1,4 +1,4 @@
-import os, csv
+import os, csv, json
 from exceptions import OpenFileException, UnsupportedFileTypeException
 
 
@@ -42,4 +42,10 @@ def import_taxonomy_tree(file_path):
 
 
 def import_json_taxonomy_tree(file_path):
-    pass
+    taxo_tree = {}
+    try:
+        with open(file_path) as json_file:
+            taxo_tree = json.load(json_file)
+    except IOError:
+        raise OpenFileException(file_path)
+    return taxo_tree
