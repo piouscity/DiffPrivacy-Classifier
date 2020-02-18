@@ -1,6 +1,6 @@
 
 DATASET_PATH = "datasets/adult.csv"
-TAXO_TREE_PATH = ""
+TAXO_TREE_PATH = "taxonomy-trees/adult-taxonomy.json"
 
 RECORD_PATH = "result/dp_dataset.json"
 
