@@ -45,6 +45,7 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="requirements.txt" />
+    <Content Include="taxonomy-trees\adult-taxonomy.json" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
@@ -56,6 +57,9 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="taxonomy-trees\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
