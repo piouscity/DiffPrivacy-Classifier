@@ -17,6 +17,10 @@ def check_float_attribute(dataset, attribute):
     raise DatasetAttributeMissingValueException(attribute)
 
 
+def check_valid_taxonomy_tree_node(node, trace_path):
+    pass
+
+
 def check_valid_taxonomy_tree(taxo_tree, dataset):
     if len(dataset) < 1:
         return
@@ -44,3 +48,5 @@ def check_valid_taxonomy_tree(taxo_tree, dataset):
             att_root = attribute_info[TAXO_ROOT]
             if not att_root:
                 raise TaxoTreeCategoryAttributeRootException(attribute)
+            trace_path = attribute + "/"
+            check_valid_taxonomy_tree_node(att_root, trace_path)
