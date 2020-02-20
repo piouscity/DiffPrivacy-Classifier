@@ -10,8 +10,7 @@ def import_dataset(file_path):
     file_name, file_ext = os.path.splitext(file_path)
     if file_ext == CSV_EXT:
         return import_csv_dataset(file_path)
-    else:
-        raise UnsupportedFileTypeException(file_path)
+    raise UnsupportedFileTypeException(file_path)
 
 
 def import_csv_dataset(file_path):
@@ -37,8 +36,7 @@ def import_taxonomy_tree(file_path):
     file_name, file_ext = os.path.splitext(file_path)
     if file_ext == JSON_EXT:
         return import_json_taxonomy_tree(file_path)
-    else:
-         raise UnsupportedFileTypeException(file_path)
+    raise UnsupportedFileTypeException(file_path)
 
 
 def import_json_taxonomy_tree(file_path):
