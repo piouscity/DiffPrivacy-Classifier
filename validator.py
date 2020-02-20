@@ -1,5 +1,5 @@
 from exceptions import TaxoTreeMissingAttributeException, \
-    DatasetMissingAttributeException, DatasetAttributeHasNoValueException, \
+    DatasetMissingAttributeException, DatasetAttributeMissingValueException, \
     TaxoTreeFloatAtttributeException, TaxoTreeCategoryAttributeException
 from settings import MISSING_VALUE, TAXO_FROM, TAXO_TO, TAXO_ROOT
 
@@ -11,7 +11,7 @@ def check_float_attribute(dataset, attribute):
         if item[attribute] == MISSING_VALUE:
             continue
         return isinstance(item[attribute], float)
-    raise DatasetAttributeHasNoValueException(attribute)
+    raise DatasetAttributeMissingValueException(attribute)
 
 
 def check_valid_taxonomy_tree(taxo_tree, dataset):

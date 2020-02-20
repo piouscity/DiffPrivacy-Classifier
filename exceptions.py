@@ -48,7 +48,7 @@ class AttributeValueException(AttributeException):
     detail = "Value of attribute {} has some problems"
 
 
-class DatasetAttributeHasNoValueException(AttributeValueException):
+class DatasetAttributeMissingValueException(AttributeValueException):
     code = 351
     detail = "Attribute {} from dataset has no value"
     
