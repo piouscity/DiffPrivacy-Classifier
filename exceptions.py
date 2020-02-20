@@ -69,5 +69,5 @@ class TaxoTreeCategoryAttributeMissingRootException(AttributeValueException):
 
 
 class TaxoTreeCategoryAttributeRootException(AttributeValueException):
-    code = 360
+    code = 361
     detail = "Category attribute {} of taxonomy tree has invalid root value"
