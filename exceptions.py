@@ -53,11 +53,21 @@ class DatasetAttributeMissingValueException(AttributeValueException):
     detail = "Attribute {} from dataset has no value"
     
 
-class TaxoTreeFloatAtttributeException(AttributeValueException):
+class TaxoTreeFloatAtttributeMissingRootException(AttributeValueException):
     code = 355
     detail = "Float attribute {} of taxonomy tree has no range info"
 
 
-class TaxoTreeCategoryAttributeException(AttributeValueException):
+class TaxoTreeFloatAtttributeRootException(AttributeValueException):
+    code = 356
+    detail = "Float attribute {} of taxonomy tree has invalid range info"
+
+
+class TaxoTreeCategoryAttributeMissingRootException(AttributeValueException):
     code = 360
     detail = "Category attribute {} of taxonomy tree has no root value"
+
+
+class TaxoTreeCategoryAttributeRootException(AttributeValueException):
+    code = 360
+    detail = "Category attribute {} of taxonomy tree has invalid root value"

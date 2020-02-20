@@ -1,6 +1,9 @@
 from exceptions import TaxoTreeMissingAttributeException, \
     DatasetMissingAttributeException, DatasetAttributeMissingValueException, \
-    TaxoTreeFloatAtttributeException, TaxoTreeCategoryAttributeException
+    TaxoTreeFloatAtttributeMissingRootException, \
+    TaxoTreeCategoryAttributeMissingRootException, \
+    TaxoTreeFloatAtttributeRootException, \
+    TaxoTreeCategoryAttributeRootException
 from settings import MISSING_VALUE, TAXO_FROM, TAXO_TO, TAXO_ROOT
 
 
@@ -22,10 +25,22 @@ def check_valid_taxonomy_tree(taxo_tree, dataset):
         if attribute not in taxo_tree:
             raise TaxoTreeMissingAttributeException(attribute)
         is_float_attribute = check_float_attribute(dataset, attribute)
+        attribute_info = taxo_tree[attribute]
         if is_float_attribute:
-            if (TAXO_FROM not in taxo_tree[attribute]) or \
-                (TAXO_TO not in taxo_tree[attribute]):
-                raise TaxoTreeFloatAtttributeException(attribute)
+            # Check if there is TAXO_FROM and TAXO_TO
+            if (TAXO_FROM not in attribute_info) or \
+                (TAXO_TO not in attribute_info):
+                raise TaxoTreeFloatAtttributeMissingRootException(attribute)
+            # Check if TAXO_FROM and TAXO_TO is valid
+            att_from_value = attribute_info[TAXO_FROM]
+            att_to_value = attribute_info[TAXO_TO]
+            if (not isinstance(att_from_value, float)) or \
+                (not isinstance(att_to_value, float)) or \
+                (att_from_value >= att_to_value):
+                raise TaxoTreeFloatAtttributeRootException(attribute)
         else:   # Category attribute
-            if TAXO_ROOT not in taxo_tree[attribute]:
-                raise TaxoTreeCategoryAttributeException(attribute)
+            if TAXO_ROOT not in attribute_info:
+                raise TaxoTreeCategoryAttributeMissingRootException(attribute)
+            att_root = attribute_info[TAXO_ROOT]
+            if not att_root:
+                raise TaxoTreeCategoryAttributeRootException(attribute)
