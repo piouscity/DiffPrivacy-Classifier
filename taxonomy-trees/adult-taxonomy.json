@@ -1,51 +1,153 @@
 {
-	"workclass": {
-		"gov": ["Federal-gov", "Local-gov", "State-gov"],
-		"self-emp": ["Self-emp-not-inc", "Self-emp-inc"],
-		"others": ["Private", "Without-pay", "Never-worked"]
-	},
-	"education": {
+	"root": {
+		"workclass": {
+			"gov": [
+				"Federal-gov",
+				"Local-gov",
+				"State-gov"
+			],
+			"self-emp": [
+				"Self-emp-not-inc",
+				"Self-emp-inc"
+			],
+			"others": [
+				"Private",
+				"Without-pay",
+				"Never-worked"
+			]
+		},
+		"education": {
 			"12th-graduate": {
-				"association": ["Assoc-acdm", "Assoc-voc"],
-				"college": ["Some-college", "Bachelors", "Masters", "Doctorate"],
-				"non-college": ["HS-grad, Prof-school"]
+				"association": [
+					"Assoc-acdm",
+					"Assoc-voc"
+				],
+				"college": [
+					"Some-college",
+					"Bachelors",
+					"Masters",
+					"Doctorate"
+				],
+				"non-college": [
+					"HS-grad, Prof-school"
+				]
 			},
 			"non-graduate": {
-				"high": ["10th", "11th", "12th"],
-				"elementary": ["7th-8th", "9th"],
-				"primary": ["Preschool", "1st-4th", "5th-6th"]
+				"high": [
+					"10th",
+					"11th",
+					"12th"
+				],
+				"elementary": [
+					"7th-8th",
+					"9th"
+				],
+				"primary": [
+					"Preschool",
+					"1st-4th",
+					"5th-6th"
+				]
 			}
 		},
-	"occupation": {
+		"occupation": {
 			"manual": {
-				"self-business": ["sales", "farming-fishing"],
-				"hired-employee": ["craft-repair", "handlers-cleaners", "transport-moving", "priv-house-serv"],
-				"protectors": ["protective-serv", "armed-forces"]
+				"self-business": [
+					"sales",
+					"farming-fishing"
+				],
+				"hired-employee": [
+					"craft-repair",
+					"handlers-cleaners",
+					"transport-moving",
+					"priv-house-serv"
+				],
+				"protectors": [
+					"protective-serv",
+					"armed-forces"
+				]
 			},
 			"mental": {
-				"engineer": ["prof-specialty", "machine-op-inspct"],
-				"office": ["tech-support", "exec-managerial", "adm-clerical"]
+				"engineer": [
+					"prof-specialty",
+					"machine-op-inspct"
+				],
+				"office": [
+					"tech-support",
+					"exec-managerial",
+					"adm-clerical"
+				]
 			}
 		},
-	"native-country": {
-		"Asia": {
-			"South-East": ["Cambodia", "Philippines", "Vietnam", "Laos", "Thailand"],
-			"East": ["Japan", "China", "Hong", "Taiwan"],
-			"South": ["Iran", "India"]
-		},
-		"Europe": {
-			"West": ["England", "", "", "", ""],
-			"South": ["Italy", "Greece", "Yugoslavia", "Hungary"],
-			"North": ["Ireland", "Scotland"]
-		},
-		"America": {
-			"South-America": ["Ecuador", "Columbia", "Peru"],
-			"North-America": {
-				"American": ["United-States", "Outlying-US(Guam-USVI-etc)", "Puerto-Rico"],
-				"Non-American": ["Canada", "Mexico"]
+		"native-country": {
+			"Asia": {
+				"South-East": [
+					"Cambodia",
+					"Philippines",
+					"Vietnam",
+					"Laos",
+					"Thailand"
+				],
+				"East": [
+					"Japan",
+					"China",
+					"Hong",
+					"Taiwan"
+				],
+				"South": [
+					"Iran",
+					"India"
+				]
 			},
-			"Caribe": ["Cuba", "Haiti", "Dominican-Republic", "Jamaica", "Trinadad&Tobago"],
-			"Central-America": ["El-Salvador", "Guatemala", "Nicaragua", "Honduras"]
+			"Europe": {
+				"West": [
+					"England",
+					"",
+					"",
+					"",
+					""
+				],
+				"South": [
+					"Italy",
+					"Greece",
+					"Yugoslavia",
+					"Hungary"
+				],
+				"North": [
+					"Ireland",
+					"Scotland"
+				]
+			},
+			"America": {
+				"South-America": [
+					"Ecuador",
+					"Columbia",
+					"Peru"
+				],
+				"North-America": {
+					"American": [
+						"United-States",
+						"Outlying-US(Guam-USVI-etc)",
+						"Puerto-Rico"
+					],
+					"Non-American": [
+						"Canada",
+						"Mexico"
+					]
+				},
+				"Caribe": [
+					"Cuba",
+					"Haiti",
+					"Dominican-Republic",
+					"Jamaica",
+					"Trinadad&Tobago"
+				],
+				"Central-America": [
+					"El-Salvador",
+					"Guatemala",
+					"Nicaragua",
+					"Honduras"
+				]
+			}
 		}
 	}
 }
