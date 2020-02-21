@@ -58,6 +58,15 @@ class TaxoTreeCategoryAttributeMissingRootException(AttributeException):
     detail = "Category attribute {} of taxonomy tree has no root value"
 
 
-class TaxoTreeCategoryAttributeRootException(AttributeException):
-    code = 331
-    detail = "Category attribute {} of taxonomy tree has invalid root value"
+class TaxoNodeException(BaseException):
+     code = 350
+     detail = "Taxonomy node {path} is invalid"
+     def __init__(self, path):
+         self.detail = self.detail.format(path=path)
+
+
+class TaxoNodeMissingKeyException(BaseException):
+    code = 351
+    detail = "Taxonomy node {path} missing key {key}"
+    def __init__(self, path, key):
+        self.detail = self.detail.format(path=path, key=key)

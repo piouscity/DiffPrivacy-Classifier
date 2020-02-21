@@ -1,10 +1,13 @@
 from exceptions import TaxoTreeMissingAttributeException, \
     DatasetMissingAttributeException, DatasetAttributeMissingValueException, \
-    TaxoTreeFloatAtttributeMissingRootException, \
+    TaxoTreeFloatAtttributeMissingRootException, TaxoNodeException, \
     TaxoTreeCategoryAttributeMissingRootException, \
-    TaxoTreeFloatAtttributeRootException, \
-    TaxoTreeCategoryAttributeRootException
-from settings import MISSING_VALUE, TAXO_FROM, TAXO_TO, TAXO_ROOT
+    TaxoTreeFloatAtttributeRootException, TaxoNodeMissingKeyException
+from settings import MISSING_VALUE, TAXO_FROM, TAXO_TO, TAXO_ROOT, \
+    TAXO_NODE_NAME, TAXO_NODE_CHILD
+
+
+PATH_SEP = "/"
 
 
 def check_float_attribute(dataset, attribute):
@@ -18,7 +21,16 @@ def check_float_attribute(dataset, attribute):
 
 
 def check_valid_taxonomy_tree_node(node, trace_path):
-    pass
+    if not isinstance(node, dict):
+        raise TaxoNodeException(trace_path)
+    if TAXO_NODE_NAME not in node:
+        raise TaxoNodeMissingKeyException(trace_path, TAXO_NODE_NAME)
+    if (TAXO_NODE_CHILD not in node) or \
+        (not isinstance(node[TAXO_NODE_CHILD], list)):
+        raise TaxoNodeMissingKeyException(trace_path, TAXO_NODE_CHILD)
+    new_trace_path = trace_path + node[TAXO_NODE_NAME] + PATH_SEP
+    for child_node in node[TAXO_NODE_CHILD]:
+        check_valid_taxonomy_tree_node(child_node, new_trace_path)
 
 
 def check_valid_taxonomy_tree(taxo_tree, dataset):
@@ -46,7 +58,5 @@ def check_valid_taxonomy_tree(taxo_tree, dataset):
             if TAXO_ROOT not in attribute_info:
                 raise TaxoTreeCategoryAttributeMissingRootException(attribute)
             att_root = attribute_info[TAXO_ROOT]
-            if not att_root:
-                raise TaxoTreeCategoryAttributeRootException(attribute)
-            trace_path = attribute + "/"
+            trace_path = attribute + PATH_SEP
             check_valid_taxonomy_tree_node(att_root, trace_path)
