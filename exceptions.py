@@ -26,48 +26,38 @@ class AttributeException(BaseException):
     detail = "Attribute {} has some problems"
     def __init__(self, attribute):
         self.detail = self.detail.format(attribute)
-
-
-class MissingAttributeException(AttributeException):
-    code = 320
-    detail = "Attribute {} is missing"
     
 
-class TaxoTreeMissingAttributeException(MissingAttributeException):
-    code = 321
+class TaxoTreeMissingAttributeException(AttributeException):
+    code = 310
     detail = "Attribute {} is missing from taxonomy tree"
     
 
-class DatasetMissingAttributeException(MissingAttributeException):
-    code = 322
+class DatasetMissingAttributeException(AttributeException):
+    code = 301
     detail = "Attribute {} is missing from an item of dataset"
 
 
-class AttributeValueException(AttributeException):
-    code = 350
-    detail = "Value of attribute {} has some problems"
-
-
-class DatasetAttributeMissingValueException(AttributeValueException):
-    code = 351
+class DatasetAttributeMissingValueException(AttributeException):
+    code = 302
     detail = "Attribute {} from dataset has no value"
     
 
-class TaxoTreeFloatAtttributeMissingRootException(AttributeValueException):
-    code = 355
+class TaxoTreeFloatAtttributeMissingRootException(AttributeException):
+    code = 320
     detail = "Float attribute {} of taxonomy tree has no range info"
 
 
-class TaxoTreeFloatAtttributeRootException(AttributeValueException):
-    code = 356
+class TaxoTreeFloatAtttributeRootException(AttributeException):
+    code = 321
     detail = "Float attribute {} of taxonomy tree has invalid range info"
 
 
-class TaxoTreeCategoryAttributeMissingRootException(AttributeValueException):
-    code = 360
+class TaxoTreeCategoryAttributeMissingRootException(AttributeException):
+    code = 330
     detail = "Category attribute {} of taxonomy tree has no root value"
 
 
-class TaxoTreeCategoryAttributeRootException(AttributeValueException):
-    code = 361
+class TaxoTreeCategoryAttributeRootException(AttributeException):
+    code = 331
     detail = "Category attribute {} of taxonomy tree has invalid root value"
