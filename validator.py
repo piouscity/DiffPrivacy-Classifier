@@ -30,7 +30,7 @@ def get_all_leaf_values(node, trace_path):
         raise TaxoNodeMissingKeyException(trace_path, TAXO_NODE_CHILD)
     new_trace_path = trace_path + node[TAXO_NODE_NAME] + PATH_SEP
     result = []
-    if not child_node:  # Is leaf node
+    if not node[TAXO_NODE_CHILD]:  # Is leaf node
         result.append(node[TAXO_NODE_NAME])
     else: 
         for child_node in node[TAXO_NODE_CHILD]:
@@ -53,15 +53,18 @@ def check_valid_taxonomy_tree(taxo_tree, dataset):
                 (TAXO_TO not in attribute_info):
                 raise TaxoTreeFloatAtttributeMissingRootException(attribute)
             # Check if TAXO_FROM and TAXO_TO is valid
-            att_from_value = attribute_info[TAXO_FROM]
-            att_to_value = attribute_info[TAXO_TO]
-            if (not isinstance(att_from_value, float)) or \
-                (not isinstance(att_to_value, float)) or \
-                (att_from_value >= att_to_value):
+            try:
+                att_from_value = float(attribute_info[TAXO_FROM])
+                att_to_value = float(attribute_info[TAXO_TO])
+            except ValueError:
+                raise TaxoTreeFloatAtttributeRootException(attribute)
+            if att_from_value >= att_to_value:
                 raise TaxoTreeFloatAtttributeRootException(attribute)
             # Integrity
             for item in dataset:
                 item_att = item[attribute]
+                if item_att == MISSING_VALUE:
+                    continue
                 if not (item_att>=att_from_value and item_att<att_to_value):
                     raise TaxoTreeCoverageException(attribute, item_att)
         else:   # Category attribute
@@ -78,6 +81,8 @@ def check_valid_taxonomy_tree(taxo_tree, dataset):
                 }
             for item in dataset:
                 item_att = item[attribute]
+                if item_att == MISSING_VALUE:
+                    continue
                 if not leaf_value_record.get(item_att):
                     raise TaxoTreeCoverageException(attribute, item_att)
 

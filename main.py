@@ -13,10 +13,10 @@ try:
     taxo_tree = import_taxonomy_tree(TAXO_TREE_PATH)
     if not IGNORE_CHECK:
         check_valid_taxonomy_tree(taxo_tree, dataset)
-    private_dataset, attribute_mapping = generate_dp_dataset(
-        dataset, taxo_tree, EDP, STEPS
-        )
-    export_dataset(RECORD_PATH, private_dataset)
+    ##private_dataset, attribute_mapping = generate_dp_dataset(
+    #    dataset, taxo_tree, EDP, STEPS
+    #    )
+    #export_dataset(RECORD_PATH, private_dataset)
 except BaseException as e:
     print("{} - {}".format(e.code, e.detail))
 except:

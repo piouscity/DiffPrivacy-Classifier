@@ -1,7 +1,7 @@
 IGNORE_CHECK = False
 
 DATASET_PATH = "datasets/adult.csv"
-TAXO_TREE_PATH = "taxonomy-trees/adult-taxonomy.json"
+TAXO_TREE_PATH = "taxonomy-trees/adult.json"
 
 RECORD_PATH = "result/dp_dataset.json"
 
