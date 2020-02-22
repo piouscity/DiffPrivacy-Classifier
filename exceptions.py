@@ -70,3 +70,10 @@ class TaxoNodeMissingKeyException(BaseException):
     detail = "Taxonomy node {path} missing key {key}"
     def __init__(self, path, key):
         self.detail = self.detail.format(path=path, key=key)
+
+
+class TaxoTreeCoverageException(BaseException):
+    code = 380
+    detail = "Taxonomy tree of attribute {att} does not cover value {val}"
+    def __init__(self, att, value):
+        self.detail = self.detail.format(att=att, val=value)
