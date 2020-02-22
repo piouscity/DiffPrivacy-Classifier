@@ -5,15 +5,267 @@
   },
   "workclass": {
     "root": {
+      "value": "Any-workclass",
+      "childs": [
+        {
+          "value": "Gov",
+          "childs": [
+            {
+              "value": "Federal-gov",
+              "childs": []
+            },
+            {
+              "value": "Local-gov",
+              "childs": []
+            },
+            {
+              "value": "State-gov",
+              "childs": []
+            }
+          ]
+        },
+        {
+          "value": "Self-emp",
+          "childs": [
+            {
+              "value": "Self-emp-not-inc",
+              "childs": []
+            },
+            {
+              "value": "Self-emp-inc",
+              "childs": []
+            }
+          ]
+        },
+        {
+          "value": "Private-or-no-income",
+          "childs": [
+            {
+              "value": "Private",
+              "childs": []
+            },
+            {
+              "value": "Without-pay",
+              "childs": []
+            },
+            {
+              "value": "Never-worked",
+              "childs": []
+            }
+          ]
+        }
+      ]
     }
   },
   "education": {
-    "root": {}
+    "root": {
+      "value": "Any-educated",
+      "childs": [
+        {
+          "value": "12th-graduate",
+          "childs": [
+            {
+              "value": "Association",
+              "childs": [
+                {
+                  "value": "Assoc-acdm",
+                  "childs": []
+                },
+                {
+                  "value": "Assoc-voc",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "College",
+              "childs": [
+                {
+                  "value": "Some-college",
+                  "childs": []
+                },
+                {
+                  "value": "Bachelors",
+                  "childs": []
+                },
+                {
+                  "value": "Masters",
+                  "childs": []
+                },
+                {
+                  "value": "Doctorate",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "Below-college",
+              "childs": [
+                {
+                  "value": "HS-grad",
+                  "childs": []
+                },
+                {
+                  "value": "Prof-school",
+                  "childs": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "value": "Under-12th-graduate",
+          "childs": [
+            {
+              "value": "High",
+              "childs": [
+                {
+                  "value": "10th",
+                  "childs": []
+                },
+                {
+                  "value": "11th",
+                  "childs": []
+                },
+                {
+                  "value": "12th",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "Elementary",
+              "childs": [
+                {
+                  "value": "7th-8th",
+                  "childs": []
+                },
+                {
+                  "value": "9th",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "Primary",
+              "childs": [
+                {
+                  "value": "Preschool",
+                  "childs": []
+                },
+                {
+                  "value": "1st-4th",
+                  "childs": []
+                },
+                {
+                  "value": "5th-6th",
+                  "childs": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   },
   "occupation": {
-    "root": {}
+    "root": {
+      "value": "Any-occupation",
+      "childs": [
+        {
+          "value": "Manual",
+          "childs": [
+            {
+              "value": "Self-business",
+              "childs": [
+                {
+                  "value": "Sales",
+                  "childs": []
+                },
+                {
+                  "value": "Farming-fishing",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "Hired-employee",
+              "childs": [
+                {
+                  "value": "Craft-repair",
+                  "childs": []
+                },
+                {
+                  "value": "Handlers-cleaners",
+                  "childs": []
+                },
+                {
+                  "value": "Transport-moving",
+                  "childs": []
+                },
+                {
+                  "value": "Priv-house-serv",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "Protector",
+              "childs": [
+                {
+                  "value": "Protective-serv",
+                  "childs": []
+                },
+                {
+                  "value": "Armed-forces",
+                  "childs": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "value": "Mental",
+          "childs": [
+            {
+              "value": "Engineer",
+              "childs": [
+                {
+                  "value": "Prof-specialty",
+                  "childs": []
+                },
+                {
+                  "value": "Machine-op-inspct",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "Office",
+              "childs": [
+                {
+                  "value": "Tech-support",
+                  "childs": []
+                },
+                {
+                  "value": "Exec-Managerial",
+                  "childs": []
+                },
+                {
+                  "value": "Adm-clerical",
+                  "childs": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   },
   "native-country": {
-    "root": {}
+    "root": {
+      "value": "Any-country",
+      "childs": []
+    }
   }
 }
