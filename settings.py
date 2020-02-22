@@ -9,7 +9,7 @@ MISSING_VALUE = "?"
 TAXO_FROM = "min"
 TAXO_TO = "max"
 TAXO_ROOT = "root"
-TAXO_NODE_NAME = "name"
+TAXO_NODE_NAME = "value"
 TAXO_NODE_CHILD = "childs"
 
 EDP = 2

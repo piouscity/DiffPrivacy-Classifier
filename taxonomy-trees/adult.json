@@ -1,0 +1,19 @@
+{
+  "age": {
+    "min": 17,
+    "max": 91
+  },
+  "workclass": {
+    "root": {
+    }
+  },
+  "education": {
+    "root": {}
+  },
+  "occupation": {
+    "root": {}
+  },
+  "native-country": {
+    "root": {}
+  }
+}
