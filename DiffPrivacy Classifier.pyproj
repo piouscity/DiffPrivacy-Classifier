@@ -45,7 +45,6 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="requirements.txt" />
-    <Content Include="taxonomy-trees\adult-taxonomy.json" />
     <Content Include="taxonomy-trees\adult.json" />
   </ItemGroup>
   <ItemGroup>
