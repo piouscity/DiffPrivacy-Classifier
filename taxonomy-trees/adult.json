@@ -206,6 +206,10 @@
                 {
                   "value": "Priv-house-serv",
                   "childs": []
+                },
+                {
+                  "value": "Other-service",
+                  "childs": []
                 }
               ]
             },
@@ -217,7 +221,7 @@
                   "childs": []
                 },
                 {
-                  "value": "Armed-forces",
+                  "value": "Armed-Forces",
                   "childs": []
                 }
               ]
@@ -266,238 +270,246 @@
     "root": {
       "value": "Any-country",
       "childs": [
-	      {
-		      "value": "Asia",
-		      "childs": [
-			      {
-			        "value": "South-East",
-			        "childs": [
-			          {
-				        "value": "Cambodia",
-				        "childs": []
-				        },
-				        {
-				          "value": "Philippines",
-				          "childs": []
-				        },
-				        {
-				          "value": "Vietnam",
-				          "childs": []
-				        },
-				        {
-				          "value": "Laos",
-				          "childs": []
-				        },
-				        {
-				          "value": "Thailand",
-				          "childs": []
-				        }
-			        ]
-			      },
-			      {
-			        "value": "East",
-			        "childs": [
-			          {
-				        "value": "Japan",
-				        "childs": []
-				        },
-				        {
-				          "value": "China",
-				          "childs": []
-				        },
-				        {
-				          "value": "Hong",
-				          "childs": []
-				        },
-				        {
-				          "value": "Taiwan",
-				          "childs": []
-				        }
-			        ]
-			      },
-			      {
-			        "value": "South",
-			        "childs": [
-				        {
-				          "value": "India",
-				          "childs": []
-				        },
-				        {
-				          "value": "Iran",
-				          "childs": []
-				        }
-			        ]
-			      }
-		      ]
-		    },
-		    {
-		      "value": "Europe",
-		      "childs": [
-			      {
-			        "value": "West",
-			        "childs": [
-			          {
-				          "value": "England",
-				          "childs": []
-				        },
-				        {
-				          "value": "Germany",
-				          "childs": []
-				        },
-				        {
-				          "value": "Portugal",
-				          "childs": []
-				        },
-				        {
-				          "value": "Holand-Netherlands",
-				          "childs": []
-				        },
-				        {
-				          "value": "France",
-				          "childs": []
-				        }
-			        ]
-			      },
-			      {
-			        "value": "South",
-			        "childs": [
-			          {
-				          "value": "Italy",
-				          "childs": []
-				        },
-				        {
-				          "value": "Greece",
-				          "childs": []
-				        },
-				        {
-				          "value": "Yugoslavia",
-				          "childs": []
-				        },
-				        {
-				          "value": "Hungary",
-				          "childs": []
-				        }
-			        ]
-			      },
-			      {
-			        "value": "North",
-			        "childs": [
-				        {
-				          "value": "Ireland",
-				          "childs": []
-				        },
-				        {
-				          "value": "Scotland",
-				          "childs": []
-				        }
-			        ]
-			      }
-		      ]
-		    },
-		    {
-		      "value": "America",
-		      "childs": [
-			      {
-			        "value": "South",
-			        "childs": [
-			          {
-				        "value": "Ecuador",
-				        "childs": []
-				        },
-				        {
-				          "value": "Columbia",
-				          "childs": []
-				        },
-				        {
-				          "value": "Peru",
-				          "childs": []
-				        }
-			        ]
-			      },
-			      {
-			        "value": "North",
-			        "childs": [
-			          {
-				          "value": "American",
-				          "childs": [
-					          {
-					            "value": "United-States",
-					            "childs": []
-					          },
-					          {
-					            "value": "Outlying-US(Guam-USVI-etc)",
-					            "childs": []
-					          },
-					          {
-					            "value": "Puerto-Rico",
-					            "childs": []
-					          }
-				          ]
-				        },
-				        {
-				          "value": "Not-American",
-				          "childs": [
-					          {
-					            "value": "Canada",
-					            "childs": []
-					          },
-					          {
-					            "value": "Mexico",
-					            "childs": []
-					          }
-				          ]
-				        }
-			        ]
-			      },
-			      {
-			        "value": "Caribe",
-			        "childs": [
-			          {
-				          "value": "Cuba",
-				          "childs": []
-				        },
-				        {
-				          "value": "Haiti",
-				          "childs": []
-				        },
-				        {
-				          "value": "Dominican-Republic",
-				          "childs": []
-				        },
-				        {
-				          "value": "Jamaica",
-				          "childs": []
-				        },
-				        {
-				          "value": "Trinadad&Tobago",
-				          "childs": []
-				        }
-			        ]
-			      },
-			      {
-			        "value": "Central",
-			        "childs": [
-			          {
-				          "value": "El-Salvador",
-				          "childs": []
-				        },
-				        {
-				          "value": "Guatemala",
-				          "childs": []
-				        },
-				        {
-				          "value": "Honduras",
-				          "childs": []
-				        },
-				        {
-				          "value": "Nicaragua",
-				          "childs": []
-				        }
-			        ]
-			      }
-		      ]
-		    }
-	    ]
+        {
+          "value": "Asia",
+          "childs": [
+            {
+              "value": "South-East-Asia",
+              "childs": [
+                {
+                  "value": "Cambodia",
+                  "childs": []
+                },
+                {
+                  "value": "Philippines",
+                  "childs": []
+                },
+                {
+                  "value": "Vietnam",
+                  "childs": []
+                },
+                {
+                  "value": "Laos",
+                  "childs": []
+                },
+                {
+                  "value": "Thailand",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "East-Asia",
+              "childs": [
+                {
+                "value": "Japan",
+                "childs": []
+                },
+                {
+                  "value": "China",
+                  "childs": []
+                },
+                {
+                  "value": "Hong",
+                  "childs": []
+                },
+                {
+                  "value": "Taiwan",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "South-Asia",
+              "childs": [
+                {
+                  "value": "India",
+                  "childs": []
+                },
+                {
+                  "value": "Iran",
+                  "childs": []
+                },
+                {
+                  "value": "South",
+                  "childs": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "value": "Europe",
+          "childs": [
+            {
+              "value": "West-EU",
+              "childs": [
+                {
+                  "value": "England",
+                  "childs": []
+                },
+                {
+                  "value": "Germany",
+                  "childs": []
+                },
+                {
+                  "value": "Portugal",
+                  "childs": []
+                },
+                {
+                  "value": "Holand-Netherlands",
+                  "childs": []
+                },
+                {
+                  "value": "France",
+                  "childs": []
+                },
+                {
+                  "value": "Poland",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "South-EU",
+              "childs": [
+                {
+                  "value": "Italy",
+                  "childs": []
+                },
+                {
+                  "value": "Greece",
+                  "childs": []
+                },
+                {
+                  "value": "Yugoslavia",
+                  "childs": []
+                },
+                {
+                  "value": "Hungary",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "North-EU",
+              "childs": [
+                {
+                  "value": "Ireland",
+                  "childs": []
+                },
+                {
+                  "value": "Scotland",
+                  "childs": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "value": "America",
+          "childs": [
+            {
+              "value": "South-America",
+              "childs": [
+                {
+                "value": "Ecuador",
+                "childs": []
+                },
+                {
+                  "value": "Columbia",
+                  "childs": []
+                },
+                {
+                  "value": "Peru",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "North-America",
+              "childs": [
+                {
+                  "value": "American",
+                  "childs": [
+                      {
+                        "value": "United-States",
+                        "childs": []
+                      },
+                      {
+                        "value": "Outlying-US(Guam-USVI-etc)",
+                        "childs": []
+                      },
+                      {
+                        "value": "Puerto-Rico",
+                        "childs": []
+                      }
+                  ]
+                },
+                {
+                  "value": "Not-American",
+                  "childs": [
+                      {
+                        "value": "Canada",
+                        "childs": []
+                      },
+                      {
+                        "value": "Mexico",
+                        "childs": []
+                      }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "Caribe",
+              "childs": [
+                {
+                  "value": "Cuba",
+                  "childs": []
+                },
+                {
+                  "value": "Haiti",
+                  "childs": []
+                },
+                {
+                  "value": "Dominican-Republic",
+                  "childs": []
+                },
+                {
+                  "value": "Jamaica",
+                  "childs": []
+                },
+                {
+                  "value": "Trinadad&Tobago",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "Central-America",
+              "childs": [
+                {
+                  "value": "El-Salvador",
+                  "childs": []
+                },
+                {
+                  "value": "Guatemala",
+                  "childs": []
+                },
+                {
+                  "value": "Honduras",
+                  "childs": []
+                },
+                {
+                  "value": "Nicaragua",
+                  "childs": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   }
 }

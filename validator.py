@@ -85,4 +85,3 @@ def check_valid_taxonomy_tree(taxo_tree, dataset):
                     continue
                 if not leaf_value_record.get(item_att):
                     raise TaxoTreeCoverageException(attribute, item_att)
-

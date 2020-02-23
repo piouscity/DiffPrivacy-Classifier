@@ -28,11 +28,6 @@ class AttributeException(BaseException):
         self.detail = self.detail.format(attribute)
     
 
-class TaxoTreeMissingAttributeException(AttributeException):
-    code = 310
-    detail = "Attribute {} is missing from taxonomy tree"
-    
-
 class DatasetMissingAttributeException(AttributeException):
     code = 301
     detail = "Attribute {} is missing from an item of dataset"
@@ -41,6 +36,11 @@ class DatasetMissingAttributeException(AttributeException):
 class DatasetAttributeMissingValueException(AttributeException):
     code = 302
     detail = "Attribute {} from dataset has no value"
+
+
+class TaxoTreeMissingAttributeException(AttributeException):
+    code = 310
+    detail = "Attribute {} is missing from taxonomy tree"
     
 
 class TaxoTreeFloatAtttributeMissingRootException(AttributeException):
