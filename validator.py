@@ -4,7 +4,7 @@ from exceptions import TaxoTreeMissingAttributeException, \
     TaxoTreeCategoryAttributeMissingRootException, TaxoTreeCoverageException, \
     TaxoTreeFloatAtttributeRootException, TaxoNodeMissingKeyException
 from settings import MISSING_VALUE, TAXO_FROM, TAXO_TO, TAXO_ROOT, \
-    TAXO_NODE_NAME, TAXO_NODE_CHILD
+    TAXO_NODE_NAME, TAXO_NODE_CHILD, CLASS_ATTRIBUTE
 
 
 PATH_SEP = "/"
@@ -43,6 +43,8 @@ def check_valid_taxonomy_tree(taxo_tree, dataset):
         return
     sample = dataset[0]
     for attribute in sample:
+        if attribute == CLASS_ATTRIBUTE:
+            continue
         if attribute not in taxo_tree:
             raise TaxoTreeMissingAttributeException(attribute)
         is_float_attribute = check_float_attribute(dataset, attribute)
