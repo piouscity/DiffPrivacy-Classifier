@@ -6,7 +6,7 @@ from importer import import_dataset, import_taxonomy_tree
 from exporter import export_dataset
 from settings import DATASET_PATH, TAXO_TREE_PATH, RECORD_PATH, EDP, STEPS, \
     IGNORE_CHECK
-from protecter import generate_dp_dataset
+from coverer import generate_dp_dataset
 
 try:
     dataset = import_dataset(DATASET_PATH)
