@@ -3,7 +3,7 @@ IGNORE_CHECK = False    # Only ignore if taxonomy tree is ensured to be valid
 # File paths
 DATASET_PATH = "datasets/adult-1000.csv"
 TAXO_TREE_PATH = "taxonomy-trees/adult.json"
-RECORD_PATH = "result/dp_dataset.json"
+RECORD_PATH = ""
 
 # Dataset setting
 CLASS_ATTRIBUTE = "class"
