@@ -42,11 +42,9 @@ def export_dataset(file_path, dataset):
 def export_csv_dataset(file_path, dataset):
     attributes = tuple(dataset[0].keys())
     data_export = [attributes]
-
     for row in dataset:
         item = tuple(row[attribute] for attribute in attributes)
         data_export.append(item)
-
     try:
         with open(file_path, 'w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file)
