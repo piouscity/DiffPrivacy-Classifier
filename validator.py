@@ -20,6 +20,14 @@ def check_float_attribute(dataset, attribute):
     raise DatasetAttributeMissingValueException(attribute)
 
 
+def count_float_attribute(dataset):
+    res = 0
+    for attribute in dataset[0]:
+        if check_float_attribute(dataset, attribute):
+            res += 1
+    return res
+
+
 def get_all_leaf_values(node, trace_path):
     if not isinstance(node, dict):
         raise TaxoNodeException(trace_path)
@@ -41,8 +49,7 @@ def get_all_leaf_values(node, trace_path):
 def check_valid_taxonomy_tree(taxo_tree, dataset):
     if len(dataset) < 1:
         return
-    sample = dataset[0]
-    for attribute in sample:
+    for attribute in dataset[0]:
         if attribute == CLASS_ATTRIBUTE:
             continue
         if attribute not in taxo_tree:
