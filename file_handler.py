@@ -1,4 +1,5 @@
 import os, csv, json
+
 from exceptions import OpenFileException, UnsupportedFileTypeException
 
 
