@@ -2,8 +2,7 @@ import traceback
 
 from exceptions import BaseException
 from validator import check_valid_taxonomy_tree
-from importer import import_dataset, import_taxonomy_tree
-from exporter import export_dataset
+from file_handler import import_dataset, import_taxonomy_tree, export_dataset
 from settings import DATASET_PATH, TAXO_TREE_PATH, RECORD_PATH, EDP, STEPS, \
     IGNORE_CHECK
 from coverer import generate_dp_dataset

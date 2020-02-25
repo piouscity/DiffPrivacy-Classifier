@@ -25,10 +25,7 @@
     <Compile Include="exceptions.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="exporter.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="importer.py">
+    <Compile Include="file_handler.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="main.py" />
