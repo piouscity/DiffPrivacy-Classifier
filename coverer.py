@@ -33,7 +33,7 @@ class TaxonomyValueMapperSet:
         for att in taxo_tree:
             if TAXO_ROOT in taxo_tree[att]: # Category attribute
                 root = taxo_tree[att][TAXO_ROOT]
-                mappers[att] = TaxonomyValueMapper(root)    
+                self.mappers[att] = TaxonomyValueMapper(root)    
 
 
 class CategoryCutCandidate:
