@@ -30,6 +30,31 @@ class TaxonomyValueMapper:
         return leafs
 
 
+class CategoryCutCandidate:
+    def __init__(self, taxo_node):
+        self.node = taxo_node
+
+
+class IntervalCutCandidate:
+    def __init__(self, from_value, to_value):
+        self.from_value = from_value
+        self.to_value = to_value
+
+
+class CutCandidateSet:
+    cut_list = []
+    def __init__(self, taxo_tree):
+        for att in taxo_tree:
+            taxo_att = taxo_tree[att]
+            if TAXO_ROOT in taxo_att: # Category attribute
+                self.cut_list.append(CategoryCutCandidate(taxo_att[TAXO_ROOT]))
+            else:   # Float attribute
+                self.cut_list.append(IntervalCutCandidate(
+                    taxo_att[TAXO_FROM], 
+                    taxo_att[TAXO_TO]
+                    ))
+
+
 def generate_dp_dataset(dataset, taxo_tree, edp, steps):
     float_att_cnt = count_float_attribute(dataset)
     single_edp = edp / 2 / (float_att_cnt + 2*steps)
