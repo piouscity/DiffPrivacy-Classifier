@@ -36,42 +36,53 @@ class TaxonomyValueMapperSet:
                 self.mappers[att] = TaxonomyValueMapper(root)    
 
 
-class CategoryCutCandidate:
+class CutCandidate:
+    data_nodes = []
+    def add_data_node(self, node):
+        self.data_nodes.append(node)
+
+
+class CategoryCutCandidate(CutCandidate):
     def __init__(self, taxo_node):
         self.node = taxo_node
 
 
-class IntervalCutCandidate:
+class IntervalCutCandidate(CutCandidate):
     def __init__(self, from_value, to_value):
         self.from_value = from_value
         self.to_value = to_value
 
 
 class CutCandidateSet:
-    cut_list = []
+    candidate_list = []
+    new_float_candidates = []
 
     def __init__(self, taxo_tree):
         for att in taxo_tree:
             taxo_att = taxo_tree[att]
             if TAXO_ROOT in taxo_att: # Category attribute
-                self.cut_list.append(CategoryCutCandidate(taxo_att[TAXO_ROOT]))
+                self.candidate_list.append(CategoryCutCandidate(taxo_att[TAXO_ROOT]))
             else:   # Float attribute
-                self.cut_list.append(IntervalCutCandidate(
+                float_candidate = IntervalCutCandidate(
                     taxo_att[TAXO_FROM], 
                     taxo_att[TAXO_TO]
-                    ))
+                    )
+                self.candidate_list.append(float_candidate)
+                self.new_float_candidates.append(float_candidate)
 
     def float_candidates(self):
-        for candidate in self.cut_list:
-            if isinstance(candidate, IntervalCutCandidate):
-                yield candidate
+        result = self.new_float_candidates
+        self.new_float_candidates = []
+        return result
 
 
 class DatasetTree:
     def __init__(self, dataset, taxo_tree):
-        self.tree = dataset
+        self.root = dataset
         self.mapper_set = TaxonomyValueMapperSet(taxo_tree)
         self.cut_set = CutCandidateSet(taxo_tree)
+        for candidate in self.cut_set:
+            candidate.add_data_node(self.root)
 
 
 def generate_dp_dataset(dataset, taxo_tree, edp, steps):
