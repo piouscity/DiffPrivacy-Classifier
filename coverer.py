@@ -38,8 +38,32 @@ class TaxonomyValueMapperSet:
 
 class CutCandidate:
     data_nodes = []
+    
     def add_data_node(self, node):
         self.data_nodes.append(node)
+
+    def refresh_data_nodes(self):
+        need_refresh = False
+        for node in self.data_nodes:
+            if not node.is_leaf():
+                need_refresh = True
+                break
+        if not need_refresh:
+            return
+        new_nodes = []
+        for node in self.data_nodes:
+            if node.is_leaf():
+                new_nodes.append(node)
+            else:
+                leafs = node.get_all_leafs()
+                new_nodes.extend(leafs)
+        self.data_nodes = new_nodes
+
+    def get_all_items(self):
+        self.refresh_data_nodes()
+        for node in self.data_nodes:
+            for item in node.get_all_items():
+                yield item
 
 
 class CategoryCutCandidate(CutCandidate):
@@ -70,19 +94,45 @@ class CutCandidateSet:
                 self.candidate_list.append(float_candidate)
                 self.new_float_candidates.append(float_candidate)
 
-    def float_candidates(self):
+    def pop_new_float_candidates(self):
         result = self.new_float_candidates
         self.new_float_candidates = []
         return result
 
 
+class DatasetNode:
+    def __init__(self, dataset):
+        self.dataset = dataset
+        self.childs = []
+
+    def is_leaf(self):
+        return not self.childs
+
+    def get_all_leafs(self):
+        if not self.childs:
+            return self
+        leafs = []
+        for child in self.childs:
+            leafs.extend(child.get_all_leafs())
+        return leafs
+
+    def get_all_items(self):
+        for item in self.dataset:
+            yield item
+
+
 class DatasetTree:
     def __init__(self, dataset, taxo_tree):
-        self.root = dataset
+        self.root = DatasetNode(dataset)
         self.mapper_set = TaxonomyValueMapperSet(taxo_tree)
         self.cut_set = CutCandidateSet(taxo_tree)
         for candidate in self.cut_set:
             candidate.add_data_node(self.root)
+
+    def determine_new_splits(self, edp):
+        for candidate in self.cut_set.pop_new_float_candidates():
+            for item in candidate.get_all_items():
+                pass
 
 
 def generate_dp_dataset(dataset, taxo_tree, edp, steps):
