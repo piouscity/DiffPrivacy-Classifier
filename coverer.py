@@ -68,20 +68,14 @@ class CutCandidateSet:
 
 
 class DatasetTree:
-    def __init__(self, dataset):
+    def __init__(self, dataset, taxo_tree):
         self.tree = dataset
-
-
-def determine_split_value(data_tree, float_candidate, edp):
-    pass
+        self.mapper_set = TaxonomyValueMapperSet(taxo_tree)
+        self.cut_set = CutCandidateSet(taxo_tree)
 
 
 def generate_dp_dataset(dataset, taxo_tree, edp, steps):
     float_att_cnt = count_float_attribute(dataset)
     single_edp = edp / 2 / (float_att_cnt + 2*steps)
-    mapper_set = TaxonomyValueMapperSet(taxo_tree)
-    cut_set = CutCandidateSet(taxo_tree)
     data_tree = DatasetTree(dataset)
-    for candidate in cut_set.float_candidates():
-        determine_split_value(data_tree, candidate, single_edp)
 
