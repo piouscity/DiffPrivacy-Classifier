@@ -37,7 +37,9 @@ class TaxonomyValueMapperSet:
 
 
 class CutCandidate:
-    data_nodes = []
+    def __init__(self, att):
+        self.attribute = att
+        self.data_nodes = []
     
     def add_data_node(self, node):
         self.data_nodes.append(node)
@@ -67,14 +69,17 @@ class CutCandidate:
 
 
 class CategoryCutCandidate(CutCandidate):
-    def __init__(self, taxo_node):
+    def __init__(self, att, taxo_node):
+        super().__init__(att)
         self.node = taxo_node
 
 
 class IntervalCutCandidate(CutCandidate):
-    def __init__(self, from_value, to_value):
+    def __init__(self, att, from_value, to_value):
+        super().__init__(att)
         self.from_value = from_value
         self.to_value = to_value
+        self.existing_values = None
 
 
 class CutCandidateSet:
@@ -85,9 +90,13 @@ class CutCandidateSet:
         for att in taxo_tree:
             taxo_att = taxo_tree[att]
             if TAXO_ROOT in taxo_att: # Category attribute
-                self.candidate_list.append(CategoryCutCandidate(taxo_att[TAXO_ROOT]))
+                self.candidate_list.append(CategoryCutCandidate(
+                    att, 
+                    taxo_att[TAXO_ROOT]
+                    ))
             else:   # Float attribute
                 float_candidate = IntervalCutCandidate(
+                    att,
                     taxo_att[TAXO_FROM], 
                     taxo_att[TAXO_TO]
                     )
@@ -131,8 +140,13 @@ class DatasetTree:
 
     def determine_new_splits(self, edp):
         for candidate in self.cut_set.pop_new_float_candidates():
-            for item in candidate.get_all_items():
-                pass
+            if candidate.existing_values is None:
+                values = []
+                att = candidate.attribute
+                for item in candidate.get_all_items():
+                    values.append(item[att])
+                candidate.existing_values = sorted(set(values))
+
 
 
 def generate_dp_dataset(dataset, taxo_tree, edp, steps):
