@@ -62,6 +62,11 @@ class CutCandidateSet:
                     ))
 
 
+class DatasetTree:
+    def __init__(self, dataset):
+        self.tree = dataset
+
+
 def generate_dp_dataset(dataset, taxo_tree, edp, steps):
     float_att_cnt = count_float_attribute(dataset)
     single_edp = edp / 2 / (float_att_cnt + 2*steps)
