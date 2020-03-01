@@ -167,9 +167,10 @@ class DatasetNode:
 class DatasetTree:
     def __init__(self, dataset, taxo_tree):
         self.root = DatasetNode(dataset)
-        self.class_list = sorted(set([
-            item[CLASS_ATTRIBUTE] for item in dataset
-            ]))
+        general_count = RecordCounter()
+        for item in dataset:
+            general_count.record(item[CLASS_ATTRIBUTE])
+        self.class_list = list(general_count.count.keys())
         self.mapper_set = TaxonomyValueMapperSet(taxo_tree)
         self.cut_set = CutCandidateSet(taxo_tree)
         for candidate in self.cut_set:
