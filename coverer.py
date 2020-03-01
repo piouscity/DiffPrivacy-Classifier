@@ -36,6 +36,37 @@ class TaxonomyValueMapperSet:
                 self.mappers[att] = TaxonomyValueMapper(root)    
 
 
+class RecordCounter:
+    def __init__(self, class_list):
+        self.count_all = 0
+        self.count = {
+            cls: 0
+            for cls in class_list
+            }
+    
+    def record(self, cls):
+        self.count_all += 1
+        self.count[cls] += 1
+
+    def __add__(self, other):
+        result = RecordCounter()
+        result.count_all = self.count_all + other.count_all
+        result.count = {
+            cls: self.count[cls] + other.count[cls]
+            for cls in self.count
+            }
+        return result
+
+    def __sub__(self, other):
+        result = RecordCounter()
+        result.count_all = self.count_all - other.count_all
+        result.count = {
+            cls: self.count[cls] - other.count[cls]
+            for cls in self.count
+            }
+        return result
+
+
 class CutCandidate:
     def __init__(self, att):
         self.attribute = att
