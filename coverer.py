@@ -1,6 +1,6 @@
 from validator import count_float_attribute
 from settings import TAXO_ROOT, TAXO_NODE_NAME, TAXO_NODE_CHILD, TAXO_FROM, \
-   TAXO_TO
+   TAXO_TO, CLASS_ATTRIBUTE
 
 
 class TaxonomyValueMapper:
@@ -164,6 +164,9 @@ class DatasetNode:
 class DatasetTree:
     def __init__(self, dataset, taxo_tree):
         self.root = DatasetNode(dataset)
+        self.class_list = sorted(set([
+            item[CLASS_ATTRIBUTE] for item in dataset
+            ]))
         self.mapper_set = TaxonomyValueMapperSet(taxo_tree)
         self.cut_set = CutCandidateSet(taxo_tree)
         for candidate in self.cut_set:
