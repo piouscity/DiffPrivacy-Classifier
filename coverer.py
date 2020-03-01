@@ -37,12 +37,15 @@ class TaxonomyValueMapperSet:
 
 
 class RecordCounter:
-    def __init__(self, class_list):
+    def __init__(self, class_list=None):
         self.count_all = 0
-        self.count = {
-            cls: 0
-            for cls in class_list
-            }
+        if class_list:
+            self.count = {
+                cls: 0
+                for cls in class_list
+                }
+        else:
+            self.count = {}
     
     def record(self, cls):
         self.count_all += 1
@@ -74,9 +77,15 @@ class CutCandidate:
     def __init__(self, att):
         self.attribute = att
         self.data_nodes = []
+        self.counter = None
     
-    def add_data_node(self, node):
+    def add_data_node(self, node, counter=None):
         self.data_nodes.append(node)
+        if counter:
+            if not self.counter:
+                self.counter = counter
+            else:
+                self.counter += counter
 
     def refresh_data_nodes(self):
         need_refresh = False
@@ -174,7 +183,7 @@ class DatasetTree:
         self.mapper_set = TaxonomyValueMapperSet(taxo_tree)
         self.cut_set = CutCandidateSet(taxo_tree)
         for candidate in self.cut_set:
-            candidate.add_data_node(self.root)
+            candidate.add_data_node(self.root, general_count)
 
     def determine_new_splits(self, edp):
         for candidate in self.cut_set.pop_new_float_candidates():
