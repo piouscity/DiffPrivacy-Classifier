@@ -46,7 +46,10 @@ class RecordCounter:
     
     def record(self, cls):
         self.count_all += 1
-        self.count[cls] += 1
+        if cls in self.count:
+            self.count[cls] += 1
+        else:
+            self.count[cls] = 1
 
     def __add__(self, other):
         result = RecordCounter()
