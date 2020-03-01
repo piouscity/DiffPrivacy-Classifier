@@ -85,7 +85,7 @@ class CutCandidate:
             if not self.counter:
                 self.counter = counter
             else:
-                self.counter += counter
+                self.counter = self.counter + counter
 
     def refresh_data_nodes(self):
         need_refresh = False
