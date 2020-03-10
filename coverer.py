@@ -128,6 +128,51 @@ class IntervalCutCandidate(CutCandidate):
         self.to_value = to_value
         self.split_value = None
 
+    def find_split_value(self, class_list, sensi, edp):
+        if not self.splittable:
+            return
+        value_counter = {}
+        # Count
+        for item in self.get_all_items():
+            value = item[self.attribute]
+            if not (value in value_counter):
+                value_counter[value] = RecordCounter(class_list)
+            value_counter[value].record(item[CLASS_ATTRIBUTE])
+        if len(value_counter <= 1):
+            self.splittable = False
+        else:
+            # Prepare weight
+            left_part = RecordCounter(class_list)
+            right_part = RecordCounter(class_list)
+            for value in value_counter:
+                right_part = right_part + value_counter[value]
+            sorted_values = sorted(value_counter.keys())
+            weights = []
+            intervals = []
+            pre_value = sorted_values[0]
+            # Weight calculation
+            for value in sorted_values[1:]:
+                left_part = left_part + value_counter[pre_value]
+                right_part = right_part - value_counter[pre_value]
+                intervals.append((pre_value, value))
+                score = information_gain(
+                    self.counter, 
+                    [left_part, right_part]
+                    )
+                w = exp_mechanism(edp, sensi, score)\
+                    * (value-pre_value)
+                weights.append(w)          
+            # Exp choose
+            interval = random.choices(intervals, weights=weights)[0]
+            while True:
+                split_value = random.uniform(interval[0], interval[1])
+                split_value = round(split_value, DIGIT)
+                if split_value > interval[1]:
+                    split_value = interval[1]
+                if split_value > interval[0]:  # Okay
+                    break
+            self.split_value = split_value
+
 
 class CutCandidateSet:
     candidate_list = []
@@ -192,49 +237,8 @@ class DatasetTree:
 
     def determine_new_splits(self, edp):
         for candidate in self.cut_set.pop_new_float_candidates():
-            if not candidate.split_value:
-                value_counter = {}
-                # Count
-                for item in candidate.get_all_items():
-                    value = item[candidate.attribute]
-                    if not (value in value_counter):
-                        value_counter[value] = RecordCounter(self.class_list)
-                    value_counter[value].record(item[CLASS_ATTRIBUTE])
-                if len(value_counter <= 1):
-                    candidate.splittable = False
-                else:
-                    # Prepare weight
-                    left_part = RecordCounter(self.class_list)
-                    right_part = RecordCounter(self.class_list)
-                    for value in value_counter:
-                        right_part = right_part + value_counter[value]
-                    sorted_values = sorted(value_counter.keys())
-                    weights = []
-                    intervals = []
-                    pre_value = sorted_values[0]
-                    # Weight calculation
-                    for value in sorted_values[1:]:
-                        left_part = left_part + value_counter[pre_value]
-                        right_part = right_part - value_counter[pre_value]
-                        intervals.append((pre_value, value))
-                        score = information_gain(
-                            candidate.counter, 
-                            [left_part, right_part]
-                            )
-                        w = exp_mechanism(edp, self.sensi, score)\
-                           * (value-pre_value)
-                        weights.append(w)          
-                    # Exp choose
-                    interval = random.choices(intervals, weights=weights)[0]
-                    while True:
-                        split_value = random.uniform(interval[0], interval[1])
-                        split_value = round(split_value, DIGIT)
-                        if split_value > interval[1]:
-                            split_value = interval[1]
-                        if split_value > interval[0]:  # Okay
-                            break
-                    candidate.split_value = split_value
-
+            candidate.find_split_value(self.class_list, self.sensi, edp)
+            
 
 def generate_dp_dataset(dataset, taxo_tree, edp, steps):
     float_att_cnt = count_float_attribute(dataset)
