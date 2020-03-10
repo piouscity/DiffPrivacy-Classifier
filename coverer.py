@@ -122,8 +122,7 @@ class IntervalCutCandidate(CutCandidate):
         super().__init__(att)
         self.from_value = from_value
         self.to_value = to_value
-        self.existing_values = None
-
+        self.split_value = None
 
 class CutCandidateSet:
     candidate_list = []
@@ -187,13 +186,8 @@ class DatasetTree:
 
     def determine_new_splits(self, edp):
         for candidate in self.cut_set.pop_new_float_candidates():
-            if candidate.existing_values is None:
-                values = []
-                att = candidate.attribute
-                for item in candidate.get_all_items():
-                    values.append(item[att])
-                candidate.existing_values = sorted(set(values))
-
+            if not candidate.split_value:
+                pass
 
 
 def generate_dp_dataset(dataset, taxo_tree, edp, steps):
