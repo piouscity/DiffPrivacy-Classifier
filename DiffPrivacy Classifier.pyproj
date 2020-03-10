@@ -35,6 +35,9 @@
     <Compile Include="settings.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="utility.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="validator.py">
       <SubType>Code</SubType>
     </Compile>
