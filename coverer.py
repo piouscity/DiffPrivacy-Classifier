@@ -187,7 +187,17 @@ class DatasetTree:
     def determine_new_splits(self, edp):
         for candidate in self.cut_set.pop_new_float_candidates():
             if not candidate.split_value:
-                pass
+                value_counter = {}
+                att = candidate.attribute
+                for item in candidate.get_all_items():
+                    value = item[att]
+                    if not (value in value_counter):
+                        value_counter[value] = RecordCounter(self.class_list)
+                    value_counter[value].record(item[CLASS_ATTRIBUTE])
+                left_part = RecordCounter(self.class_list)
+                right_part = RecordCounter(self.class_list)
+                for value in value_counter:
+                    right_part = right_part + value_counter[value]
 
 
 def generate_dp_dataset(dataset, taxo_tree, edp, steps):
