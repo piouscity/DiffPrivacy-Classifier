@@ -126,7 +126,6 @@ class IntervalCutCandidate(CutCandidate):
         super().__init__(att)
         self.from_value = from_value
         self.to_value = to_value
-        self.split_value = None
 
     def find_split_value(self, class_list, sensi, edp):
         if not self.splittable:
@@ -172,6 +171,13 @@ class IntervalCutCandidate(CutCandidate):
                 if split_value > interval[0]:  # Okay
                     break
             self.split_value = split_value
+            self.left_count = RecordCounter(class_list)
+            self.right_count = RecordCounter(class_list)
+            for value in sorted_values:
+                if value < self.split_value:
+                    self.left_count = self.left_count + value_counter[value]
+                else:
+                    self.right_count = self.right_count + value_counter[value]
 
 
 class CutCandidateSet:
