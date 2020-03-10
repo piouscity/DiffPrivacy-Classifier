@@ -14,3 +14,7 @@ def information_gain(value, childs):
     for child in childs:
         result -= child.count_all / value.count_all * entropy(child)
     return result
+
+
+def exp_mechanism(edp, sensi, score):
+    return math.exp(edp/(2*sensi)*score)

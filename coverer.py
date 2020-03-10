@@ -1,6 +1,9 @@
+import math, random
+
 from validator import count_float_attribute
 from settings import TAXO_ROOT, TAXO_NODE_NAME, TAXO_NODE_CHILD, TAXO_FROM, \
-   TAXO_TO, CLASS_ATTRIBUTE
+   TAXO_TO, CLASS_ATTRIBUTE, DIGIT
+from utility import information_gain, exp_mechanism
 
 
 class TaxonomyValueMapper:
@@ -78,6 +81,7 @@ class CutCandidate:
         self.attribute = att
         self.data_nodes = []
         self.counter = None
+        self.splittable = True
     
     def add_data_node(self, node, counter=None):
         self.data_nodes.append(node)
@@ -123,6 +127,7 @@ class IntervalCutCandidate(CutCandidate):
         self.from_value = from_value
         self.to_value = to_value
         self.split_value = None
+
 
 class CutCandidateSet:
     candidate_list = []
@@ -179,6 +184,7 @@ class DatasetTree:
         for item in dataset:
             general_count.record(item[CLASS_ATTRIBUTE])
         self.class_list = list(general_count.count.keys())
+        self.sensi = math.log2(len(self.class_list))
         self.mapper_set = TaxonomyValueMapperSet(taxo_tree)
         self.cut_set = CutCandidateSet(taxo_tree)
         for candidate in self.cut_set:
@@ -188,16 +194,46 @@ class DatasetTree:
         for candidate in self.cut_set.pop_new_float_candidates():
             if not candidate.split_value:
                 value_counter = {}
-                att = candidate.attribute
+                # Count
                 for item in candidate.get_all_items():
-                    value = item[att]
+                    value = item[candidate.attribute]
                     if not (value in value_counter):
                         value_counter[value] = RecordCounter(self.class_list)
                     value_counter[value].record(item[CLASS_ATTRIBUTE])
-                left_part = RecordCounter(self.class_list)
-                right_part = RecordCounter(self.class_list)
-                for value in value_counter:
-                    right_part = right_part + value_counter[value]
+                if len(value_counter <= 1):
+                    candidate.splittable = False
+                else:
+                    # Prepare weight
+                    left_part = RecordCounter(self.class_list)
+                    right_part = RecordCounter(self.class_list)
+                    for value in value_counter:
+                        right_part = right_part + value_counter[value]
+                    sorted_values = sorted(value_counter.keys())
+                    weights = []
+                    intervals = []
+                    pre_value = sorted_values[0]
+                    # Weight calculation
+                    for value in sorted_values[1:]:
+                        left_part = left_part + value_counter[pre_value]
+                        right_part = right_part - value_counter[pre_value]
+                        intervals.append((pre_value, value))
+                        score = information_gain(
+                            candidate.counter, 
+                            [left_part, right_part]
+                            )
+                        w = exp_mechanism(edp, self.sensi, score)\
+                           * (value-pre_value)
+                        weights.append(w)          
+                    # Exp choose
+                    interval = random.choices(intervals, weights=weights)[0]
+                    while True:
+                        split_value = random.uniform(interval[0], interval[1])
+                        split_value = round(split_value, DIGIT)
+                        if split_value > interval[1]:
+                            split_value = interval[1]
+                        if split_value > interval[0]:  # Okay
+                            break
+                    candidate.split_value = split_value
 
 
 def generate_dp_dataset(dataset, taxo_tree, edp, steps):
