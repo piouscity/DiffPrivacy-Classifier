@@ -126,6 +126,7 @@ class IntervalCutCandidate(CutCandidate):
         super().__init__(att)
         self.from_value = from_value
         self.to_value = to_value
+        self.split_value = None
 
     def find_split_value(self, class_list, sensi, edp):
         if not self.splittable:
@@ -206,10 +207,8 @@ class CutCandidateSet:
 
     def determine_new_splits(self, edp):
         for candidate in self.new_float_candidates:
-            candidate.find_split_value(self.class_list, self.sensi, edp)
-            if candidate.splittable:
-                self.candidate_list.append(candidate)
-        self.new_float_candidates = []
+            if (candidate.splittable) and (not candidate.split_value):
+                candidate.find_split_value(self.class_list, self.sensi, edp)
 
 
 class DatasetNode:
