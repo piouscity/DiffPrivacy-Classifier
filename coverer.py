@@ -11,9 +11,10 @@ class TaxonomyValueMapper:
     leaf_list = {}
 
     def __init__(self, node):
-        node_value = node[TAXO_NODE_NAME]
-        leafs = self.__scan_tree(att, node)   
-        self.leaf_list[node_value] = leafs
+        for child in node[TAXO_NODE_CHILD]:
+            node_value = child[TAXO_NODE_NAME]
+            leafs = self.__scan_tree(node)   
+            self.leaf_list[node_value] = leafs
 
     def __scan_tree(self, node):
         node_value = node[TAXO_NODE_NAME]
@@ -23,11 +24,14 @@ class TaxonomyValueMapper:
             return [node_value]
         leafs = []
         for child in child_list:
-            new_leafs = self.__scan_tree(att, child)
+            new_leafs = self.__scan_tree(child)
             leafs.extend(new_leafs)
         for leaf in leafs:
             self.parent_list[leaf].append(node_value)
         return leafs
+
+    def get_general_value(self, value):
+        return self.parent_list[value][-1]
 
 
 class TaxonomyValueMapperSet:
@@ -36,7 +40,10 @@ class TaxonomyValueMapperSet:
         for att in taxo_tree:
             if TAXO_ROOT in taxo_tree[att]: # Category attribute
                 root = taxo_tree[att][TAXO_ROOT]
-                self.mappers[att] = TaxonomyValueMapper(root)    
+                self.mappers[att] = TaxonomyValueMapper(root)
+                
+    def get_mapper_by_att(self, att):
+        return self.mappers[att]
 
 
 class RecordCounter:
@@ -120,6 +127,19 @@ class CategoryCutCandidate(CutCandidate):
         super().__init__(att)
         self.node = taxo_node
 
+    def first_class_count(self, class_list, mapper):
+        if not self.node[TAXO_NODE_CHILD]:
+            self.splittable = False
+            return
+        value_counter = {
+            node[TAXO_NODE_NAME]: RecordCounter(class_list)
+            for node in self.node[TAXO_NODE_CHILD]
+            }
+        for item in self.get_all_items():
+            value = item[self.attribute]
+            general_value = mapper.get_general_value(value)
+            value_counter[general_value].record(item[CLASS_ATTRIBUTE])
+
 
 class IntervalCutCandidate(CutCandidate):
     def __init__(self, att, from_value, to_value):
@@ -186,29 +206,37 @@ class CutCandidateSet:
     new_float_candidates = []
     new_category_candidates = []
 
-    def __init__(self, taxo_tree, class_list):
+    def __init__(self, taxo_tree, class_list, root, general_count):
         self.sensi = math.log2(len(class_list))
         self.class_list = class_list
         for att in taxo_tree:
             taxo_att = taxo_tree[att]
             if TAXO_ROOT in taxo_att: # Category attribute
-                category_candidate = CategoryCutCandidate(
+                candidate = CategoryCutCandidate(
                     att, 
                     taxo_att[TAXO_ROOT]
                     )
-                self.new_category_candidates.append(category_candidate)
+                self.new_category_candidates.append(candidate)
             else:   # Float attribute
-                float_candidate = IntervalCutCandidate(
+                candidate = IntervalCutCandidate(
                     att,
                     taxo_att[TAXO_FROM], 
                     taxo_att[TAXO_TO]
                     )
-                self.new_float_candidates.append(float_candidate)
+                self.new_float_candidates.append(candidate)
+            candidate.add_data_node(root, general_count)     
 
     def determine_new_splits(self, edp):
         for candidate in self.new_float_candidates:
             if (candidate.splittable) and (not candidate.split_value):
                 candidate.find_split_value(self.class_list, self.sensi, edp)
+
+    def category_first_class_count(self, mapper_set):
+        for candidate in self.new_category_candidates:
+            candidate.first_class_count(
+                self.class_list, 
+                mapper_set.get_mapper_by_att(candidate.attribute)
+                )
 
 
 class DatasetNode:
@@ -240,9 +268,13 @@ class DatasetTree:
             general_count.record(item[CLASS_ATTRIBUTE])
         class_list = list(general_count.count.keys())
         self.mapper_set = TaxonomyValueMapperSet(taxo_tree)
-        self.cut_set = CutCandidateSet(taxo_tree, class_list)
-        for candidate in self.cut_set:
-            candidate.add_data_node(self.root, general_count)
+        self.cut_set = CutCandidateSet(
+            taxo_tree, 
+            class_list, 
+            self.root, 
+            general_count
+            )
+        self.cut_set.category_first_class_count(self.mapper_set)
 
     def determine_new_splits(self, edp):
         self.cut_set.determine_new_splits(edp)
