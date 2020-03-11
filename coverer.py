@@ -183,28 +183,33 @@ class IntervalCutCandidate(CutCandidate):
 class CutCandidateSet:
     candidate_list = []
     new_float_candidates = []
+    new_category_candidates = []
 
-    def __init__(self, taxo_tree):
+    def __init__(self, taxo_tree, class_list):
+        self.sensi = math.log2(len(class_list))
+        self.class_list = class_list
         for att in taxo_tree:
             taxo_att = taxo_tree[att]
             if TAXO_ROOT in taxo_att: # Category attribute
-                self.candidate_list.append(CategoryCutCandidate(
+                category_candidate = CategoryCutCandidate(
                     att, 
                     taxo_att[TAXO_ROOT]
-                    ))
+                    )
+                self.new_category_candidates.append(category_candidate)
             else:   # Float attribute
                 float_candidate = IntervalCutCandidate(
                     att,
                     taxo_att[TAXO_FROM], 
                     taxo_att[TAXO_TO]
                     )
-                self.candidate_list.append(float_candidate)
                 self.new_float_candidates.append(float_candidate)
 
-    def pop_new_float_candidates(self):
-        result = self.new_float_candidates
+    def determine_new_splits(self, edp):
+        for candidate in self.new_float_candidates:
+            candidate.find_split_value(self.class_list, self.sensi, edp)
+            if candidate.splittable:
+                self.candidate_list.append(candidate)
         self.new_float_candidates = []
-        return result
 
 
 class DatasetNode:
@@ -234,16 +239,14 @@ class DatasetTree:
         general_count = RecordCounter()
         for item in dataset:
             general_count.record(item[CLASS_ATTRIBUTE])
-        self.class_list = list(general_count.count.keys())
-        self.sensi = math.log2(len(self.class_list))
+        class_list = list(general_count.count.keys())
         self.mapper_set = TaxonomyValueMapperSet(taxo_tree)
-        self.cut_set = CutCandidateSet(taxo_tree)
+        self.cut_set = CutCandidateSet(taxo_tree, class_list)
         for candidate in self.cut_set:
             candidate.add_data_node(self.root, general_count)
 
     def determine_new_splits(self, edp):
-        for candidate in self.cut_set.pop_new_float_candidates():
-            candidate.find_split_value(self.class_list, self.sensi, edp)
+        self.cut_set.determine_new_splits(edp)
             
 
 def generate_dp_dataset(dataset, taxo_tree, edp, steps):
