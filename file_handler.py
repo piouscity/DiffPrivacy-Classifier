@@ -1,6 +1,7 @@
 import os, csv, json
 
 from exceptions import OpenFileException, UnsupportedFileTypeException
+from settings import MISSING_VALUE
 
 
 CSV_EXT = ".csv"
@@ -20,6 +21,8 @@ def import_csv_dataset(file_path):
         with open(file_path) as csv_file:
             for row in csv.DictReader(csv_file, skipinitialspace=True):
                 converted_row = {}
+                if MISSING_VALUE in row.values():
+                    continue
                 for key, value in row.items():
                     try:
                         float_value = float(value)
