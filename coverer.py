@@ -214,6 +214,7 @@ class CutCandidateSet:
     new_category_cands = []
 
     def __init__(self, taxo_tree, class_list, root, general_count):
+        self.mapper_set = TaxonomyValueMapperSet(taxo_tree)
         self.sensi = math.log2(len(class_list))
         self.class_list = class_list
         for att in taxo_tree:
@@ -231,19 +232,20 @@ class CutCandidateSet:
                     taxo_att[TAXO_TO]
                     )
                 self.new_float_cands.append(candidate)
-            candidate.add_data_node(root, general_count)     
+            candidate.add_data_node(root, general_count)
+        self.category_first_class_count()
 
     def determine_new_splits(self, edp):
         for candidate in self.new_float_cands:
             if (candidate.splittable) and (not candidate.split_value):
                 candidate.find_split_value(self.class_list, self.sensi, edp)
 
-    def category_first_class_count(self, mapper_set):
+    def category_first_class_count(self):
         for candidate in self.new_category_cands:
             if (candidate.splittable) and (not candidate.child_counter):
                 candidate.first_class_count(
                     self.class_list, 
-                    mapper_set.get_mapper_by_att(candidate.attribute)
+                    self.mapper_set.get_mapper_by_att(candidate.attribute)
                     )
 
     def calculate_candidate_score(self):
@@ -283,14 +285,12 @@ class DatasetTree:
         for item in dataset:
             general_count.record(item[CLASS_ATTRIBUTE])
         class_list = list(general_count.count.keys())
-        self.mapper_set = TaxonomyValueMapperSet(taxo_tree)
         self.cut_set = CutCandidateSet(
             taxo_tree, 
             class_list, 
             self.root, 
             general_count
             )
-        self.cut_set.category_first_class_count(self.mapper_set)
 
     def determine_new_splits(self, edp):
         self.cut_set.determine_new_splits(edp)
