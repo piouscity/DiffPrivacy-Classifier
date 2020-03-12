@@ -162,23 +162,22 @@ class IntervalCutCandidate(CutCandidate):
             self.splittable = False
         else:
             # Prepare weight
-            left_part = RecordCounter(class_list)
-            right_part = RecordCounter(class_list)
+            part_counter = {
+                "left": RecordCounter(class_list),
+                "right": RecordCounter(class_list),
+                }
             for value in value_counter:
-                right_part = right_part + value_counter[value]
+                part_counter["right"] += value_counter[value]
             sorted_values = sorted(value_counter.keys())
             weights = []
             intervals = []
             pre_value = sorted_values[0]
             # Weight calculation
             for value in sorted_values[1:]:
-                left_part = left_part + value_counter[pre_value]
-                right_part = right_part - value_counter[pre_value]
+                part_counter["left"] += value_counter[pre_value]
+                part_counter["right"] -= value_counter[pre_value]
                 intervals.append((pre_value, value))
-                score = information_gain(
-                    self.counter, 
-                    [left_part, right_part]
-                    )
+                score = information_gain(self.counter, part_counter)
                 w = exp_mechanism(edp, sensi, score)\
                     * (value-pre_value)
                 weights.append(w)          

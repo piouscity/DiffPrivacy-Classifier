@@ -11,8 +11,9 @@ def entropy(value):
 
 def information_gain(value, childs):
     result = entropy(value)
-    for child in childs:
-        result -= child.count_all / value.count_all * entropy(child)
+    for c_val in childs:
+        result -= child[c_val].count_all / value.count_all \
+            * entropy(child[c_val])
     return result
 
 
