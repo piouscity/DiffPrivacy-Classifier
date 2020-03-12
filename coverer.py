@@ -89,6 +89,7 @@ class CutCandidate:
         self.data_nodes = []
         self.counter = None
         self.splittable = True
+        self.child_counter = {}
     
     def add_data_node(self, node, counter=None):
         self.data_nodes.append(node)
@@ -191,13 +192,15 @@ class IntervalCutCandidate(CutCandidate):
                 if split_value > interval[0]:  # Okay
                     break
             self.split_value = split_value
-            self.left_count = RecordCounter(class_list)
-            self.right_count = RecordCounter(class_list)
+            self.child_counter = {
+                "left": RecordCounter(class_list),
+                "right": RecordCounter(class_list),
+                }
             for value in sorted_values:
                 if value < self.split_value:
-                    self.left_count = self.left_count + value_counter[value]
+                    self.child_counter["left"] += value_counter[value]
                 else:
-                    self.right_count = self.right_count + value_counter[value]
+                    self.child_counter["right"] += value_counter[value]
 
 
 class CutCandidateSet:
