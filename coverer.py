@@ -90,6 +90,7 @@ class CutCandidate:
         self.counter = None
         self.splittable = True
         self.child_counter = {}
+        self.score = None
     
     def add_data_node(self, node, counter=None):
         self.data_nodes.append(node)
@@ -121,6 +122,9 @@ class CutCandidate:
         for node in self.data_nodes:
             for item in node.get_all_items():
                 yield item
+
+    def calculate_score(self):
+        self.score = information_gain(self.counter, self.child_counter)
 
 
 class CategoryCutCandidate(CutCandidate):
@@ -206,8 +210,8 @@ class IntervalCutCandidate(CutCandidate):
 
 class CutCandidateSet:
     candidate_list = []
-    new_float_candidates = []
-    new_category_candidates = []
+    new_float_cands = []
+    new_category_cands = []
 
     def __init__(self, taxo_tree, class_list, root, general_count):
         self.sensi = math.log2(len(class_list))
@@ -219,28 +223,36 @@ class CutCandidateSet:
                     att, 
                     taxo_att[TAXO_ROOT]
                     )
-                self.new_category_candidates.append(candidate)
+                self.new_category_cands.append(candidate)
             else:   # Float attribute
                 candidate = IntervalCutCandidate(
                     att,
                     taxo_att[TAXO_FROM], 
                     taxo_att[TAXO_TO]
                     )
-                self.new_float_candidates.append(candidate)
+                self.new_float_cands.append(candidate)
             candidate.add_data_node(root, general_count)     
 
     def determine_new_splits(self, edp):
-        for candidate in self.new_float_candidates:
+        for candidate in self.new_float_cands:
             if (candidate.splittable) and (not candidate.split_value):
                 candidate.find_split_value(self.class_list, self.sensi, edp)
 
     def category_first_class_count(self, mapper_set):
-        for candidate in self.new_category_candidates:
+        for candidate in self.new_category_cands:
             if (candidate.splittable) and (not candidate.child_counter):
                 candidate.first_class_count(
                     self.class_list, 
                     mapper_set.get_mapper_by_att(candidate.attribute)
                     )
+
+    def calculate_candidate_score(self):
+        for candidate in chain(self.new_category_cands, self.new_float_cands):
+            if candidate.splittable:
+                candidate.calculate_score()
+                self.candidate_list.append(candidate)
+        self.new_category_cands = []
+        self.new_float_cands = []
 
 
 class DatasetNode:
