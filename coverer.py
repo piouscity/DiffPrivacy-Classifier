@@ -236,10 +236,11 @@ class CutCandidateSet:
 
     def category_first_class_count(self, mapper_set):
         for candidate in self.new_category_candidates:
-            candidate.first_class_count(
-                self.class_list, 
-                mapper_set.get_mapper_by_att(candidate.attribute)
-                )
+            if (candidate.splittable) and (not candidate.child_counter):
+                candidate.first_class_count(
+                    self.class_list, 
+                    mapper_set.get_mapper_by_att(candidate.attribute)
+                    )
 
 
 class DatasetNode:
