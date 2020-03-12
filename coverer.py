@@ -140,6 +140,7 @@ class CategoryCutCandidate(CutCandidate):
             value = item[self.attribute]
             general_value = mapper.get_general_value(value)
             value_counter[general_value].record(item[CLASS_ATTRIBUTE])
+        self.child_counter = value_counter
 
 
 class IntervalCutCandidate(CutCandidate):
