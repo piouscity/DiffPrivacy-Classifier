@@ -196,6 +196,7 @@ class IntervalCutCandidate(CutCandidate):
                     split_value = interval[1]
                 if split_value > interval[0]:  # Okay
                     break
+            # Re-count
             self.split_value = split_value
             self.child_counter = {
                 "left": RecordCounter(class_list),
@@ -258,6 +259,21 @@ class CutCandidateSet:
                 self.candidate_list.append(candidate)
         self.new_category_cands = []
         self.new_float_cands = []
+    
+    def get_score_list(self):
+        for candidate in self.candidate_list:
+            yield candidate.score
+
+    def select_candidate(self, edp):
+        weights = [
+            exp_mechanism(edp, self.sensi, score) 
+            for score in self.get_score_list()
+            ]
+        chosen_index = random.choices(
+            list(range(len(weights))), 
+            weights=weights
+            )[0]
+        return chosen_index
 
 
 class DatasetNode:
@@ -286,3 +302,7 @@ def generate_dp_dataset(dataset, taxo_tree, edp, steps):
     single_edp = edp / 2 / (float_att_cnt + 2*steps)
     data_root = DatasetNode(dataset)
     cut_set = CutCandidateSet(taxo_tree, data_root)
+    cut_set.determine_new_splits(single_edp)
+    cut_set.calculate_candidate_score()
+    for i in range(steps):
+        index = cut_set.select_candidate(single_edp)
