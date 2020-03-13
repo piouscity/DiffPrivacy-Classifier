@@ -31,6 +31,8 @@ class TaxonomyValueMapper:
         return leafs
 
     def get_general_value(self, value):
+        if not self.parent_list[value]:
+            return value
         return self.parent_list[value][-1]
 
 
@@ -126,6 +128,9 @@ class CutCandidate:
     def calculate_score(self):
         self.score = information_gain(self.counter, self.child_counter)
 
+    def specialize(self, mapper):
+        raise NotImplementedError()
+
 
 class CategoryCutCandidate(CutCandidate):
     def __init__(self, att, taxo_node):
@@ -145,6 +150,33 @@ class CategoryCutCandidate(CutCandidate):
             general_value = mapper.get_general_value(value)
             value_counter[general_value].record(item[CLASS_ATTRIBUTE])
         self.child_counter = value_counter
+
+    def specialize(self, mapper):
+        child_candidates = []
+        for taxo_child in self.node[TAXO_NODE_CHILD]:
+            candidate = CategoryCutCandidate(self.attribute, taxo_child)
+            candidate.counter = self.child_counter[taxo_child[TAXO_NODE_NAME]]
+            child_candidates.append(candidate)
+        self.refresh_data_nodes()
+        data_node_record = {
+            taxo_child[TAXO_NODE_NAME]: None
+            for taxo_child in self.node[TAXO_NODE_CHILD]
+            }
+        for data_node in self.data_nodes:
+            for value in data_node_record:
+                new_node = DatasetNode()
+                data_node.insert_child(new_node)
+                data_node_record[value] = new_node
+            for item in data_node.get_all_items():
+                value = item[self.attribute]
+                general_value = mapper.get_general_value(value)
+                data_node_record[general_value].insert_item(item)
+            data_node.clean_up()
+            for candidate in child_candidates:
+                candidate.add_data_node(
+                    data_node_record[candidate.node[TAXO_NODE_NAME]]
+                    )
+        return child_candidates
 
 
 class IntervalCutCandidate(CutCandidate):
@@ -275,11 +307,31 @@ class CutCandidateSet:
             )[0]
         return chosen_index
 
+    def specialize_candidate(self, index):
+        chosen_candidate = self.candidate_list[index]
+        if index < len(self.candidate_list)-1:  # Not the last
+            self.candidate_list[index] = self.candidate_list.pop()
+        else:   # Is the last
+            self.candidate_list.pop()
+
 
 class DatasetNode:
-    def __init__(self, dataset):
-        self.dataset = dataset
+    def __init__(self, dataset=None):
+        if not dataset:
+            self.dataset = []
+        else:
+            assert isinstance(dataset, list)
+            self.dataset = dataset
         self.childs = []
+
+    def insert_item(self, item):
+        self.dataset.append(item)
+
+    def insert_child(self, child_node):
+        self.childs.append(child_node)
+
+    def clean_up(self):
+        self.dataset = []
 
     def is_leaf(self):
         return not self.childs
