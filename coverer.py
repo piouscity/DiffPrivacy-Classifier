@@ -333,6 +333,8 @@ class CutCandidateSet:
             yield candidate.score
 
     def select_candidate(self, edp):
+        if not self.candidate_list:
+            return -1
         weights = [
             exp_mechanism(edp, self.sensi, score) 
             for score in self.get_score_list()
@@ -354,6 +356,7 @@ class CutCandidateSet:
                 self.mapper_set.get_mapper_by_att(chosen_candidate.attribute)
                 )
             self.new_category_cands.extend(child_candidates)
+            self.category_count_childs()
         else:
             child_candidates = chosen_candidate.specialize()
             self.new_float_cands.extend(child_candidates)
@@ -402,4 +405,8 @@ def generate_dp_dataset(dataset, taxo_tree, edp, steps):
     cut_set.calculate_candidate_score()
     for i in range(steps):
         index = cut_set.select_candidate(single_edp)
+        if index == -1:
+            break
         cut_set.specialize_candidate(index)
+        cut_set.determine_new_splits(single_edp)
+        cut_set.calculate_candidate_score()
