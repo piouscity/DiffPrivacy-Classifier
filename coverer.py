@@ -128,9 +128,6 @@ class CutCandidate:
     def calculate_score(self):
         self.score = information_gain(self.counter, self.child_counter)
 
-    def specialize(self, mapper):
-        raise NotImplementedError()
-
 
 class CategoryCutCandidate(CutCandidate):
     def __init__(self, att, taxo_node):
@@ -239,6 +236,40 @@ class IntervalCutCandidate(CutCandidate):
                     self.child_counter["left"] += value_counter[value]
                 else:
                     self.child_counter["right"] += value_counter[value]
+
+    def specialize(self):
+        child_candidates = []
+        interval = {
+            "left": (self.from_value, self.split_value),
+            "right": (self.split_value, self.to_value)
+            }
+        for part in interval:
+            candidate = IntervalCutCandidate(
+                self.attribute, 
+                interval[part][0],
+                interval[part][1]
+                )
+            candidate.counter = self.child_counter[part]
+            child_candidates.append(candidate)
+        self.refresh_data_nodes()
+        for data_node in self.data_nodes:
+            left_node = DatasetNode()
+            right_node = DatasetNode()
+            data_node.insert_child(left_node)
+            data_node.insert_child(right_node)
+            for item in data_node.get_all_items():
+                value = item[self.attribute]
+                if value < self.split_value:
+                    left_node.insert_item(item)
+                else:
+                    right_node.insert_item(item)
+            data_node.clean_up()
+            for candidate in child_candidates:
+                if candidate.to_value == self.split_value:
+                    candidate.add_data_node(left_node)
+                else:
+                    candidate.add_data_node(right_node)
+        return child_candidates
 
 
 class CutCandidateSet:
