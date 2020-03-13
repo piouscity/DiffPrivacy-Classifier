@@ -35,6 +35,10 @@ class TaxonomyValueMapper:
             return value
         return self.parent_list[value][-1]
 
+    def specialize(self, value):
+        for leaf_value in self.leaf_list[value]:
+            self.parent_list[leaf_value].pop()
+
 
 class TaxonomyValueMapperSet:
     mappers = {}
@@ -134,7 +138,7 @@ class CategoryCutCandidate(CutCandidate):
         super().__init__(att)
         self.node = taxo_node
 
-    def first_class_count(self, class_list, mapper):
+    def child_count(self, class_list, mapper):
         if not self.node[TAXO_NODE_CHILD]:
             self.splittable = False
             return
@@ -173,6 +177,7 @@ class CategoryCutCandidate(CutCandidate):
                 candidate.add_data_node(
                     data_node_record[candidate.node[TAXO_NODE_NAME]]
                     )
+        mapper.specialize(self.node[TAXO_NODE_NAME])
         return child_candidates
 
 
@@ -300,17 +305,17 @@ class CutCandidateSet:
                     )
                 self.new_float_cands.append(candidate)
             candidate.add_data_node(root, general_count)
-        self.category_first_class_count()
+        self.category_count_childs()
 
     def determine_new_splits(self, edp):
         for candidate in self.new_float_cands:
             if (candidate.splittable) and (not candidate.split_value):
                 candidate.find_split_value(self.class_list, self.sensi, edp)
 
-    def category_first_class_count(self):
+    def category_count_childs(self):
         for candidate in self.new_category_cands:
             if (candidate.splittable) and (not candidate.child_counter):
-                candidate.first_class_count(
+                candidate.child_count(
                     self.class_list, 
                     self.mapper_set.get_mapper_by_att(candidate.attribute)
                     )
@@ -397,3 +402,4 @@ def generate_dp_dataset(dataset, taxo_tree, edp, steps):
     cut_set.calculate_candidate_score()
     for i in range(steps):
         index = cut_set.select_candidate(single_edp)
+        cut_set.specialize_candidate(index)
