@@ -213,10 +213,13 @@ class CutCandidateSet:
     new_float_cands = []
     new_category_cands = []
 
-    def __init__(self, taxo_tree, class_list, root, general_count):
+    def __init__(self, taxo_tree, root):
         self.mapper_set = TaxonomyValueMapperSet(taxo_tree)
-        self.sensi = math.log2(len(class_list))
-        self.class_list = class_list
+        general_count = RecordCounter()
+        for item in dataset:
+            general_count.record(item[CLASS_ATTRIBUTE])
+        self.class_list = list(general_count.count.keys())
+        self.sensi = math.log2(len(self.class_list))
         for att in taxo_tree:
             taxo_att = taxo_tree[att]
             if TAXO_ROOT in taxo_att: # Category attribute
@@ -276,28 +279,10 @@ class DatasetNode:
     def get_all_items(self):
         for item in self.dataset:
             yield item
-
-
-class DatasetTree:
-    def __init__(self, dataset, taxo_tree):
-        self.root = DatasetNode(dataset)
-        general_count = RecordCounter()
-        for item in dataset:
-            general_count.record(item[CLASS_ATTRIBUTE])
-        class_list = list(general_count.count.keys())
-        self.cut_set = CutCandidateSet(
-            taxo_tree, 
-            class_list, 
-            self.root, 
-            general_count
-            )
-
-    def determine_new_splits(self, edp):
-        self.cut_set.determine_new_splits(edp)
             
 
 def generate_dp_dataset(dataset, taxo_tree, edp, steps):
     float_att_cnt = count_float_attribute(dataset)
     single_edp = edp / 2 / (float_att_cnt + 2*steps)
-    data_tree = DatasetTree(dataset)
-
+    data_root = DatasetNode(dataset)
+    cut_set = CutCandidateSet(taxo_tree, data_root)
