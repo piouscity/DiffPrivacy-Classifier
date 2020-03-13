@@ -344,6 +344,14 @@ class CutCandidateSet:
             self.candidate_list[index] = self.candidate_list.pop()
         else:   # Is the last
             self.candidate_list.pop()
+        if isinstance(chosen_candidate, CategoryCutCandidate):
+            child_candidates = chosen_candidate.specialize(
+                self.mapper_set.get_mapper_by_att(chosen_candidate.attribute)
+                )
+            self.new_category_cands.extend(child_candidates)
+        else:
+            child_candidates = chosen_candidate.specialize()
+            self.new_float_cands.extend(child_candidates)
 
 
 class DatasetNode:
