@@ -3,7 +3,7 @@ import math, random
 from validator import count_float_attribute
 from settings import TAXO_ROOT, TAXO_NODE_NAME, TAXO_NODE_CHILD, TAXO_FROM, \
    TAXO_TO, CLASS_ATTRIBUTE, DIGIT
-from utility import information_gain, exp_mechanism
+from utility import information_gain, exp_mechanism, RecordCounter
 
 
 class TaxonomyValueMapper:
@@ -56,43 +56,6 @@ class TaxonomyValueMapperSet:
                 
     def get_mapper_by_att(self, att):
         return self.mappers[att]
-
-
-class RecordCounter:
-    def __init__(self, class_list=None):
-        self.count_all = 0
-        if class_list:
-            self.count = {
-                cls: 0
-                for cls in class_list
-                }
-        else:
-            self.count = {}
-    
-    def record(self, cls):
-        self.count_all += 1
-        if cls in self.count:
-            self.count[cls] += 1
-        else:
-            self.count[cls] = 1
-
-    def __add__(self, other):
-        result = RecordCounter()
-        result.count_all = self.count_all + other.count_all
-        result.count = {
-            cls: self.count[cls] + other.count[cls]
-            for cls in self.count
-            }
-        return result
-
-    def __sub__(self, other):
-        result = RecordCounter()
-        result.count_all = self.count_all - other.count_all
-        result.count = {
-            cls: self.count[cls] - other.count[cls]
-            for cls in self.count
-            }
-        return result
 
 
 class CutCandidate:
