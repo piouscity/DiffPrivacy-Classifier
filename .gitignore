@@ -341,3 +341,6 @@ healthchecksdb
 
 # Environments
 env/*
+
+# Log files
+logger/*
