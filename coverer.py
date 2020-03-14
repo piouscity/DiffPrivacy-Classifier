@@ -1,5 +1,5 @@
 import math, random, numpy
-from typing import Iterator
+from typing import Iterator, List
 
 from validator import count_float_attribute
 from settings import TAXO_ROOT, TAXO_NODE_NAME, TAXO_NODE_CHILD, TAXO_FROM, \
@@ -105,6 +105,7 @@ class CutCandidate:
                 yield item
 
     def calculate_score(self):
+        assert self.child_counter
         self.score = information_gain(self.counter, self.child_counter)
 
     def export_value(self):
@@ -141,6 +142,7 @@ class CategoryCutCandidate(CutCandidate):
 
     def specialize(self, mapper:TaxonomyValueMapper) \
         -> List[CategoryCutCandidate]:
+        assert self.taxo_node[TAXO_NODE_CHILD]
         child_candidates = []
         data_node_record = {}
         for taxo_child in self.taxo_node[TAXO_NODE_CHILD]:
@@ -170,18 +172,19 @@ class CategoryCutCandidate(CutCandidate):
 
 
 class IntervalCutCandidate(CutCandidate):
-    def __init__(self, att, from_value, to_value):
+    split_value = None
+    left = "left"
+    right = "right"
+
+    def __init__(self, att, from_value:float, to_value:float):
         super().__init__(att)
         self.from_value = from_value
         self.to_value = to_value
-        self.split_value = None
 
-    def export_value(self):
+    def export_value(self) -> str:
         return "[{0},{1})".format(self.from_value, self.to_value)
 
-    def find_split_value(self, class_list, sensi, edp):
-        if not self.splittable:
-            return
+    def find_split_value(self, class_list:list, sensi:float, edp:float):
         value_counter = {}
         # Count
         for item in self.get_all_items():
@@ -191,57 +194,58 @@ class IntervalCutCandidate(CutCandidate):
             value_counter[value].record(item[CLASS_ATTRIBUTE])
         if not value_counter:
             self.splittable = False
-        else:
-            # Prepare weight
-            if not self.from_value in value_counter:
-                value_counter[self.from_value] = RecordCounter(class_list)
-            value_counter[self.to_value] = RecordCounter(class_list)
-            part_counter = {
-                "left": RecordCounter(class_list),
-                "right": RecordCounter(class_list),
-                }
-            for value in value_counter:
-                part_counter["right"] += value_counter[value]
-            sorted_values = sorted(value_counter.keys())
-            weights = []
-            intervals = []
-            pre_value = sorted_values[0]
-            # Weight calculation
-            for value in sorted_values[1:]:
-                part_counter["left"] += value_counter[pre_value]
-                part_counter["right"] -= value_counter[pre_value]
-                intervals.append((pre_value, value))
-                score = information_gain(self.counter, part_counter)
-                w = exp_mechanism(edp, sensi, score)\
-                    * (value-pre_value)
-                weights.append(w)          
-            # Exp choose
-            interval = random.choices(intervals, weights=weights)[0]
-            while True:
-                split_value = random.uniform(interval[0], interval[1])
-                split_value = round(split_value, DIGIT)
-                if split_value > interval[1]:
-                    split_value = interval[1]
-                if (split_value > interval[0]) \
-                    and (split_value != self.to_value):  # Okay
-                    break
-            # Re-count
-            self.split_value = split_value
-            self.child_counter = {
-                "left": RecordCounter(class_list),
-                "right": RecordCounter(class_list),
-                }
-            for value in sorted_values:
-                if value < self.split_value:
-                    self.child_counter["left"] += value_counter[value]
-                else:
-                    self.child_counter["right"] += value_counter[value]
+            return
+        # Prepare weight
+        if not self.from_value in value_counter:
+            value_counter[self.from_value] = RecordCounter(class_list)
+        value_counter[self.to_value] = RecordCounter(class_list)
+        part_counter = {
+            self.left: RecordCounter(class_list),
+            self.right: RecordCounter(class_list),
+            }
+        for value in value_counter:
+            part_counter[self.right] += value_counter[value]
+        sorted_values = sorted(value_counter.keys())
+        weights = []
+        intervals = []
+        pre_value = sorted_values[0]
+        # Weight calculation
+        for value in sorted_values[1:]:
+            part_counter[self.left] += value_counter[pre_value]
+            part_counter[self.right] -= value_counter[pre_value]
+            intervals.append((pre_value, value))
+            score = information_gain(self.counter, part_counter)
+            w = exp_mechanism(edp, sensi, score)\
+                * (value-pre_value)
+            weights.append(w)          
+        # Exp choose
+        interval = random.choices(intervals, weights=weights)[0]
+        while True:
+            split_value = random.uniform(interval[0], interval[1])
+            split_value = round(split_value, DIGIT)
+            if split_value > interval[1]:
+                split_value = interval[1]
+            if (split_value > interval[0]) \
+                and (split_value != self.to_value):  # Okay
+                break
+        # Re-count
+        self.split_value = split_value
+        self.child_counter = {
+            self.left: RecordCounter(class_list),
+            self.right: RecordCounter(class_list),
+            }
+        for value in sorted_values:
+            if value < self.split_value:
+                self.child_counter[self.left] += value_counter[value]
+            else:
+                self.child_counter[self.right] += value_counter[value]
 
-    def specialize(self):
+    def specialize(self) -> List[IntervalCutCandidate]:
+        assert self.split_value
         child_candidates = []
         interval = {
-            "left": (self.from_value, self.split_value),
-            "right": (self.split_value, self.to_value)
+            self.left: (self.from_value, self.split_value),
+            self.right: (self.split_value, self.to_value)
             }
         for part in interval:
             candidate = IntervalCutCandidate(
