@@ -10,18 +10,21 @@ class TaxonomyValueMapper:
     parent_list = {}
     leaf_list = {}
 
-    def __init__(self, node):
+    def __init__(self, node:dict):
+        assert node[TAXO_NODE_CHILD]
         for child in node[TAXO_NODE_CHILD]:
             node_value = child[TAXO_NODE_NAME]
-            leafs = self.__scan_tree(node)   
+            leafs = self.__scan_tree(child)   
             self.leaf_list[node_value] = leafs
 
-    def __scan_tree(self, node):
+    def __scan_tree(self, node:dict) -> list:
         node_value = node[TAXO_NODE_NAME]
         child_list = node[TAXO_NODE_CHILD]
-        if not child_list:   # Is a leaf
+        # Is a leaf
+        if not child_list:   
             self.parent_list[node_value] = []
             return [node_value]
+        # Not a leaf
         leafs = []
         for child in child_list:
             new_leafs = self.__scan_tree(child)
@@ -37,9 +40,10 @@ class TaxonomyValueMapper:
 
     def specialize(self, value):
         for leaf_value in self.leaf_list[value]:
+            # If value has leafs, then it is not a leaf
             self.parent_list[leaf_value].pop()
-            if self.parent_list[leaf_value]:
-                new_parent = self.parent_list[leaf_value][-1]
+            new_parent = self.get_general_value(leaf_value)
+            if new_parent != leaf_value: # leaf value still has parent
                 if not new_parent in self.leaf_list:
                     self.leaf_list[new_parent] = []
                 self.leaf_list[new_parent].append(leaf_value)
