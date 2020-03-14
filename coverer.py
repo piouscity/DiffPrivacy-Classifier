@@ -52,13 +52,13 @@ class TaxonomyValueMapper:
 
 class TaxonomyValueMapperSet:
     mappers = {}
-    def __init__(self, taxo_tree):
+    def __init__(self, taxo_tree:dict):
         for att in taxo_tree:
             if TAXO_ROOT in taxo_tree[att]: # Category attribute
                 root = taxo_tree[att][TAXO_ROOT]
                 self.mappers[att] = TaxonomyValueMapper(root)
                 
-    def get_mapper_by_att(self, att):
+    def get_mapper_by_att(self, att) -> TaxonomyValueMapper:
         return self.mappers[att]
 
 
