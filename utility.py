@@ -3,8 +3,8 @@ from typing import Dict, Any
 
 
 class RecordCounter:
-    def __init__(self, class_list=None):
-        self.count_all = 0
+    count_all = 0
+    def __init__(self, class_list:list = None):
         if class_list:
             self.count = {
                 cls: 0
@@ -20,7 +20,7 @@ class RecordCounter:
         else:
             self.count[cls] = 1
 
-    def __add__(self, other):
+    def __add__(self, other:RecordCounter) -> RecordCounter:
         result = RecordCounter()
         result.count_all = self.count_all + other.count_all
         result.count = {
@@ -29,7 +29,7 @@ class RecordCounter:
             }
         return result
 
-    def __sub__(self, other):
+    def __sub__(self, other:RecordCounter) -> RecordCounter:
         result = RecordCounter()
         result.count_all = self.count_all - other.count_all
         result.count = {
@@ -39,7 +39,7 @@ class RecordCounter:
         return result
 
 
-def entropy(value: RecordCounter):
+def entropy(value: RecordCounter) -> float:
     assert value.count_all != 0
     result = 0
     for cls in value.count:
@@ -48,7 +48,8 @@ def entropy(value: RecordCounter):
     return result
 
 
-def information_gain(value: RecordCounter, child: Dict[Any, RecordCounter]):
+def information_gain(value: RecordCounter, child: Dict[Any, RecordCounter]) \
+    -> float:
     result = entropy(value)
     for c_val in child:
         if child[c_val].count_all == 0:
@@ -58,5 +59,6 @@ def information_gain(value: RecordCounter, child: Dict[Any, RecordCounter]):
     return result
 
 
-def exp_mechanism(edp, sensi, score):
+def exp_mechanism(edp:float, sensi:float, score:float) -> float:
+    assert sensi != 0
     return math.exp(edp/(2*sensi)*score)
