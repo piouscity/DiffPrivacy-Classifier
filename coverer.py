@@ -118,20 +118,20 @@ class CutCandidate:
 
 
 class CategoryCutCandidate(CutCandidate):
-    def __init__(self, att, taxo_node):
+    def __init__(self, att, taxo_node:dict):
         super().__init__(att)
-        self.node = taxo_node
+        self.taxo_node = taxo_node
 
     def export_value(self):
-        return self.node[TAXO_NODE_NAME]
+        return self.taxo_node[TAXO_NODE_NAME]
 
-    def child_count(self, class_list, mapper):
-        if not self.node[TAXO_NODE_CHILD]:
+    def child_count(self, class_list:list, mapper:TaxonomyValueMapper):
+        if not self.taxo_node[TAXO_NODE_CHILD]:
             self.splittable = False
             return
         value_counter = {
             node[TAXO_NODE_NAME]: RecordCounter(class_list)
-            for node in self.node[TAXO_NODE_CHILD]
+            for node in self.taxo_node[TAXO_NODE_CHILD]
             }
         for item in self.get_all_items():
             value = item[self.attribute]
@@ -139,17 +139,17 @@ class CategoryCutCandidate(CutCandidate):
             value_counter[general_value].record(item[CLASS_ATTRIBUTE])
         self.child_counter = value_counter
 
-    def specialize(self, mapper):
+    def specialize(self, mapper:TaxonomyValueMapper) \
+        -> List[CategoryCutCandidate]:
         child_candidates = []
-        for taxo_child in self.node[TAXO_NODE_CHILD]:
+        data_node_record = {}
+        for taxo_child in self.taxo_node[TAXO_NODE_CHILD]:
+            child_value = taxo_child[TAXO_NODE_NAME]
             candidate = CategoryCutCandidate(self.attribute, taxo_child)
-            candidate.counter = self.child_counter[taxo_child[TAXO_NODE_NAME]]
+            candidate.counter = self.child_counter[child_value]
             child_candidates.append(candidate)
+            data_node_record[child_value] = None
         self.refresh_data_nodes()
-        data_node_record = {
-            taxo_child[TAXO_NODE_NAME]: None
-            for taxo_child in self.node[TAXO_NODE_CHILD]
-            }
         for data_node in self.data_nodes:
             for value in data_node_record:
                 new_node = DatasetNode()
@@ -162,9 +162,9 @@ class CategoryCutCandidate(CutCandidate):
             data_node.clean_up()
             for candidate in child_candidates:
                 candidate.add_data_node(
-                    data_node_record[candidate.node[TAXO_NODE_NAME]]
+                    data_node_record[candidate.taxo_node[TAXO_NODE_NAME]]
                     )
-        for taxo_child in self.node[TAXO_NODE_CHILD]:
+        for taxo_child in self.taxo_node[TAXO_NODE_CHILD]:
             mapper.specialize(taxo_child[TAXO_NODE_NAME])
         return child_candidates
 
