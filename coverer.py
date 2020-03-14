@@ -411,7 +411,7 @@ class DatasetNode:
         ex_dataset = []
         leafs = self.get_all_leafs()
         for leaf in leafs:
-            ex_item = self.represent.copy()
+            ex_item = leaf.represent.copy()
             counter = RecordCounter(class_list)
             for item in leaf.get_all_items():
                 counter.record(item[CLASS_ATTRIBUTE])
