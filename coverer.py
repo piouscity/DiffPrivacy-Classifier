@@ -252,6 +252,7 @@ class IntervalCutCandidate(CutCandidate):
 
 
 class CutCandidateSet:
+    unsplittable_list = []
     candidate_list = []
     new_float_cands = []
     new_category_cands = []
@@ -299,6 +300,8 @@ class CutCandidateSet:
             if candidate.splittable:
                 candidate.calculate_score()
                 self.candidate_list.append(candidate)
+            else:
+                self.unsplittable_list.append(candidate)
         self.new_category_cands = []
         self.new_float_cands = []
     
