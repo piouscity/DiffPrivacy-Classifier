@@ -1,4 +1,4 @@
-import math, random
+import math, random, numpy
 
 from validator import count_float_attribute
 from settings import TAXO_ROOT, TAXO_NODE_NAME, TAXO_NODE_CHILD, TAXO_FROM, \
@@ -394,6 +394,26 @@ class DatasetNode:
     def get_all_items(self):
         for item in self.dataset:
             yield item
+
+    def export_dataset(self, edp, class_list):
+        ex_dataset = []
+        leafs = self.get_all_leafs()
+        for leaf in leafs:
+            ex_item = self.represent.copy()
+            counter = RecordCounter(class_list)
+            for item in leaf.get_all_items():
+                counter.record(item[CLASS_ATTRIBUTE])
+            for cls in counter.count:
+                cnt = counter.count[cls]
+                cnt += numpy.random.laplace(scale=1/edp)
+                if cnt < 0:
+                    cnt = 0
+                else:
+                    cnt = round(cnt)
+                header = "{att}:{val}".format(att=CLASS_ATTRIBUTE, val=cls)
+                ex_item[header] = cnt
+            ex_dataset.append(ex_item)
+        return ex_dataset
             
 
 def generate_dp_dataset(dataset, taxo_tree, edp, steps):
@@ -410,3 +430,5 @@ def generate_dp_dataset(dataset, taxo_tree, edp, steps):
         cut_set.specialize_candidate(index)
         cut_set.determine_new_splits(single_edp)
         cut_set.calculate_candidate_score()
+    cut_set.transfer_candidate_values()
+    return data_root.export_dataset(edp/2, cut_set.class_list)
