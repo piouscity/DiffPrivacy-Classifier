@@ -38,6 +38,12 @@ class TaxonomyValueMapper:
     def specialize(self, value):
         for leaf_value in self.leaf_list[value]:
             self.parent_list[leaf_value].pop()
+            if self.parent_list[leaf_value]:
+                new_parent = self.parent_list[leaf_value][-1]
+                if not new_parent in self.leaf_list:
+                    self.leaf_list[new_parent] = []
+                self.leaf_list[new_parent].append(leaf_value)
+        self.leaf_list[value] = []
 
 
 class TaxonomyValueMapperSet:
@@ -177,7 +183,8 @@ class CategoryCutCandidate(CutCandidate):
                 candidate.add_data_node(
                     data_node_record[candidate.node[TAXO_NODE_NAME]]
                     )
-        mapper.specialize(self.node[TAXO_NODE_NAME])
+        for taxo_child in self.node[TAXO_NODE_CHILD]:
+            mapper.specialize(taxo_child[TAXO_NODE_NAME])
         return child_candidates
 
 
