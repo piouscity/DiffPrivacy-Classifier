@@ -282,32 +282,30 @@ class CutCandidateSet:
     new_float_cands = []
     new_category_cands = []
 
-    def __init__(self, taxo_tree, root):
+    def __init__(self, taxo_tree:dict, root:DatasetNode):
         self.mapper_set = TaxonomyValueMapperSet(taxo_tree)
+        # Class attribute scan
         general_count = RecordCounter()
-        for item in dataset:
+        for item in root.get_all_items():
             general_count.record(item[CLASS_ATTRIBUTE])
         self.class_list = list(general_count.count.keys())
         self.sensi = math.log2(len(self.class_list))
+        assert self.sensi > 0
+        # Generate candidates
         for att in taxo_tree:
-            taxo_att = taxo_tree[att]
-            if TAXO_ROOT in taxo_att: # Category attribute
-                candidate = CategoryCutCandidate(
-                    att, 
-                    taxo_att[TAXO_ROOT]
-                    )
+            att_taxo = taxo_tree[att]
+            if TAXO_ROOT in att_taxo: # Category attribute
+                candidate = CategoryCutCandidate(att, att_taxo[TAXO_ROOT])
                 self.new_category_cands.append(candidate)
             else:   # Float attribute
                 candidate = IntervalCutCandidate(
-                    att,
-                    taxo_att[TAXO_FROM], 
-                    taxo_att[TAXO_TO]
+                    att, att_taxo[TAXO_FROM], att_taxo[TAXO_TO]
                     )
                 self.new_float_cands.append(candidate)
             candidate.add_data_node(root, general_count)
         self.category_count_childs()
 
-    def determine_new_splits(self, edp):
+    def determine_new_splits(self, edp:float):
         for candidate in self.new_float_cands:
             if (candidate.splittable) and (not candidate.split_value):
                 candidate.find_split_value(self.class_list, self.sensi, edp)
@@ -330,11 +328,12 @@ class CutCandidateSet:
         self.new_category_cands = []
         self.new_float_cands = []
     
-    def get_score_list(self):
+    def get_score_list(self) -> Iterator[float]:
         for candidate in self.candidate_list:
+            assert candidate.score
             yield candidate.score
 
-    def select_candidate(self, edp):
+    def select_candidate(self, edp:float) -> int:
         if not self.candidate_list:
             return -1
         weights = [
@@ -347,7 +346,9 @@ class CutCandidateSet:
             )[0]
         return chosen_index
 
-    def specialize_candidate(self, index):
+    def specialize_candidate(self, index:int):
+        assert index >= 0
+        assert index < len(self.candidate_list)
         chosen_candidate = self.candidate_list[index]
         if index < len(self.candidate_list)-1:  # Not the last
             self.candidate_list[index] = self.candidate_list.pop()
