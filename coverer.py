@@ -371,18 +371,19 @@ class CutCandidateSet:
 
 class DatasetNode:
     represent = {}
-    def __init__(self, dataset=None):
+    childs = []
+
+    def __init__(self, dataset:List[dict]=None):
         if not dataset:
             self.dataset = []
         else:
             assert isinstance(dataset, list)
             self.dataset = dataset
-        self.childs = []
 
-    def insert_item(self, item):
+    def insert_item(self, item:dict):
         self.dataset.append(item)
 
-    def insert_child(self, child_node):
+    def insert_child(self, child_node:DatasetNode):
         self.childs.append(child_node)
 
     def clean_up(self):
@@ -391,22 +392,22 @@ class DatasetNode:
     def insert_represent_value(self, att, value):
         self.represent[att] = value
 
-    def is_leaf(self):
+    def is_leaf(self) -> bool:
         return not self.childs
 
-    def get_all_leafs(self):
+    def get_all_leafs(self) -> List[DatasetNode]:
         if not self.childs:
-            return self
+            return [self]
         leafs = []
         for child in self.childs:
             leafs.extend(child.get_all_leafs())
         return leafs
 
-    def get_all_items(self):
+    def get_all_items(self) -> Iterator[dict]:
         for item in self.dataset:
             yield item
 
-    def export_dataset(self, edp, class_list):
+    def export_dataset(self, edp:float, class_list:list) -> List[dict]:
         ex_dataset = []
         leafs = self.get_all_leafs()
         for leaf in leafs:
@@ -427,7 +428,9 @@ class DatasetNode:
         return ex_dataset
             
 
-def generate_dp_dataset(dataset, taxo_tree, edp, steps):
+def generate_dp_dataset(
+    dataset:List[dict], taxo_tree:dict, edp:float, steps:int
+    ):
     float_att_cnt = count_float_attribute(dataset)
     single_edp = edp / 2 / (float_att_cnt + 2*steps)
     data_root = DatasetNode(dataset)
