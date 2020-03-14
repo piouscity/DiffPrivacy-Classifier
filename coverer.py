@@ -340,16 +340,22 @@ class CutCandidateSet:
             exp_mechanism(edp, self.sensi, score) 
             for score in self.get_score_list()
             ]
+        logging.info("Candidate weights: %s", str(weights))
         chosen_index = random.choices(
             list(range(len(weights))), 
             weights=weights
             )[0]
+        logging.info("Chosen candidate index: %d", chosen_index)
         return chosen_index
 
     def specialize_candidate(self, index:int):
         assert index >= 0
         assert index < len(self.candidate_list)
         chosen_candidate = self.candidate_list[index]
+        logging.info(
+            "Candidate %s is chosen to be specialize", 
+            chosen_candidate.export_value()
+            )
         if index < len(self.candidate_list)-1:  # Not the last
             self.candidate_list[index] = self.candidate_list.pop()
         else:   # Is the last
@@ -363,6 +369,10 @@ class CutCandidateSet:
         else:
             child_candidates = chosen_candidate.specialize()
             self.new_float_cands.extend(child_candidates)
+        logging.debug(
+            "New candidates: %s", 
+            str([candidate.export_value for candidate in child_candidates])
+            )
 
     def transfer_candidate_values(self):
         for candidate in chain(self.candidate_list, self.unsplittable_list):
@@ -433,6 +443,7 @@ def generate_dp_dataset(
     ):
     float_att_cnt = count_float_attribute(dataset)
     single_edp = edp / 2 / (float_att_cnt + 2*steps)
+    logging.debug("edp' =  %f", single_edp)
     data_root = DatasetNode(dataset)
     cut_set = CutCandidateSet(taxo_tree, data_root)
     cut_set.determine_new_splits(single_edp)
