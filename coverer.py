@@ -101,11 +101,23 @@ class CutCandidate:
     def calculate_score(self):
         self.score = information_gain(self.counter, self.child_counter)
 
+    def export_value(self):
+        raise NotImplementedError()
+
+    def transfer_value(self):
+        self.refresh_data_nodes()
+        value = self.export_value()
+        for node in self.data_nodes:
+            node.insert_represent_value(self.attribute, value)
+
 
 class CategoryCutCandidate(CutCandidate):
     def __init__(self, att, taxo_node):
         super().__init__(att)
         self.node = taxo_node
+
+    def export_value(self):
+        return self.node[TAXO_NODE_NAME]
 
     def child_count(self, class_list, mapper):
         if not self.node[TAXO_NODE_CHILD]:
@@ -157,6 +169,9 @@ class IntervalCutCandidate(CutCandidate):
         self.from_value = from_value
         self.to_value = to_value
         self.split_value = None
+
+    def export_value(self):
+        return "[{0},{1})".format(self.from_value, self.to_value)
 
     def find_split_value(self, class_list, sensi, edp):
         if not self.splittable:
@@ -338,8 +353,13 @@ class CutCandidateSet:
             child_candidates = chosen_candidate.specialize()
             self.new_float_cands.extend(child_candidates)
 
+    def transfer_candidate_values(self):
+        for candidate in chain(self.candidate_list, self.unsplittable_list):
+            candidate.transfer_value()
+
 
 class DatasetNode:
+    represent = {}
     def __init__(self, dataset=None):
         if not dataset:
             self.dataset = []
@@ -356,6 +376,9 @@ class DatasetNode:
 
     def clean_up(self):
         self.dataset = []
+
+    def insert_represent_value(self, att, value):
+        self.represent[att] = value
 
     def is_leaf(self):
         return not self.childs
