@@ -1,4 +1,5 @@
 import math
+from typing import Dict, Any
 
 
 class RecordCounter:
@@ -38,7 +39,8 @@ class RecordCounter:
         return result
 
 
-def entropy(value):
+def entropy(value: RecordCounter):
+    assert value.count_all != 0
     result = 0
     for cls in value.count:
         prop = value.count[cls] / value.count_all
@@ -46,9 +48,11 @@ def entropy(value):
     return result
 
 
-def information_gain(value, childs):
+def information_gain(value: RecordCounter, child: Dict[Any, RecordCounter]):
     result = entropy(value)
-    for c_val in childs:
+    for c_val in child:
+        if child[c_val].count_all == 0:
+            continue
         result -= child[c_val].count_all / value.count_all \
             * entropy(child[c_val])
     return result
