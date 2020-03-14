@@ -59,6 +59,7 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="logger\" />
     <Folder Include="taxonomy-trees\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

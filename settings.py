@@ -1,5 +1,10 @@
 IGNORE_CHECK = False    # Only ignore if taxonomy tree is ensured to be valid
 
+# Logging
+import logging
+LOG_LEVEL = logging.INFO
+LOG_FILE = "logger/logging.txt"
+
 # File paths
 DATASET_PATH = "datasets/adult-1000.csv"
 TAXO_TREE_PATH = "taxonomy-trees/adult.json"
