@@ -1,4 +1,5 @@
 import math, random, numpy
+from typing import Iterator
 
 from validator import count_float_attribute
 from settings import TAXO_ROOT, TAXO_NODE_NAME, TAXO_NODE_CHILD, TAXO_FROM, \
@@ -63,15 +64,16 @@ class TaxonomyValueMapperSet:
 
 
 class CutCandidate:
+    data_nodes = []
+    counter = None
+    child_counter = {}
+    splittable = True
+    score = None
+
     def __init__(self, att):
         self.attribute = att
-        self.data_nodes = []
-        self.counter = None
-        self.splittable = True
-        self.child_counter = {}
-        self.score = None
     
-    def add_data_node(self, node, counter=None):
+    def add_data_node(self, node:DatasetNode, counter:RecordCounter=None):
         self.data_nodes.append(node)
         if counter:
             if not self.counter:
@@ -96,7 +98,7 @@ class CutCandidate:
                 new_nodes.extend(leafs)
         self.data_nodes = new_nodes
 
-    def get_all_items(self):
+    def get_all_items(self) -> Iterator[dict]:
         self.refresh_data_nodes()
         for node in self.data_nodes:
             for item in node.get_all_items():
