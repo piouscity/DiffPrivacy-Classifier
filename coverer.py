@@ -168,10 +168,13 @@ class IntervalCutCandidate(CutCandidate):
             if not (value in value_counter):
                 value_counter[value] = RecordCounter(class_list)
             value_counter[value].record(item[CLASS_ATTRIBUTE])
-        if len(value_counter <= 1):
+        if not value_counter:
             self.splittable = False
         else:
             # Prepare weight
+            if not self.from_value in value_counter:
+                value_counter[self.from_value] = RecordCounter(class_list)
+            value_counter[self.to_value] = RecordCounter(class_list)
             part_counter = {
                 "left": RecordCounter(class_list),
                 "right": RecordCounter(class_list),
@@ -198,7 +201,8 @@ class IntervalCutCandidate(CutCandidate):
                 split_value = round(split_value, DIGIT)
                 if split_value > interval[1]:
                     split_value = interval[1]
-                if split_value > interval[0]:  # Okay
+                if (split_value > interval[0]) \
+                    and (split_value != self.to_value):  # Okay
                     break
             # Re-count
             self.split_value = split_value
