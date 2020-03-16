@@ -52,9 +52,11 @@ class TaxonomyMapper(CommonMapper):
         return leafs
 
     def get_general_value(self, value):
-        if not self.parent_list[value]:
-            return value
-        return self.parent_list[value][-1]
+        if not self.exported:
+            if not self.parent_list[value]:
+                return value
+            return self.parent_list[value][-1]
+        return self.current_parent[value]
 
     def specialize(self, value):
         for leaf_value in self.leaf_list[value]:
@@ -70,7 +72,10 @@ class TaxonomyMapper(CommonMapper):
                     leaf_value, new_parent
                     )
                 self.leaf_list[new_parent].append(leaf_value)
-        self.leaf_list[value] = []
+        if not self.leaf_list[value]:   # Value is a leaf
+            self.current_parent[value] = value
+        else:
+            self.leaf_list[value] = []
 
     def clean_up(self):
         self.exported = True
