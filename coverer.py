@@ -16,6 +16,7 @@ class TaxonomyValueMapper:
         for child in node[TAXO_NODE_CHILD]:
             node_value = child[TAXO_NODE_NAME]
             leafs = self.__scan_tree(child)   
+            logging.debug("Next parent of %s is %s", str(leafs), node_value)
             self.leaf_list[node_value] = leafs
 
     def __scan_tree(self, node:dict) -> list:
@@ -47,6 +48,10 @@ class TaxonomyValueMapper:
             if new_parent != leaf_value: # leaf value still has parent
                 if not new_parent in self.leaf_list:
                     self.leaf_list[new_parent] = []
+                logging.debug(
+                    "Next parent of %s is %s", 
+                    leaf_value, new_parent
+                    )
                 self.leaf_list[new_parent].append(leaf_value)
         self.leaf_list[value] = []
 
@@ -127,6 +132,10 @@ class CategoryCutCandidate(CutCandidate):
         return self.taxo_node[TAXO_NODE_NAME]
 
     def child_count(self, class_list:list, mapper:TaxonomyValueMapper):
+        logging.debug(
+            "Couting child of %s, attribute %s", 
+            self.export_value(), self.attribute
+            )
         if not self.taxo_node[TAXO_NODE_CHILD]:
             self.splittable = False
             return
@@ -185,6 +194,10 @@ class IntervalCutCandidate(CutCandidate):
         return "[{0},{1})".format(self.from_value, self.to_value)
 
     def find_split_value(self, class_list:list, sensi:float, edp:float):
+        logging.debug(
+            "Finding split value of %s, attribute %s", 
+            self.export_value(), self.attribute
+            )
         value_counter = {}
         # Count
         for item in self.get_all_items():
@@ -217,7 +230,9 @@ class IntervalCutCandidate(CutCandidate):
             score = information_gain(self.counter, part_counter)
             w = exp_mechanism(edp, sensi, score)\
                 * (value-pre_value)
-            weights.append(w)          
+            weights.append(w)  
+        logging.info("List of splitting intervals: %s", str(intervals))
+        logging.info("List of corresponding weights: %s", str(weights))
         # Exp choose
         interval = random.choices(intervals, weights=weights)[0]
         while True:
@@ -228,6 +243,7 @@ class IntervalCutCandidate(CutCandidate):
             if (split_value > interval[0]) \
                 and (split_value != self.to_value):  # Okay
                 break
+        logging.info("Split value is %f", split_value)
         # Re-count
         self.split_value = split_value
         self.child_counter = {
@@ -322,6 +338,10 @@ class CutCandidateSet:
         for candidate in chain(self.new_category_cands, self.new_float_cands):
             if candidate.splittable:
                 candidate.calculate_score()
+                logging.debug(
+                    "Score of candidate %s is %f", 
+                    candidate.export_value(), candidate.score
+                    )
                 self.candidate_list.append(candidate)
             else:
                 self.unsplittable_list.append(candidate)
@@ -345,7 +365,6 @@ class CutCandidateSet:
             list(range(len(weights))), 
             weights=weights
             )[0]
-        logging.info("Chosen candidate index: %d", chosen_index)
         return chosen_index
 
     def specialize_candidate(self, index:int):
@@ -449,9 +468,12 @@ def generate_dp_dataset(
     cut_set.determine_new_splits(single_edp)
     cut_set.calculate_candidate_score()
     for i in range(steps):
+        logging.debug("Specializing, step %d", i+1)
         index = cut_set.select_candidate(single_edp)
         if index == -1:
+            logging.warn("No more candidate to specialize. Step %d", i+1)
             break
+        logging.info("Chosen candidate index: %d", index)
         cut_set.specialize_candidate(index)
         cut_set.determine_new_splits(single_edp)
         cut_set.calculate_candidate_score()
