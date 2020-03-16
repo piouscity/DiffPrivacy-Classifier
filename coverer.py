@@ -7,7 +7,15 @@ from settings import TAXO_ROOT, TAXO_NODE_NAME, TAXO_NODE_CHILD, TAXO_FROM, \
 from utility import information_gain, exp_mechanism, RecordCounter
 
 
-class TaxonomyMapper:
+class CommonMapper:
+    def get_general_value(self, value):
+        raise NotImplementedError()
+
+    def specialize(self, value):
+        raise NotImplementedError()
+
+
+class TaxonomyMapper(CommonMapper):
     parent_list = {}
     leaf_list = {}
     current_parent = {}
@@ -61,6 +69,17 @@ class TaxonomyMapper:
         self.leaf_list[value] = []
 
 
+class IntervalMapper(CommonMapper):
+    split_values = []
+
+    def __init__(self, from_value:float, to_value:float):
+        self.from_value = from_value
+        self.to_value = to_value
+
+    def specialize(self, value:float):
+        self.split_values.append(value)
+
+
 class ValueMapperSet:
     mappers = {}
     def __init__(self, taxo_tree:dict):
@@ -68,8 +87,12 @@ class ValueMapperSet:
             if TAXO_ROOT in taxo_tree[att]: # Category attribute
                 root = taxo_tree[att][TAXO_ROOT]
                 self.mappers[att] = TaxonomyMapper(root)
+            else: # Float attribute
+                self.mapper[att] = IntervalMapper(
+                    taxo_tree[att][TAXO_FROM], taxo_tree[att][TAXO_TO]
+                    )
                 
-    def get_mapper_by_att(self, att) -> TaxonomyMapper:
+    def get_mapper_by_att(self, att) -> CommonMapper:
         return self.mappers[att]
 
 
@@ -261,7 +284,7 @@ class IntervalCutCandidate(CutCandidate):
             else:
                 self.child_counter[self.right] += value_counter[value]
 
-    def specialize(self) -> List[IntervalCutCandidate]:
+    def specialize(self, mapper:IntervalMapper) -> List[IntervalCutCandidate]:
         assert self.split_value
         child_candidates = []
         interval = {
@@ -294,6 +317,7 @@ class IntervalCutCandidate(CutCandidate):
                     candidate.add_data_node(left_node)
                 else:
                     candidate.add_data_node(right_node)
+        mapper.specialize(self.split_value)
         return child_candidates
 
 
@@ -384,14 +408,14 @@ class CutCandidateSet:
             self.candidate_list[index] = self.candidate_list.pop()
         else:   # Is the last
             self.candidate_list.pop()
+        # Commit
+        child_candidates = chosen_candidate.specialize(
+            self.mapper_set.get_mapper_by_att(chosen_candidate.attribute)
+            )
         if isinstance(chosen_candidate, CategoryCutCandidate):
-            child_candidates = chosen_candidate.specialize(
-                self.mapper_set.get_mapper_by_att(chosen_candidate.attribute)
-                )
             self.new_category_cands.extend(child_candidates)
             self.category_count_childs()
         else:
-            child_candidates = chosen_candidate.specialize()
             self.new_float_cands.extend(child_candidates)
         logging.debug(
             "New candidates: %s", 
