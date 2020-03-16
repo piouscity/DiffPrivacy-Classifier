@@ -7,7 +7,7 @@ from settings import TAXO_ROOT, TAXO_NODE_NAME, TAXO_NODE_CHILD, TAXO_FROM, \
 from utility import information_gain, exp_mechanism, RecordCounter
 
 
-class TaxonomyValueMapper:
+class TaxonomyMapper:
     parent_list = {}
     leaf_list = {}
     current_parent = {}
@@ -67,9 +67,9 @@ class TaxonomyValueMapperSet:
         for att in taxo_tree:
             if TAXO_ROOT in taxo_tree[att]: # Category attribute
                 root = taxo_tree[att][TAXO_ROOT]
-                self.mappers[att] = TaxonomyValueMapper(root)
+                self.mappers[att] = TaxonomyMapper(root)
                 
-    def get_mapper_by_att(self, att) -> TaxonomyValueMapper:
+    def get_mapper_by_att(self, att) -> TaxonomyMapper:
         return self.mappers[att]
 
 
@@ -136,7 +136,7 @@ class CategoryCutCandidate(CutCandidate):
     def export_value(self):
         return self.taxo_node[TAXO_NODE_NAME]
 
-    def child_count(self, class_list:list, mapper:TaxonomyValueMapper):
+    def child_count(self, class_list:list, mapper:TaxonomyMapper):
         logging.debug(
             "Couting child of %s, attribute %s", 
             self.export_value(), self.attribute
@@ -154,7 +154,7 @@ class CategoryCutCandidate(CutCandidate):
             value_counter[general_value].record(item[CLASS_ATTRIBUTE])
         self.child_counter = value_counter
 
-    def specialize(self, mapper:TaxonomyValueMapper) \
+    def specialize(self, mapper:TaxonomyMapper) \
         -> List[CategoryCutCandidate]:
         assert self.taxo_node[TAXO_NODE_CHILD]
         child_candidates = []
