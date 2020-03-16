@@ -1,4 +1,5 @@
 import math, random, numpy, logging
+from bisect import bisect
 from typing import Iterator, List, Tuple
 
 from validator import count_float_attribute
@@ -87,8 +88,14 @@ class IntervalMapper(CommonMapper):
     split_values = []
 
     def __init__(self, from_value:float, to_value:float):
-        self.from_value = from_value
-        self.to_value = to_value
+        self.split_values.append(from_value)
+        self.split_values.append(to_value)
+
+    def get_general_value(self, value:float) -> Tuple[float,float]:
+        index = bisect(self.split_values, value)
+        assert index > 0
+        assert index < len(self.split_values)
+        return (self.split_values[index-1], self.split_values[index])
 
     def specialize(self, value:float):
         self.split_values.append(value)
