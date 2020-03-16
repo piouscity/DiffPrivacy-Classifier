@@ -61,7 +61,7 @@ class TaxonomyMapper:
         self.leaf_list[value] = []
 
 
-class TaxonomyValueMapperSet:
+class ValueMapperSet:
     mappers = {}
     def __init__(self, taxo_tree:dict):
         for att in taxo_tree:
@@ -304,7 +304,7 @@ class CutCandidateSet:
     new_category_cands = []
 
     def __init__(self, taxo_tree:dict, root:DatasetNode):
-        self.mapper_set = TaxonomyValueMapperSet(taxo_tree)
+        self.mapper_set = ValueMapperSet(taxo_tree)
         # Class attribute scan
         general_count = RecordCounter()
         for item in root.get_all_items():
