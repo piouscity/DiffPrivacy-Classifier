@@ -1,5 +1,5 @@
 import math, random, numpy, logging
-from typing import Iterator, List
+from typing import Iterator, List, Tuple
 
 from validator import count_float_attribute
 from settings import TAXO_ROOT, TAXO_NODE_NAME, TAXO_NODE_CHILD, TAXO_FROM, \
@@ -14,11 +14,15 @@ class CommonMapper:
     def specialize(self, value):
         raise NotImplementedError()
 
+    def clean_up(self):
+        raise NotImplementedError()
+
 
 class TaxonomyMapper(CommonMapper):
     parent_list = {}
     leaf_list = {}
     current_parent = {}
+    exported = False
 
     def __init__(self, node:dict):
         assert node[TAXO_NODE_CHILD]
@@ -68,6 +72,11 @@ class TaxonomyMapper(CommonMapper):
                 self.leaf_list[new_parent].append(leaf_value)
         self.leaf_list[value] = []
 
+    def clean_up(self):
+        self.exported = True
+        self.parent_list = {}
+        self.leaf_list = {}
+
 
 class IntervalMapper(CommonMapper):
     split_values = []
@@ -78,6 +87,9 @@ class IntervalMapper(CommonMapper):
 
     def specialize(self, value:float):
         self.split_values.append(value)
+
+    def clean_up(self):
+        self.split_values = sorted(self.split_values)
 
 
 class ValueMapperSet:
@@ -94,6 +106,10 @@ class ValueMapperSet:
                 
     def get_mapper_by_att(self, att) -> CommonMapper:
         return self.mappers[att]
+
+    def clean_up(self):
+        for att in self.mappers:
+            mappers[att].clean_up()
 
 
 class CutCandidate:
@@ -426,6 +442,10 @@ class CutCandidateSet:
         for candidate in chain(self.candidate_list, self.unsplittable_list):
             candidate.transfer_value()
 
+    def export_mapper_set(self) -> ValueMapperSet:
+        self.mapper_set.clean_up()
+        return self.mapper_set
+
 
 class DatasetNode:
     represent = {}
@@ -488,7 +508,7 @@ class DatasetNode:
 
 def generate_dp_dataset(
     dataset:List[dict], taxo_tree:dict, edp:float, steps:int
-    ):
+    ) -> Tuple[List[dict], ValueMapperSet]:
     float_att_cnt = count_float_attribute(dataset)
     single_edp = edp / 2 / (float_att_cnt + 2*steps)
     logging.debug("edp' =  %f", single_edp)
@@ -507,4 +527,7 @@ def generate_dp_dataset(
         cut_set.determine_new_splits(single_edp)
         cut_set.calculate_candidate_score()
     cut_set.transfer_candidate_values()
-    return data_root.export_dataset(edp/2, cut_set.class_list)
+    return (
+        data_root.export_dataset(edp/2, cut_set.class_list),
+        cut_set.export_mapper_set()
+        )
