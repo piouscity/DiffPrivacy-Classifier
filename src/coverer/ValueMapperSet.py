@@ -10,7 +10,7 @@ class ValueMapperSet:
                 root = taxo_tree[att][TAXO_ROOT]
                 self.mappers[att] = TaxonomyMapper(root)
             else: # Float attribute
-                self.mapper[att] = IntervalMapper(
+                self.mappers[att] = IntervalMapper(
                     taxo_tree[att][TAXO_FROM], taxo_tree[att][TAXO_TO]
                     )
                 
