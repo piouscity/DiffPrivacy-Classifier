@@ -22,6 +22,21 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\coverer\CommonMapper.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\coverer\CutCandidate.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\coverer\CutCandidateSet.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\coverer\DatasetNode.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\coverer\ValueMapperSet.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\exceptions.py">
       <SubType>Code</SubType>
     </Compile>
@@ -29,13 +44,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="main.py" />
-    <Compile Include="src\coverer.py">
+    <Compile Include="src\coverer\routine.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="settings.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\utility.py">
+    <Compile Include="src\coverer\utility.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\validator.py">
@@ -71,6 +86,7 @@
     <Folder Include="data\private_datasets\" />
     <Folder Include="data\taxonomy-trees\" />
     <Folder Include="src\" />
+    <Folder Include="src\coverer\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

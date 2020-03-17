@@ -5,7 +5,7 @@ from src.validator import check_valid_taxonomy_tree
 from src.file_handler import import_dataset, import_taxonomy_tree, export_dataset
 from settings import DATASET_PATH, TAXO_TREE_PATH, RECORD_PATH, EDP, STEPS, \
     IGNORE_CHECK, LOG_LEVEL, LOG_FILE
-from src.coverer import generate_dp_dataset
+from src.coverer.routine import generate_dp_dataset
 
 try:
     logging.basicConfig(filename=LOG_FILE, filemode='w',level=LOG_LEVEL)
