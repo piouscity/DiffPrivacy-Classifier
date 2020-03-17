@@ -44,8 +44,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="data\datasets\adult-1000.csv" />
+    <Content Include="data\datasets\adult.csv" />
+    <Content Include="data\datasets\tae.data" />
+    <Content Include="data\datasets\tae.names" />
+    <Content Include="data\datasets\winequality-white.csv" />
+    <Content Include="data\private_datasets\adult-1000.csv" />
     <Content Include="requirements.txt" />
-    <Content Include="taxonomy-trees\adult.json" />
+    <Content Include="data\taxonomy-trees\adult.json" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
@@ -59,8 +65,11 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="data\datasets\" />
     <Folder Include="logger\" />
-    <Folder Include="taxonomy-trees\" />
+    <Folder Include="data\" />
+    <Folder Include="data\private_datasets\" />
+    <Folder Include="data\taxonomy-trees\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
