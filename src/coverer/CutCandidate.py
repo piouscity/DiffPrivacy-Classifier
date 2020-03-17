@@ -4,7 +4,8 @@ from typing import Iterator, List
 from settings import TAXO_NODE_NAME, TAXO_NODE_CHILD, CLASS_ATTRIBUTE, DIGIT
 from .CommonMapper import TaxonomyMapper, IntervalMapper
 from .DatasetNode import DatasetNode
-from .utility import RecordCounter, information_gain, exp_mechanism
+from .utility import RecordCounter, information_gain, exp_mechanism, \
+    interval_to_str
 
 
 class CutCandidate:
@@ -130,7 +131,7 @@ class IntervalCutCandidate(CutCandidate):
         self.to_value = to_value
 
     def export_value(self) -> str:
-        return "[{0},{1})".format(self.from_value, self.to_value)
+        return interval_to_str(self.from_value, self.to_value)
 
     def find_split_value(self, class_list:list, sensi:float, edp:float):
         logging.debug(

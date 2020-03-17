@@ -14,6 +14,9 @@ class ValueMapperSet:
                     taxo_tree[att][TAXO_FROM], taxo_tree[att][TAXO_TO]
                     )
                 
+    def get_attributes(self) -> list:
+        return list(self.mappers.keys())
+
     def get_mapper_by_att(self, att) -> CommonMapper:
         return self.mappers[att]
 

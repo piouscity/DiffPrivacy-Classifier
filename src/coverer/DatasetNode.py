@@ -20,10 +20,12 @@ class DatasetNode:
         self.dataset.append(item)
 
     def insert_child(self, child_node:DatasetNode):
+        child_node.represent.update(self.represent)
         self.childs.append(child_node)
 
     def clean_up(self):
         self.dataset = []
+        self.represent = {}
 
     def insert_represent_value(self, att, value):
         self.represent[att] = value

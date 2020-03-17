@@ -9,7 +9,7 @@ from .ValueMapperSet import ValueMapperSet
 
 def generate_dp_dataset(
     dataset:List[dict], taxo_tree:dict, edp:float, steps:int
-    ) -> Tuple[List[dict], ValueMapperSet]:
+    ) -> Tuple[List[dict], ValueMapperSet, list]:
     float_att_cnt = count_float_attribute(dataset)
     single_edp = edp / 2 / (float_att_cnt + 2*steps)
     logging.debug("edp' =  %f", single_edp)
@@ -30,5 +30,30 @@ def generate_dp_dataset(
     cut_set.transfer_candidate_values()
     return (
         data_root.export_dataset(edp/2, cut_set.class_list),
-        cut_set.export_mapper_set()
+        cut_set.export_mapper_set(),
+        cut_set.class_list
         )
+
+
+def apply_generalization(
+    dataset:List[dict], mapper_set:ValueMapperSet, class_list:list, edp:float
+    ) -> List[dict]:
+    data_root = DatasetNode(dataset)
+    leaf_list = data_root.get_all_leafs()
+    for att in mapper_set.get_attributes():
+        mapper = mapper_set.get_mapper_by_att(att)
+        new_leaf_list = []
+        for data_node in leaf_list:
+            child_record = {}
+            for item in data_node.get_all_items():
+                gen_value = mapper.get_general_value(item[att])
+                if not gen_value in child_record:
+                    new_child = DatasetNode()
+                    new_child.insert_represent_value(att, gen_value)
+                    data_node.insert_child(new_child)
+                    child_record[gen_value] = new_child
+                child_record[gen_value].insert_item(item)
+            data_node.clean_up()
+            new_leaf_list.extend(data_node.get_all_leafs())
+        leaf_list = new_leaf_list
+    return data_root.export_dataset(edp, class_list)

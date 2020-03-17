@@ -3,6 +3,7 @@ from typing import Tuple
 from bisect import bisect
 
 from settings import TAXO_NODE_NAME, TAXO_NODE_CHILD
+from .utility import interval_to_str
 
 
 class CommonMapper:
@@ -92,7 +93,9 @@ class IntervalMapper(CommonMapper):
         index = bisect(self.split_values, value)
         assert index > 0
         assert index < len(self.split_values)
-        return (self.split_values[index-1], self.split_values[index])
+        return interval_to_str(
+            self.split_values[index-1], self.split_values[index]
+            )
 
     def specialize(self, value:float):
         self.split_values.append(value)
