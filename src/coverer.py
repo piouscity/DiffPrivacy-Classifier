@@ -2,10 +2,10 @@ import math, random, numpy, logging
 from bisect import bisect
 from typing import Iterator, List, Tuple
 
-from validator import count_float_attribute
+from src.validator import count_float_attribute
 from settings import TAXO_ROOT, TAXO_NODE_NAME, TAXO_NODE_CHILD, TAXO_FROM, \
    TAXO_TO, CLASS_ATTRIBUTE, DIGIT
-from utility import information_gain, exp_mechanism, RecordCounter
+from .utility import information_gain, exp_mechanism, RecordCounter
 
 
 class CommonMapper:

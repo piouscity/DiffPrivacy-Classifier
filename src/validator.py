@@ -1,4 +1,4 @@
-from exceptions import TaxoTreeMissingAttributeException, \
+from src.exceptions import TaxoTreeMissingAttributeException, \
     DatasetMissingAttributeException, DatasetAttributeMissingValueException, \
     TaxoTreeFloatAtttributeMissingRootException, TaxoNodeException, \
     TaxoTreeCategoryAttributeMissingRootException, TaxoTreeCoverageException, \

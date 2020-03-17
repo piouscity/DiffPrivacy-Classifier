@@ -22,23 +22,23 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="exceptions.py">
+    <Compile Include="src\exceptions.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="file_handler.py">
+    <Compile Include="src\file_handler.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="main.py" />
-    <Compile Include="coverer.py">
+    <Compile Include="src\coverer.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="settings.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="utility.py">
+    <Compile Include="src\utility.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="validator.py">
+    <Compile Include="src\validator.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -70,6 +70,7 @@
     <Folder Include="data\" />
     <Folder Include="data\private_datasets\" />
     <Folder Include="data\taxonomy-trees\" />
+    <Folder Include="src\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

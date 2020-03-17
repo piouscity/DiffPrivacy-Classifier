@@ -1,6 +1,6 @@
 import os, csv, json
 
-from exceptions import OpenFileException, UnsupportedFileTypeException
+from src.exceptions import OpenFileException, UnsupportedFileTypeException
 from settings import MISSING_VALUE
 
 
