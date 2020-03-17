@@ -20,7 +20,7 @@ class RecordCounter:
         else:
             self.count[cls] = 1
 
-    def __add__(self, other:RecordCounter) -> RecordCounter:
+    def __add__(self, other:'RecordCounter') -> 'RecordCounter':
         result = RecordCounter()
         result.count_all = self.count_all + other.count_all
         result.count = {
@@ -29,7 +29,7 @@ class RecordCounter:
             }
         return result
 
-    def __sub__(self, other:RecordCounter) -> RecordCounter:
+    def __sub__(self, other:'RecordCounter') -> 'RecordCounter':
         result = RecordCounter()
         result.count_all = self.count_all - other.count_all
         result.count = {

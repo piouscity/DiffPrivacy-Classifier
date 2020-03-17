@@ -90,7 +90,7 @@ class CategoryCutCandidate(CutCandidate):
         self.child_counter = value_counter
 
     def specialize(self, mapper:TaxonomyMapper) \
-        -> List[CategoryCutCandidate]:
+        -> List['CategoryCutCandidate']:
         assert self.taxo_node[TAXO_NODE_CHILD]
         child_candidates = []
         data_node_record = {}
@@ -196,7 +196,8 @@ class IntervalCutCandidate(CutCandidate):
             else:
                 self.child_counter[self.right] += value_counter[value]
 
-    def specialize(self, mapper:IntervalMapper) -> List[IntervalCutCandidate]:
+    def specialize(self, mapper:IntervalMapper) \
+        -> List['IntervalCutCandidate']:
         assert self.split_value
         child_candidates = []
         interval = {

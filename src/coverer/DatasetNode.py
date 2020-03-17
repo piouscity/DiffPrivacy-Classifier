@@ -19,7 +19,7 @@ class DatasetNode:
     def insert_item(self, item:dict):
         self.dataset.append(item)
 
-    def insert_child(self, child_node:DatasetNode):
+    def insert_child(self, child_node:'DatasetNode'):
         child_node.represent.update(self.represent)
         self.childs.append(child_node)
 
@@ -33,7 +33,7 @@ class DatasetNode:
     def is_leaf(self) -> bool:
         return not self.childs
 
-    def get_all_leafs(self) -> List[DatasetNode]:
+    def get_all_leafs(self) -> List['DatasetNode']:
         if not self.childs:
             return [self]
         leafs = []
