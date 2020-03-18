@@ -13,6 +13,7 @@ RECORD_PATH = "data/private_datasets/adult-1000.csv"
 # Dataset setting
 CLASS_ATTRIBUTE = "class"
 MISSING_VALUE = "?"
+PERCENTAGE_SPLIT = 0.8
 
 # Taxonomy tree setting
 TAXO_FROM = "min"
