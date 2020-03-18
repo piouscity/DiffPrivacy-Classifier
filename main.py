@@ -8,7 +8,7 @@ from settings import DATASET_PATH, TAXO_TREE_PATH, RECORD_PATH, EDP, STEPS, \
 from src.coverer.routine import generate_dp_dataset, split_dataset
 
 try:
-    #logging.basicConfig(filename=LOG_FILE, filemode='w',level=LOG_LEVEL)
+    logging.basicConfig(filename=LOG_FILE, filemode='w',level=LOG_LEVEL)
     dataset = import_dataset(DATASET_PATH)
     taxo_tree = import_taxonomy_tree(TAXO_TREE_PATH)
     if not IGNORE_CHECK:
