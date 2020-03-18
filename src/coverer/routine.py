@@ -2,10 +2,16 @@ import logging
 from typing import List, Tuple
 
 from src.validator import count_float_attribute
+from settings import PERCENTAGE_SPLIT
 from .CutCandidateSet import CutCandidateSet
 from .DatasetNode import DatasetNode
 from .ValueMapperSet import ValueMapperSet
-            
+
+
+def split_dataset(dataset):
+    split_point = int(len(dataset)*PERCENTAGE_SPLIT)
+    return dataset[:split_point], dataset[split_point:]
+
 
 def generate_dp_dataset(
     dataset:List[dict], taxo_tree:dict, edp:float, steps:int
