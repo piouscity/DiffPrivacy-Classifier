@@ -1,4 +1,5 @@
 import math, logging, random
+from itertools import chain
 from typing import Iterator
 
 from settings import CLASS_ATTRIBUTE, TAXO_ROOT, TAXO_FROM, TAXO_TO

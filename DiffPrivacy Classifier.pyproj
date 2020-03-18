@@ -65,6 +65,7 @@
     <Content Include="data\datasets\tae.names" />
     <Content Include="data\datasets\winequality-white.csv" />
     <Content Include="data\private_datasets\adult-1000.csv" />
+    <Content Include="logger\logging.txt" />
     <Content Include="requirements.txt" />
     <Content Include="data\taxonomy-trees\adult.json" />
   </ItemGroup>

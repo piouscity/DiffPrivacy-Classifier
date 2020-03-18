@@ -44,6 +44,8 @@ def entropy(value: RecordCounter) -> float:
     result = 0
     for cls in value.count:
         prop = value.count[cls] / value.count_all
+        if prop == 0:
+            continue
         result -= prop*math.log2(prop)
     return result
 

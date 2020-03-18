@@ -122,8 +122,8 @@ class CategoryCutCandidate(CutCandidate):
 
 class IntervalCutCandidate(CutCandidate):
     split_value = None
-    left = "left"
-    right = "right"
+    LEFT = "left"
+    RIGHT = "right"
 
     def __init__(self, att, from_value:float, to_value:float):
         super().__init__(att)
@@ -153,24 +153,25 @@ class IntervalCutCandidate(CutCandidate):
             value_counter[self.from_value] = RecordCounter(class_list)
         value_counter[self.to_value] = RecordCounter(class_list)
         part_counter = {
-            self.left: RecordCounter(class_list),
-            self.right: RecordCounter(class_list),
+            self.LEFT: RecordCounter(class_list),
+            self.RIGHT: RecordCounter(class_list),
             }
         for value in value_counter:
-            part_counter[self.right] += value_counter[value]
+            part_counter[self.RIGHT] += value_counter[value]
         sorted_values = sorted(value_counter.keys())
         weights = []
         intervals = []
         pre_value = sorted_values[0]
         # Weight calculation
         for value in sorted_values[1:]:
-            part_counter[self.left] += value_counter[pre_value]
-            part_counter[self.right] -= value_counter[pre_value]
+            part_counter[self.LEFT] += value_counter[pre_value]
+            part_counter[self.RIGHT] -= value_counter[pre_value]
             intervals.append((pre_value, value))
             score = information_gain(self.counter, part_counter)
             w = exp_mechanism(edp, sensi, score)\
                 * (value-pre_value)
-            weights.append(w)  
+            weights.append(w)
+            pre_value = value
         logging.info("List of splitting intervals: %s", str(intervals))
         logging.info("List of corresponding weights: %s", str(weights))
         # Exp choose
@@ -187,22 +188,22 @@ class IntervalCutCandidate(CutCandidate):
         # Re-count
         self.split_value = split_value
         self.child_counter = {
-            self.left: RecordCounter(class_list),
-            self.right: RecordCounter(class_list),
+            self.LEFT: RecordCounter(class_list),
+            self.RIGHT: RecordCounter(class_list),
             }
         for value in sorted_values:
             if value < self.split_value:
-                self.child_counter[self.left] += value_counter[value]
+                self.child_counter[self.LEFT] += value_counter[value]
             else:
-                self.child_counter[self.right] += value_counter[value]
+                self.child_counter[self.RIGHT] += value_counter[value]
 
     def specialize(self, mapper:IntervalMapper) \
         -> List['IntervalCutCandidate']:
         assert self.split_value
         child_candidates = []
         interval = {
-            self.left: (self.from_value, self.split_value),
-            self.right: (self.split_value, self.to_value)
+            self.LEFT: (self.from_value, self.split_value),
+            self.RIGHT: (self.split_value, self.to_value)
             }
         for part in interval:
             candidate = IntervalCutCandidate(

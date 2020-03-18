@@ -2,7 +2,7 @@ IGNORE_CHECK = False    # Only ignore if taxonomy tree is ensured to be valid
 
 # Logging
 import logging
-LOG_LEVEL = logging.INFO
+LOG_LEVEL = logging.DEBUG
 LOG_FILE = "logger/logging.txt"
 
 # File paths
