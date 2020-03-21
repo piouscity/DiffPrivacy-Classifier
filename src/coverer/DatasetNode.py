@@ -6,10 +6,9 @@ from .utility import RecordCounter
 
 
 class DatasetNode:
-    represent = {}
-    childs = []
-
     def __init__(self, dataset:List[dict]=None):
+        self.represent = {}
+        self.childs = []
         if not dataset:
             self.dataset = []
         else:

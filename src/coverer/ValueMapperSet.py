@@ -3,8 +3,8 @@ from .CommonMapper import TaxonomyMapper, IntervalMapper, CommonMapper
 
 
 class ValueMapperSet:
-    mappers = {}
     def __init__(self, taxo_tree:dict):
+        self.mappers = {}
         for att in taxo_tree:
             if TAXO_ROOT in taxo_tree[att]: # Category attribute
                 root = taxo_tree[att][TAXO_ROOT]

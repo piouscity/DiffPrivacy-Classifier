@@ -10,12 +10,11 @@ from .utility import RecordCounter, exp_mechanism
 
 
 class CutCandidateSet:
-    unsplittable_list = []
-    candidate_list = []
-    new_float_cands = []
-    new_category_cands = []
-
     def __init__(self, taxo_tree:dict, root:DatasetNode):
+        self.unsplittable_list = []
+        self.candidate_list = []
+        self.new_float_cands = []
+        self.new_category_cands = []
         self.mapper_set = ValueMapperSet(taxo_tree)
         # Class attribute scan
         general_count = RecordCounter()

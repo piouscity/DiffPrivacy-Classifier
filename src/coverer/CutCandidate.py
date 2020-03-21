@@ -9,14 +9,13 @@ from .utility import RecordCounter, information_gain, exp_mechanism, \
 
 
 class CutCandidate:
-    data_nodes = []
-    counter = None
-    child_counter = {}
-    splittable = True
-    score = None
-
     def __init__(self, att):
         self.attribute = att
+        self.data_nodes = []
+        self.counter = None
+        self.child_counter = {}
+        self.splittable = True
+        self.score = None
     
     def add_data_node(self, node:DatasetNode, counter:RecordCounter=None):
         self.data_nodes.append(node)
@@ -121,7 +120,6 @@ class CategoryCutCandidate(CutCandidate):
 
 
 class IntervalCutCandidate(CutCandidate):
-    split_value = None
     LEFT = "left"
     RIGHT = "right"
 
@@ -129,6 +127,7 @@ class IntervalCutCandidate(CutCandidate):
         super().__init__(att)
         self.from_value = from_value
         self.to_value = to_value
+        self.split_value = None
 
     def export_value(self) -> str:
         return interval_to_str(self.from_value, self.to_value)

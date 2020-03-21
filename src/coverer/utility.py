@@ -3,8 +3,8 @@ from typing import Dict, Any
 
 
 class RecordCounter:
-    count_all = 0
     def __init__(self, class_list:list = None):
+        self.count_all = 0
         if class_list:
             self.count = {
                 cls: 0

@@ -18,13 +18,12 @@ class CommonMapper:
 
 
 class TaxonomyMapper(CommonMapper):
-    parent_list = {}
-    leaf_list = {}
-    current_parent = {}
-    exported = False
-
     def __init__(self, node:dict):
         assert node[TAXO_NODE_CHILD]
+        self.parent_list = {}
+        self.leaf_list = {}
+        self.current_parent = {}
+        self.exported = False
         root_value = node[TAXO_NODE_NAME]
         for child in node[TAXO_NODE_CHILD]:
             node_value = child[TAXO_NODE_NAME]
@@ -83,11 +82,8 @@ class TaxonomyMapper(CommonMapper):
 
 
 class IntervalMapper(CommonMapper):
-    split_values = []
-
     def __init__(self, from_value:float, to_value:float):
-        self.split_values.append(from_value)
-        self.split_values.append(to_value)
+        self.split_values = [from_value, to_value]
 
     def get_general_value(self, value:float) -> Tuple[float,float]:
         index = bisect(self.split_values, value)
