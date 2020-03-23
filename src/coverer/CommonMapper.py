@@ -57,7 +57,7 @@ class TaxonomyMapper(CommonMapper):
         return self.current_parent[value]
 
     def specialize(self, value):
-        for leaf_value in self.leaf_list[value]:
+        for leaf_value in self.leaf_list.get(value, []):
             self.current_parent[leaf_value] = value
             # If value has leafs, then it is not a leaf
             self.parent_list[leaf_value].pop()
@@ -70,7 +70,7 @@ class TaxonomyMapper(CommonMapper):
                     leaf_value, new_parent
                     )
                 self.leaf_list[new_parent].append(leaf_value)
-        if not self.leaf_list[value]:   # Value is a leaf
+        if not self.leaf_list.get(value):   # Value is a leaf
             self.current_parent[value] = value
         else:
             self.leaf_list[value] = []

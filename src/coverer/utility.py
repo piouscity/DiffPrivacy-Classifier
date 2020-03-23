@@ -52,6 +52,8 @@ def entropy(value: RecordCounter) -> float:
 
 def information_gain(value: RecordCounter, child: Dict[Any, RecordCounter]) \
     -> float:
+    if value.count_all == 0:
+        return 0
     result = entropy(value)
     for c_val in child:
         if child[c_val].count_all == 0:

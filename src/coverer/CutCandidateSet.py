@@ -66,7 +66,7 @@ class CutCandidateSet:
     
     def get_score_list(self) -> Iterator[float]:
         for candidate in self.candidate_list:
-            assert candidate.score
+            assert not candidate.score is None
             yield candidate.score
 
     def select_candidate(self, edp:float) -> int:
@@ -106,7 +106,7 @@ class CutCandidateSet:
             self.new_float_cands.extend(child_candidates)
         logging.debug(
             "New candidates: %s", 
-            str([candidate.export_value for candidate in child_candidates])
+            str([candidate.export_value() for candidate in child_candidates])
             )
 
     def transfer_candidate_values(self):

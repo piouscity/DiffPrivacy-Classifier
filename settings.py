@@ -25,4 +25,4 @@ TAXO_NODE_CHILD = "childs"
 # eps-DP setting
 DIGIT = 2   # Rounding
 EDP = 2
-STEPS = 54
+STEPS = 18

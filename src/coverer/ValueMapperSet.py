@@ -22,5 +22,5 @@ class ValueMapperSet:
 
     def clean_up(self):
         for att in self.mappers:
-            mappers[att].clean_up()
+            self.mappers[att].clean_up()
 
