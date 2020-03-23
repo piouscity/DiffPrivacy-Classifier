@@ -344,3 +344,6 @@ env/*
 
 # Log files
 logger/*
+
+# Export files
+data/export/*

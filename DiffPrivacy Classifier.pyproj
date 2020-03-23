@@ -59,15 +59,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
-    <Content Include="data\datasets\adult-1000.csv" />
-    <Content Include="data\datasets\adult.csv" />
-    <Content Include="data\datasets\tae.data" />
-    <Content Include="data\datasets\tae.names" />
-    <Content Include="data\datasets\winequality-white.csv" />
-    <Content Include="data\private_datasets\adult-1000.csv" />
+    <Content Include="data\ds\adult-1000.csv" />
+    <Content Include="data\ds\adult.csv" />
+    <Content Include="data\ds\tae.data" />
+    <Content Include="data\ds\tae.names" />
+    <Content Include="data\ds\winequality-white.csv" />
     <Content Include="logger\logging.txt" />
     <Content Include="requirements.txt" />
-    <Content Include="data\taxonomy-trees\adult.json" />
+    <Content Include="data\taxos\adult.json" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
@@ -81,11 +80,11 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="data\datasets\" />
+    <Folder Include="data\ds\" />
+    <Folder Include="data\export\" />
     <Folder Include="logger\" />
     <Folder Include="data\" />
-    <Folder Include="data\private_datasets\" />
-    <Folder Include="data\taxonomy-trees\" />
+    <Folder Include="data\taxos\" />
     <Folder Include="src\" />
     <Folder Include="src\coverer\" />
   </ItemGroup>

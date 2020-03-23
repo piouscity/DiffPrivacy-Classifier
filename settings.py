@@ -6,9 +6,9 @@ LOG_LEVEL = logging.DEBUG
 LOG_FILE = "logger/logging.txt"
 
 # File paths
-DATASET_PATH = "data/datasets/adult-1000.csv"
-TAXO_TREE_PATH = "data/taxonomy-trees/adult.json"
-RECORD_PATH = "data/private_datasets/adult-1000.csv"
+DATASET_PATH = "data/ds/adult-1000.csv"
+TAXO_TREE_PATH = "data/taxos/adult.json"
+RECORD_PATH = "data/export/adult-1000.csv"
 
 # Dataset setting
 CLASS_ATTRIBUTE = "class"
