@@ -14,7 +14,7 @@ RECORD_TEST_PATH = "data/export/adult-test.csv"
 # Dataset setting
 CLASS_ATTRIBUTE = "class"
 MISSING_VALUE = "?"
-PERCENTAGE_SPLIT = 0.8
+TRAIN_DATA_SIZE = 0.8
 
 # Taxonomy tree setting
 TAXO_FROM = "min"

@@ -1,16 +1,17 @@
 import logging
 from typing import List, Tuple
+from sklearn.model_selection import train_test_split
 
 from src.validator import count_float_attribute
-from settings import PERCENTAGE_SPLIT
+from settings import TRAIN_DATA_SIZE
 from .CutCandidateSet import CutCandidateSet
 from .DatasetNode import DatasetNode
 from .ValueMapperSet import ValueMapperSet
 
 
 def split_dataset(dataset):
-    split_point = int(len(dataset)*PERCENTAGE_SPLIT)
-    return dataset[:split_point], dataset[split_point:]
+    train_data, test_data = train_test_split(dataset, train_size=TRAIN_DATA_SIZE)
+    return train_data, test_data
 
 
 def generate_dp_dataset(
