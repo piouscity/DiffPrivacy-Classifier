@@ -23,6 +23,6 @@ TAXO_NODE_NAME = "value"
 TAXO_NODE_CHILD = "childs"
 
 # eps-DP setting
-DIGIT = 2   # Rounding
+DIGIT = 0   # Rounding
 EDP = 2
 STEPS = 18

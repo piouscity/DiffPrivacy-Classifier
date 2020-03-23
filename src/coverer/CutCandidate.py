@@ -1,4 +1,4 @@
-import logging, random
+import logging, random, math
 from typing import Iterator, List
 
 from settings import TAXO_NODE_NAME, TAXO_NODE_CHILD, CLASS_ATTRIBUTE, DIGIT
@@ -6,6 +6,9 @@ from .CommonMapper import TaxonomyMapper, IntervalMapper
 from .DatasetNode import DatasetNode
 from .utility import RecordCounter, information_gain, exp_mechanism, \
     interval_to_str
+
+
+SMALLEST_SEG = math.pow(10, DIGIT)
 
 
 class CutCandidate:
@@ -137,6 +140,9 @@ class IntervalCutCandidate(CutCandidate):
             "Finding split value of %s, attribute %s", 
             self.export_value(), self.attribute
             )
+        if self.to_value - self.from_value <= SMALLEST_SEG:
+            self.splittable = False
+            return
         value_counter = {}
         # Count
         for item in self.get_all_items():
@@ -174,7 +180,11 @@ class IntervalCutCandidate(CutCandidate):
         logging.info("List of splitting intervals: %s", str(intervals))
         logging.info("List of corresponding weights: %s", str(weights))
         # Exp choose
-        interval = random.choices(intervals, weights=weights)[0]
+        while True:
+            interval = random.choices(intervals, weights=weights)[0]
+            if (interval != intervals[-1]) \
+                or (interval[1]-interval[0] > SMALLEST_SEG):   # Okay
+                break
         while True:
             split_value = random.uniform(interval[0], interval[1])
             split_value = round(split_value, DIGIT)
