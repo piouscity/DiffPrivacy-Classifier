@@ -52,6 +52,7 @@ class DatasetNode:
             counter = RecordCounter(class_list)
             for item in leaf.get_all_items():
                 counter.record(item[CLASS_ATTRIBUTE])
+            zero_case = True
             for cls in counter.count:
                 cnt = counter.count[cls]
                 cnt += numpy.random.laplace(scale=1/edp)
@@ -60,6 +61,9 @@ class DatasetNode:
                 else:
                     cnt = round(cnt)
                 header = "{att}:{val}".format(att=CLASS_ATTRIBUTE, val=cls)
+                if cnt != 0:
+                    zero_case = False
                 ex_item[header] = cnt
-            ex_dataset.append(ex_item)
+            if not zero_case:
+                ex_dataset.append(ex_item)
         return ex_dataset
