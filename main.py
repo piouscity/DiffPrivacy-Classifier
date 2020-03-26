@@ -9,7 +9,7 @@ from settings import DATASET_PATH, TAXO_TREE_PATH, EDP, STEPS, \
     TRAIN_DATA_SIZE
 from src.coverer.routine import generate_dp_dataset, apply_generalization
 from src.classifier.routine import calculate_classification_accuracy, \
-    calculate_lower_bound_accuracy, transform_dataset
+    calculate_lower_bound_accuracy, extract_group_dataset
 
 try:
     logging.basicConfig(filename=LOG_FILE, filemode='w',level=LOG_LEVEL)
@@ -30,8 +30,8 @@ try:
     export_dataset(RECORD_TEST_PATH, private_test_dataset)
     raw_accuracy = calculate_classification_accuracy(train_dataset, test_dataset)
     anonymized_accuracy = calculate_classification_accuracy(
-        transform_dataset(private_train_dataset),
-        transform_dataset(private_test_dataset))
+        extract_group_dataset(private_train_dataset),
+        extract_group_dataset(private_test_dataset))
     lower_bound_accuracy = calculate_lower_bound_accuracy(train_dataset, test_dataset)
     print("Baseline accuracy (BA): {} %".format(raw_accuracy * 100))
     print("Classification accuracy (CA): {} %".format(anonymized_accuracy * 100))
