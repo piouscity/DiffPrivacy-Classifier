@@ -3,7 +3,8 @@ from typing import List, Tuple
 from sklearn.model_selection import train_test_split
 
 from src.validator import count_float_attribute
-from settings import TRAIN_DATA_SIZE
+from src.classifier.C45 import C45
+from settings import TRAIN_DATA_SIZE, CLASS_ATTRIBUTE
 from .CutCandidateSet import CutCandidateSet
 from .DatasetNode import DatasetNode
 from .ValueMapperSet import ValueMapperSet
@@ -64,3 +65,39 @@ def apply_generalization(
             new_leaf_list.extend(data_node.get_all_leafs())
         leaf_list = new_leaf_list
     return data_root.export_dataset(edp, class_list)
+
+
+def transform_dataset(dataset):
+    attributes = list(dataset[0].keys())
+    class_values = []
+    append_attributes = []
+    for item in attributes:
+        if item.startswith(CLASS_ATTRIBUTE):
+            class_values.append(item.split(':')[-1])
+        else:
+            append_attributes.append(item)
+
+    trans_data = []
+    for item in dataset:
+        append_item = {
+            append_attribute: item[append_attribute]
+            for append_attribute in append_attributes
+        }
+        for class_value in class_values:
+            class_item = {CLASS_ATTRIBUTE: class_value}
+            for i in range(item[CLASS_ATTRIBUTE + ':' + class_value]):
+                trans_data.append({**append_item, **class_item})
+    return trans_data
+
+def calculate_classification_accuracy(train_dataset, test_dataset):
+    model = C45(train_dataset)
+    model.generate_decision_tree()
+
+    test_records = len(test_dataset)
+    accurate_records = 0
+    for item in test_dataset:
+        prediction = model.get_prediction(item)
+        if prediction == item[CLASS_ATTRIBUTE]:
+            accurate_records += 1
+
+    return float(accurate_records) / test_records

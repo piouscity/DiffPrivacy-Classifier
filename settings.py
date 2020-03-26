@@ -6,7 +6,7 @@ LOG_LEVEL = logging.INFO
 LOG_FILE = "logger/logging.txt"
 
 # File paths
-DATASET_PATH = "data/ds/adult-1000.csv"
+DATASET_PATH = "data/ds/adult.csv"
 TAXO_TREE_PATH = "data/taxos/adult.json"
 RECORD_TRAIN_PATH = "data/export/adult-train.csv"
 RECORD_TEST_PATH = "data/export/adult-test.csv"
@@ -26,4 +26,7 @@ TAXO_NODE_CHILD = "childs"
 # eps-DP setting
 DIGIT = 0   # Rounding
 EDP = 2
-STEPS = 18
+STEPS = 16
+
+# classification setting
+PRUNING_RATE = 0.8
