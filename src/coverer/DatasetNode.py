@@ -2,7 +2,7 @@ import numpy
 from typing import List, Iterator
 
 from settings import CLASS_ATTRIBUTE
-from .utility import RecordCounter
+from src.utility import RecordCounter
 
 
 class DatasetNode:

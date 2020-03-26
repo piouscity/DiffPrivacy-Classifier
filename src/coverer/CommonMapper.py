@@ -3,7 +3,7 @@ from typing import Tuple
 from bisect import bisect
 
 from settings import TAXO_NODE_NAME, TAXO_NODE_CHILD
-from .utility import interval_to_str
+from src.utility import interval_to_str
 
 
 class CommonMapper:

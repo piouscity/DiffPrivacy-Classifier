@@ -4,7 +4,7 @@ from typing import Iterator, List
 from settings import TAXO_NODE_NAME, TAXO_NODE_CHILD, CLASS_ATTRIBUTE, DIGIT
 from .CommonMapper import TaxonomyMapper, IntervalMapper
 from .DatasetNode import DatasetNode
-from .utility import RecordCounter, information_gain, exp_mechanism, \
+from src.utility import RecordCounter, information_gain, exp_mechanism, \
     interval_to_str
 
 

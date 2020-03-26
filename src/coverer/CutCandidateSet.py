@@ -6,7 +6,7 @@ from settings import CLASS_ATTRIBUTE, TAXO_ROOT, TAXO_FROM, TAXO_TO
 from .CutCandidate import CategoryCutCandidate, IntervalCutCandidate
 from .DatasetNode import DatasetNode
 from .ValueMapperSet import ValueMapperSet
-from .utility import RecordCounter, exp_mechanism
+from src.utility import RecordCounter, exp_mechanism
 
 
 class CutCandidateSet:

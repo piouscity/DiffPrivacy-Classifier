@@ -23,6 +23,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="src\classifier\C45.py" />
+    <Compile Include="src\classifier\routine.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\coverer\CommonMapper.py">
       <SubType>Code</SubType>
     </Compile>
@@ -51,7 +54,7 @@
     <Compile Include="settings.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\coverer\utility.py">
+    <Compile Include="src\utility.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\validator.py">
