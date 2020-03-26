@@ -1,19 +1,13 @@
 import logging
 from typing import List, Tuple
-from sklearn.model_selection import train_test_split
 
 from src.validator import count_float_attribute
 from src.classifier.C45 import C45
-from settings import TRAIN_DATA_SIZE, CLASS_ATTRIBUTE
+from settings import CLASS_ATTRIBUTE
 from .utility import RecordCounter
 from .CutCandidateSet import CutCandidateSet
 from .DatasetNode import DatasetNode
 from .ValueMapperSet import ValueMapperSet
-
-
-def split_dataset(dataset):
-    train_data, test_data = train_test_split(dataset, train_size=TRAIN_DATA_SIZE)
-    return train_data, test_data
 
 
 def generate_dp_dataset(

@@ -22,6 +22,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\classifier\C45.py" />
     <Compile Include="src\coverer\CommonMapper.py">
       <SubType>Code</SubType>
     </Compile>
@@ -81,11 +82,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\ds\" />
-    <Folder Include="data\export\" />
     <Folder Include="logger\" />
     <Folder Include="data\" />
     <Folder Include="data\taxos\" />
     <Folder Include="src\" />
+    <Folder Include="src\classifier\" />
     <Folder Include="src\coverer\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

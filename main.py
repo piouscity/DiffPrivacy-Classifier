@@ -1,12 +1,14 @@
 import traceback, logging
+from sklearn.model_selection import train_test_split
 
 from src.exceptions import BaseException
 from src.validator import check_valid_taxonomy_tree
 from src.file_handler import import_dataset, import_taxonomy_tree, export_dataset
 from settings import DATASET_PATH, TAXO_TREE_PATH, EDP, STEPS, \
-    IGNORE_CHECK, LOG_LEVEL, LOG_FILE, RECORD_TRAIN_PATH, RECORD_TEST_PATH
+    IGNORE_CHECK, LOG_LEVEL, LOG_FILE, RECORD_TRAIN_PATH, RECORD_TEST_PATH, \
+    TRAIN_DATA_SIZE
 from src.coverer.routine import generate_dp_dataset, apply_generalization, \
-    split_dataset, transform_dataset, calculate_classification_accuracy, \
+    transform_dataset, calculate_classification_accuracy, \
     calculate_lower_bound_accuracy
 
 try:
@@ -15,7 +17,9 @@ try:
     taxo_tree = import_taxonomy_tree(TAXO_TREE_PATH)
     if not IGNORE_CHECK:
         check_valid_taxonomy_tree(taxo_tree, dataset)
-    train_dataset, test_dataset = split_dataset(dataset)
+    train_dataset, test_dataset = train_test_split(
+        dataset, train_size=TRAIN_DATA_SIZE
+        )
     private_train_dataset, mapper_set, class_list = generate_dp_dataset(
         train_dataset, taxo_tree, EDP, STEPS
         )
