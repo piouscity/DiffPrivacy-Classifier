@@ -7,9 +7,9 @@ from src.file_handler import import_dataset, import_taxonomy_tree, export_datase
 from settings import DATASET_PATH, TAXO_TREE_PATH, EDP, STEPS, \
     IGNORE_CHECK, LOG_LEVEL, LOG_FILE, RECORD_TRAIN_PATH, RECORD_TEST_PATH, \
     TRAIN_DATA_SIZE
-from src.coverer.routine import generate_dp_dataset, apply_generalization, \
-    transform_dataset, calculate_classification_accuracy, \
-    calculate_lower_bound_accuracy
+from src.coverer.routine import generate_dp_dataset, apply_generalization
+from src.classifier.routine import calculate_classification_accuracy, \
+    calculate_lower_bound_accuracy, transform_dataset
 
 try:
     logging.basicConfig(filename=LOG_FILE, filemode='w',level=LOG_LEVEL)
