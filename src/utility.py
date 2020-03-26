@@ -67,5 +67,6 @@ def exp_mechanism(edp:float, sensi:float, score:float) -> float:
     assert sensi != 0
     return math.exp(edp/(2*sensi)*score)
 
+
 def interval_to_str(from_value:float, to_value:float) -> str:
     return "[{0},{1})".format(from_value, to_value)
