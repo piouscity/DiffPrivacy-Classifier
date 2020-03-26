@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from src.validator import count_float_attribute
 from src.classifier.C45 import C45
 from settings import TRAIN_DATA_SIZE, CLASS_ATTRIBUTE
+from .utility import RecordCounter
 from .CutCandidateSet import CutCandidateSet
 from .DatasetNode import DatasetNode
 from .ValueMapperSet import ValueMapperSet
@@ -98,6 +99,26 @@ def calculate_classification_accuracy(train_dataset, test_dataset):
     for item in test_dataset:
         prediction = model.get_prediction(item)
         if prediction == item[CLASS_ATTRIBUTE]:
+            accurate_records += 1
+
+    return float(accurate_records) / test_records
+
+def calculate_lower_bound_accuracy(train_dataset, test_dataset):
+    counter = RecordCounter()
+    for item in train_dataset:
+        counter.record(item[CLASS_ATTRIBUTE])
+
+    max_frequent = 0
+    decision = None
+    for key, value in counter.count.items():
+        if value > max_frequent:
+            max_frequent = value
+            decision = key
+
+    test_records = len(test_dataset)
+    accurate_records = 0
+    for item in test_dataset:
+        if item[CLASS_ATTRIBUTE] == decision:
             accurate_records += 1
 
     return float(accurate_records) / test_records
