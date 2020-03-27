@@ -20,7 +20,7 @@ class C45:
         self.attributes = list(dataset[0].keys())
         self.attributes.remove(CLASS_ATTRIBUTE)
         self.attr_values = {
-            attribute: []
+            attribute: set()
             for attribute in self.attributes
         }
         self.tree = None
@@ -28,14 +28,17 @@ class C45:
         for row in dataset:
             for key, value in row.items():
                 if not isinstance(value, float) and key != CLASS_ATTRIBUTE:
-                    self.attr_values[key].append(value)
-
-        for attribute in self.attributes:
-            self.attr_values[attribute] = list(set(self.attr_values[attribute]))
+                    self.attr_values[key].add(value)
+        for attr in self.attributes:
+            self.attr_values[attr] = list(self.attr_values[attr])
 
     def generate_decision_tree(self):
-        self.tree = self.recursive_generate_tree(self.data, self.attributes, None,
-                                            self.get_most_frequent_decision(self.data))
+        self.tree = self.recursive_generate_tree(
+            self.data, 
+            self.attributes, 
+            None,
+            self.get_most_frequent_decision(self.data)
+            )
 
     def find_split_attribute(self, cur_dataset, cur_attributes):
         selected_attr = None
