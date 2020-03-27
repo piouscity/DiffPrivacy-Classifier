@@ -42,7 +42,7 @@ class C45:
 
     def find_split_attribute(self, cur_dataset, cur_attributes):
         selected_attr = None
-        best_infogain = -1.0*float("inf")
+        best_infogain = -float("inf")
         best_split_value = None
         split_data = []
         for attribute in cur_attributes:
@@ -52,26 +52,29 @@ class C45:
                 counter = RecordCounter()
                 for item in cur_dataset:
                     counter.record(item[CLASS_ATTRIBUTE])
-
                 less_equal_counter = RecordCounter(list(counter.count.keys()))
                 index = 0
-
                 while index < len(cur_dataset)-1:
                     split_value = cur_dataset[index][attribute]
-                    while index < len(cur_dataset) and cur_dataset[index][attribute] == split_value:
-                        less_equal_counter.record(cur_dataset[index][CLASS_ATTRIBUTE])
+                    while index < len(cur_dataset) \
+                        and cur_dataset[index][attribute] == split_value:
+                        less_equal_counter.record(
+                            cur_dataset[index][CLASS_ATTRIBUTE]
+                            )
                         index += 1
-
                     if index < len(cur_dataset):
                         greater_counter = counter - less_equal_counter
                         infogain_attr = information_gain(
-                            counter, {'left': less_equal_counter, 'right': greater_counter})
+                            counter, 
+                            {
+                                'left': less_equal_counter, 
+                                'right': greater_counter
+                            }
+                            )
                         if infogain_attr > best_infogain:
                             best_infogain = infogain_attr
                             selected_attr = attribute
                             best_split_value = split_value
-                    else:
-                        break
                 less_equal = []
                 greater = []
                 if best_split_value:
@@ -83,7 +86,9 @@ class C45:
                     split_data = [less_equal, greater]
             else:
                 # category attribute
-                infogain_attr, sub_data = self.calculate_infogain(cur_dataset, attribute)
+                infogain_attr, sub_data = self.calculate_infogain(
+                    cur_dataset, attribute
+                    )
                 if infogain_attr > best_infogain:
                     selected_attr = attribute
                     best_infogain = infogain_attr
@@ -91,68 +96,90 @@ class C45:
                     best_split_value = None
         return selected_attr, split_data, best_split_value
 
-    def recursive_generate_tree(self, cur_dataset, cur_attributes, cur_attr_value, most_frequent_decision):
+    def recursive_generate_tree(
+        self, cur_dataset, cur_attributes, cur_attr_value, 
+        most_frequent_decision
+        ):
         # current data is empty, return previous most frequent decision
         if len(cur_dataset) == 0:
-            return DecisionNode(None, None, cur_attr_value, most_frequent_decision)
+            return DecisionNode(
+                None, None, cur_attr_value, most_frequent_decision
+                )
         # update most frequent decision
         most_frequent_decision = self.get_most_frequent_decision(cur_dataset)
         # current attributes is empty or all current attributes have the same values for all records
         # in current data, return current most frequent decision
-        if len(cur_attributes) == 0 or self.same_attribute_values(cur_dataset, cur_attributes):
-            return DecisionNode(None, None, cur_attr_value, most_frequent_decision)
+        if len(cur_attributes) == 0 \
+            or self.same_attribute_values(cur_dataset, cur_attributes):
+            return DecisionNode(
+                None, None, cur_attr_value, most_frequent_decision
+                )
         decision = self.check_decision(cur_dataset)
         if decision:
             return DecisionNode(None, None, cur_attr_value, decision)
-
-        split_attribute, split_data, split_value = \
-            self.find_split_attribute(cur_dataset, cur_attributes)
-        logging.info("Split attribute: {}, split_value: {}".format(split_attribute, split_value))
-        logging.info("Split data: {}".format(split_data))
+        split_attribute, split_data, split_value = self.find_split_attribute(
+            cur_dataset, cur_attributes
+            )
+        logging.info(
+            "Split attribute: %s, split_value: %s", 
+            split_attribute, split_value
+            )
+        logging.info("Split data: %s", str(split_data))
         new_attributes = cur_attributes[:]
         node = DecisionNode(split_attribute, split_value, cur_attr_value, None)
         if not split_value:
             new_attributes.remove(split_attribute)
-            node.children = [self.recursive_generate_tree(sub_data, new_attributes,
-                                                          self.attr_values[split_attribute][index],
-                                                          most_frequent_decision)
-                             for index, sub_data in enumerate(split_data)]
+            node.children = [
+                self.recursive_generate_tree(
+                    sub_data, 
+                    new_attributes,
+                    self.attr_values[split_attribute][index],
+                    most_frequent_decision
+                    )
+                for index, sub_data in enumerate(split_data)
+                ]
         else:
             if self.same_numeric_attribute_value(cur_dataset, split_attribute):
                 new_attributes.remove(split_attribute)
-            node.children = [self.recursive_generate_tree(sub_data, new_attributes,
-                                                          None, most_frequent_decision)
-                             for sub_data in split_data]
+            node.children = [
+                self.recursive_generate_tree(
+                    sub_data, 
+                    new_attributes,
+                    None, 
+                    most_frequent_decision
+                    )
+                for sub_data in split_data
+                ]
         return node
 
     def calculate_infogain(self, dataset, attribute):
         sub_data = [[] for i in range(len(self.attr_values[attribute]))]
         value_counter = RecordCounter()
         child_counter = {
-            attrValue: RecordCounter()
-            for attrValue in self.attr_values[attribute]
+            attr_value: RecordCounter()
+            for attr_value in self.attr_values[attribute]
         }
         for item in dataset:
-            value_counter.record(item[CLASS_ATTRIBUTE])
-            child_counter[item[attribute]].record(item[CLASS_ATTRIBUTE])
+            cls = item[CLASS_ATTRIBUTE]
+            value_counter.record(cls)
+            child_counter[item[attribute]].record(cls)
             for i in range(len(self.attr_values[attribute])):
                 if item[attribute] == self.attr_values[attribute][i]:
                     sub_data[i].append(item)
-
         return information_gain(value_counter, child_counter), sub_data
 
     def same_attribute_values(self, cur_dataset, cur_attributes):
-        item = cur_dataset[0]
+        first_item = cur_dataset[0]
         for row in cur_dataset:
             for attribute in cur_attributes:
-                if row[attribute] != item[attribute]:
+                if row[attribute] != first_item[attribute]:
                     return False
         return True
 
     def same_numeric_attribute_value(self, cur_dataset, attribute):
-        value = cur_dataset[0][attribute]
+        first_value = cur_dataset[0][attribute]
         for row in cur_dataset:
-            if row[attribute] != value:
+            if row[attribute] != first_value:
                 return False
         return True
 
@@ -160,27 +187,17 @@ class C45:
         counter = RecordCounter()
         for item in dataset:
             counter.record(item[CLASS_ATTRIBUTE])
-
-        max_frequent = 0
-        decision = None
-        for key, value in counter.count.items():
-            if value > max_frequent:
-                max_frequent = value
-                decision = key
-
-        return decision
+        return counter.get_most_frequent_class()
 
     def check_decision(self, dataset):
         # check if the most frequent decision / total records >= PRUNING_RATE
         counter = RecordCounter()
         for item in dataset:
             counter.record(item[CLASS_ATTRIBUTE])
-
         total_records = len(dataset)
         for key, value in counter.count.items():
-            if float(value) / total_records >= PRUNING_RATE:
+            if value / total_records >= PRUNING_RATE:
                 return key
-
         return None
 
     def get_prediction(self, object):
@@ -197,5 +214,4 @@ class C45:
                     node = node.children[0]
                 else:
                     node = node.children[1]
-
         return node.decision

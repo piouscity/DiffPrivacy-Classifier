@@ -20,6 +20,13 @@ class RecordCounter:
         else:
             self.count[cls] = 1
 
+    def get_most_frequent_class(self):
+        result = None
+        for cls in self.count:
+            if (not result) or (self.count[cls] > self.count[result]):
+                result = cls
+        return result
+
     def __add__(self, other:'RecordCounter') -> 'RecordCounter':
         result = RecordCounter()
         result.count_all = self.count_all + other.count_all
