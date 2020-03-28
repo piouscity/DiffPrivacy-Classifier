@@ -61,3 +61,10 @@ def calculate_lower_bound_accuracy(
             accurate_records += 1
     return accurate_records / test_records
 
+
+def print_accuracy_result(raw_acc, anonymized_acc, lower_bound_acc):
+    print("Baseline accuracy (BA): {} %".format(raw_acc * 100))
+    print("Classification accuracy (CA): {} %".format(anonymized_acc * 100))
+    print("Lower bound accuracy (LA): {} %".format(lower_bound_acc * 100))
+    print("Cost quality: {} %".format((raw_acc-anonymized_acc) * 100))
+    print("Benefit: {} %".format((anonymized_acc-lower_bound_acc) * 100))
