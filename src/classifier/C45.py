@@ -37,7 +37,7 @@ class C45:
             self.data, 
             self.attributes, 
             None,
-            self.get_most_frequent_decision(self.data)
+            get_most_frequent_decision(self.data)
             )
 
     def find_split_attribute(self, cur_dataset, cur_attributes):
@@ -106,15 +106,15 @@ class C45:
                 None, None, cur_attr_value, most_frequent_decision
                 )
         # update most frequent decision
-        most_frequent_decision = self.get_most_frequent_decision(cur_dataset)
+        most_frequent_decision = get_most_frequent_decision(cur_dataset)
         # current attributes is empty or all current attributes have the same values for all records
         # in current data, return current most frequent decision
         if len(cur_attributes) == 0 \
-            or self.same_attribute_values(cur_dataset, cur_attributes):
+            or same_attribute_values(cur_dataset, cur_attributes):
             return DecisionNode(
                 None, None, cur_attr_value, most_frequent_decision
                 )
-        decision = self.check_decision(cur_dataset)
+        decision = check_decision(cur_dataset)
         if decision:
             return DecisionNode(None, None, cur_attr_value, decision)
         split_attribute, split_data, split_value = self.find_split_attribute(
@@ -139,7 +139,7 @@ class C45:
                 for index, sub_data in enumerate(split_data)
                 ]
         else:
-            if self.same_numeric_attribute_value(cur_dataset, split_attribute):
+            if same_numeric_attribute_value(cur_dataset, split_attribute):
                 new_attributes.remove(split_attribute)
             node.children = [
                 self.recursive_generate_tree(
@@ -168,38 +168,6 @@ class C45:
                     sub_data[i].append(item)
         return information_gain(value_counter, child_counter), sub_data
 
-    def same_attribute_values(self, cur_dataset, cur_attributes):
-        first_item = cur_dataset[0]
-        for row in cur_dataset:
-            for attribute in cur_attributes:
-                if row[attribute] != first_item[attribute]:
-                    return False
-        return True
-
-    def same_numeric_attribute_value(self, cur_dataset, attribute):
-        first_value = cur_dataset[0][attribute]
-        for row in cur_dataset:
-            if row[attribute] != first_value:
-                return False
-        return True
-
-    def get_most_frequent_decision(self, dataset):
-        counter = RecordCounter()
-        for item in dataset:
-            counter.record(item[CLASS_ATTRIBUTE])
-        return counter.get_most_frequent_class()
-
-    def check_decision(self, dataset):
-        # check if the most frequent decision / total records >= PRUNING_RATE
-        counter = RecordCounter()
-        for item in dataset:
-            counter.record(item[CLASS_ATTRIBUTE])
-        total_records = len(dataset)
-        for key, value in counter.count.items():
-            if value / total_records >= PRUNING_RATE:
-                return key
-        return None
-
     def get_prediction(self, object):
         node = self.tree
         while not node.decision:
@@ -215,3 +183,39 @@ class C45:
                 else:
                     node = node.children[1]
         return node.decision
+
+
+def same_attribute_values(cur_dataset, cur_attributes):
+    first_item = cur_dataset[0]
+    for row in cur_dataset:
+        for attribute in cur_attributes:
+            if row[attribute] != first_item[attribute]:
+                return False
+    return True
+
+
+def same_numeric_attribute_value(cur_dataset, attribute):
+    first_value = cur_dataset[0][attribute]
+    for row in cur_dataset:
+        if row[attribute] != first_value:
+            return False
+    return True
+
+
+def get_most_frequent_decision(dataset):
+    counter = RecordCounter()
+    for item in dataset:
+        counter.record(item[CLASS_ATTRIBUTE])
+    return counter.get_most_frequent_class()
+
+
+def check_decision(dataset):
+    # check if the most frequent decision / total records >= PRUNING_RATE
+    counter = RecordCounter()
+    for item in dataset:
+        counter.record(item[CLASS_ATTRIBUTE])
+    total_records = len(dataset)
+    for key, value in counter.count.items():
+        if value / total_records >= PRUNING_RATE:
+            return key
+    return None
