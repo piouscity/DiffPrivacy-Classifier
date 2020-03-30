@@ -14,6 +14,7 @@ class RecordCounter:
             self.count = {}
     
     def record(self, cls):
+        assert not (cls is None)
         self.count_all += 1
         if cls in self.count:
             self.count[cls] += 1
@@ -29,9 +30,7 @@ class RecordCounter:
 
     def get_max_frequency(self):
         cls = self.get_most_frequent_class()
-        if cls is None:
-            return 0
-        return self.count[cls]
+        return self.count.get(cls, 0)
 
     def __add__(self, other:'RecordCounter') -> 'RecordCounter':
         result = RecordCounter()
