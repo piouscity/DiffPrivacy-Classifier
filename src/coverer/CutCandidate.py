@@ -5,8 +5,7 @@ from settings import TAXO_NODE_NAME, TAXO_NODE_CHILD, CLASS_ATTRIBUTE, DIGIT, \
     UTILITY_FUNCTION
 from .CommonMapper import TaxonomyMapper, IntervalMapper
 from .DatasetNode import DatasetNode
-from src.utility import RecordCounter, exp_mechanism, interval_to_str, \
-    utility_score
+from src.utility import RecordCounter, exp_mechanism, interval_to_str
 
 
 SMALLEST_SEG = math.pow(10, DIGIT)
@@ -54,7 +53,7 @@ class CutCandidate:
 
     def calculate_score(self):
         assert self.child_counter
-        self.score = utility_score(UTILITY_FUNCTION, self.counter, self.child_counter)
+        self.score = UTILITY_FUNCTION(self.counter, self.child_counter)
 
     def export_value(self):
         raise NotImplementedError()
@@ -173,7 +172,7 @@ class IntervalCutCandidate(CutCandidate):
             part_counter[self.LEFT] += value_counter[pre_value]
             part_counter[self.RIGHT] -= value_counter[pre_value]
             intervals.append((pre_value, value))
-            score = utility_score(UTILITY_FUNCTION, self.counter, part_counter)
+            score = UTILITY_FUNCTION(self.counter, part_counter)
             w = exp_mechanism(edp, sensi, score)\
                 * (value-pre_value)
             weights.append(w)

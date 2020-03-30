@@ -63,11 +63,6 @@ def entropy(value: RecordCounter) -> float:
     return result
 
 
-def utility_score(utility_function, value: RecordCounter, child: Dict[Any, RecordCounter]) \
-    -> float:
-    return utility_function(value, child)
-
-
 def information_gain(value: RecordCounter, child: Dict[Any, RecordCounter]) \
     -> float:
     if value.count_all == 0:
