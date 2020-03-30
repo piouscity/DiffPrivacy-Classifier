@@ -23,6 +23,10 @@ TAXO_ROOT = "root"
 TAXO_NODE_NAME = "value"
 TAXO_NODE_CHILD = "childs"
 
+# Utility function settting
+from src.utility import information_gain, max_func
+UTILITY_FUNCTION = information_gain
+
 # eps-DP setting
 DIGIT = 0   # Rounding
 EDP = 2

@@ -25,7 +25,7 @@ class RecordCounter:
         for cls in self.count:
             if (not result) or (self.count[cls] > self.count[result]):
                 result = cls
-        return result
+        return result, self.count[result]
 
     def __add__(self, other:'RecordCounter') -> 'RecordCounter':
         result = RecordCounter()
@@ -57,6 +57,11 @@ def entropy(value: RecordCounter) -> float:
     return result
 
 
+def utility_score(utility_function, value: RecordCounter, child: Dict[Any, RecordCounter]) \
+    -> float:
+    return utility_function(value, child)
+
+
 def information_gain(value: RecordCounter, child: Dict[Any, RecordCounter]) \
     -> float:
     if value.count_all == 0:
@@ -67,6 +72,18 @@ def information_gain(value: RecordCounter, child: Dict[Any, RecordCounter]) \
             continue
         result -= child[c_val].count_all / value.count_all \
             * entropy(child[c_val])
+    return result
+
+
+def max_func(value: RecordCounter, child: Dict[Any, RecordCounter]) -> float:
+    if value.count_all == 0:
+        return 0
+    result = 0
+    for c_val in child:
+        if child[c_val].count_all == 0:
+            continue
+        _, most_frequent_value = child[c_val].get_most_frequent_class()
+        result += most_frequent_value
     return result
 
 
