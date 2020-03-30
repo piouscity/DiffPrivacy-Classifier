@@ -23,9 +23,15 @@ class RecordCounter:
     def get_most_frequent_class(self):
         result = None
         for cls in self.count:
-            if (not result) or (self.count[cls] > self.count[result]):
+            if (result is None) or (self.count[cls] > self.count[result]):
                 result = cls
-        return result, self.count[result]
+        return result
+
+    def get_max_frequency(self):
+        cls = self.get_most_frequent_class()
+        if cls is None:
+            return 0
+        return self.count[cls]
 
     def __add__(self, other:'RecordCounter') -> 'RecordCounter':
         result = RecordCounter()
@@ -75,15 +81,11 @@ def information_gain(value: RecordCounter, child: Dict[Any, RecordCounter]) \
     return result
 
 
-def max_func(value: RecordCounter, child: Dict[Any, RecordCounter]) -> float:
-    if value.count_all == 0:
-        return 0
+def max_gain(value: RecordCounter, child: Dict[Any, RecordCounter]) -> float:
     result = 0
     for c_val in child:
-        if child[c_val].count_all == 0:
-            continue
-        _, most_frequent_value = child[c_val].get_most_frequent_class()
-        result += most_frequent_value
+        max_frequency = child[c_val].get_max_frequency()
+        result += max_frequency
     return result
 
 

@@ -206,8 +206,7 @@ def get_most_frequent_decision(dataset):
     counter = RecordCounter()
     for item in dataset:
         counter.record(item[CLASS_ATTRIBUTE])
-
-    most_frequent_class, _ = counter.get_most_frequent_class()
+    most_frequent_class = counter.get_most_frequent_class()
     return most_frequent_class
 
 

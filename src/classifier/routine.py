@@ -48,7 +48,7 @@ def calculate_lower_bound_accuracy(
     counter = RecordCounter()
     for item in train_dataset:
         counter.record(item[CLASS_ATTRIBUTE])
-    decision, _ = counter.get_most_frequent_class()
+    decision = counter.get_most_frequent_class()
     test_records = len(test_dataset)
     accurate_records = 0
     for item in test_dataset:
