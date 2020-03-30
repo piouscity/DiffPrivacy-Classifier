@@ -173,8 +173,7 @@ class IntervalCutCandidate(CutCandidate):
             part_counter[self.RIGHT] -= value_counter[pre_value]
             intervals.append((pre_value, value))
             score = UTILITY_FUNCTION(self.counter, part_counter)
-            w = exp_mechanism(edp, sensi, score)\
-                * (value-pre_value)
+            w = exp_mechanism(edp, sensi, score)*(value-pre_value)
             weights.append(w)
             pre_value = value
         logging.info("List of splitting intervals: %s", str(intervals))
