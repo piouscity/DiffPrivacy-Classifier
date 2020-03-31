@@ -1,5 +1,3 @@
-IGNORE_CHECK = False    # Only ignore if taxonomy tree is ensured to be valid
-
 # Logging
 import logging
 LOG_LEVEL = logging.INFO
@@ -17,17 +15,16 @@ MISSING_VALUE = "?"
 TRAIN_DATA_SIZE = 0.8
 
 # Taxonomy tree setting
+IGNORE_CHECK = False    # Only ignore if taxonomy tree is ensured to be valid
 TAXO_FROM = "min"
 TAXO_TO = "max"
 TAXO_ROOT = "root"
 TAXO_NODE_NAME = "value"
 TAXO_NODE_CHILD = "childs"
 
-# Utility function settting
+# eps-DP setting
 from src.utility import information_gain, max_gain
 UTILITY_FUNCTION = information_gain
-
-# eps-DP setting
 DIGIT = 0   # Rounding
 EDP = 2
 STEPS = 16
