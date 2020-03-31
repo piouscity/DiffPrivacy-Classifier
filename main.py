@@ -15,6 +15,7 @@ from src.classifier.routine import calculate_classification_accuracy, \
 try:
     logging.basicConfig(filename=LOG_FILE, filemode='w',level=LOG_LEVEL)
     # Import and check
+    print("Importing dataset...")
     dataset = import_dataset(DATASET_PATH)
     taxo_tree = import_taxonomy_tree(TAXO_TREE_PATH)
     if not IGNORE_CHECK:
@@ -24,6 +25,7 @@ try:
         dataset, train_size=TRAIN_DATA_SIZE
         )
     # Anonymize
+    print("Anonymizing dataset...")
     private_train_dataset, mapper_set, class_list = generate_dp_dataset(
         train_dataset, taxo_tree, EDP, STEPS
         )
@@ -33,6 +35,7 @@ try:
     export_dataset(RECORD_TRAIN_PATH, private_train_dataset)
     export_dataset(RECORD_TEST_PATH, private_test_dataset)
     # Classify
+    print("Classifying and calculating...")
     raw_accuracy = calculate_classification_accuracy(
         train_dataset, test_dataset
         )
