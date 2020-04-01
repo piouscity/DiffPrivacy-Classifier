@@ -77,3 +77,8 @@ class TaxoTreeCoverageException(BaseException):
     detail = "Taxonomy tree of attribute {att} does not cover value {val}"
     def __init__(self, att, value):
         self.detail = self.detail.format(att=att, val=value)
+
+class NumberOfClassValuesException(BaseException):
+    code = 500
+    detail = "Training dataset has less than 2 classifying values. \
+        Re-run program may solve the problem"

@@ -4,10 +4,11 @@ from typing import Iterator
 
 from settings import CLASS_ATTRIBUTE, TAXO_ROOT, TAXO_FROM, TAXO_TO, \
     UTILITY_FUNCTION
+from src.utility import RecordCounter, exp_mechanism, information_gain
+from src.exceptions import NumberOfClassValuesException
 from .CutCandidate import CategoryCutCandidate, IntervalCutCandidate
 from .DatasetNode import DatasetNode
 from .ValueMapperSet import ValueMapperSet
-from src.utility import RecordCounter, exp_mechanism, information_gain
 
 
 class CutCandidateSet:
@@ -22,10 +23,12 @@ class CutCandidateSet:
         for item in root.get_all_items():
             general_count.record(item[CLASS_ATTRIBUTE])
         self.class_list = list(general_count.count.keys())
-        # Sensitivity
+        # Sensitivity (greater than 0)
         if UTILITY_FUNCTION == information_gain:
+            if len(class_list) <= 1:
+                raise NumberOfClassValuesException()
+            # sensi > 0 <=> len of class_list > 1
             self.sensi = math.log2(len(self.class_list))
-            assert self.sensi > 0
         else: # max_gain
             self.sensi = 1
         # Generate candidates
