@@ -1,7 +1,7 @@
 import os, csv, json
 
-from src.exceptions import OpenFileException, UnsupportedFileTypeException
 from settings import MISSING_VALUE
+from src.exceptions import OpenFileException, UnsupportedFileTypeException
 
 
 CSV_EXT = ".csv"

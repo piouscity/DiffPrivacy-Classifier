@@ -3,9 +3,9 @@ from typing import Iterator, List
 
 from settings import TAXO_NODE_NAME, TAXO_NODE_CHILD, CLASS_ATTRIBUTE, DIGIT, \
     UTILITY_FUNCTION
+from src.utility import RecordCounter, exp_mechanism, interval_to_str
 from .CommonMapper import TaxonomyMapper, IntervalMapper
 from .DatasetNode import DatasetNode
-from src.utility import RecordCounter, exp_mechanism, interval_to_str
 
 
 SMALLEST_SEG = math.pow(10, DIGIT)

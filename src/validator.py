@@ -1,10 +1,10 @@
+from settings import MISSING_VALUE, TAXO_FROM, TAXO_TO, TAXO_ROOT, \
+    TAXO_NODE_NAME, TAXO_NODE_CHILD, CLASS_ATTRIBUTE
 from src.exceptions import TaxoTreeMissingAttributeException, \
     DatasetMissingAttributeException, DatasetAttributeMissingValueException, \
     TaxoTreeFloatAtttributeMissingRootException, TaxoNodeException, \
     TaxoTreeCategoryAttributeMissingRootException, TaxoTreeCoverageException, \
     TaxoTreeFloatAtttributeRootException, TaxoNodeMissingKeyException
-from settings import MISSING_VALUE, TAXO_FROM, TAXO_TO, TAXO_ROOT, \
-    TAXO_NODE_NAME, TAXO_NODE_CHILD, CLASS_ATTRIBUTE
 
 
 PATH_SEP = "/"

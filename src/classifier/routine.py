@@ -1,8 +1,8 @@
 from typing import List
 
-from .C45 import C45
 from settings import CLASS_ATTRIBUTE
 from src.utility import RecordCounter
+from .C45 import C45
 
 
 def extract_group_dataset(dataset:List[dict]) -> List[dict]:

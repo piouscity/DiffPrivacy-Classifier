@@ -1,16 +1,17 @@
 import traceback, logging
 from sklearn.model_selection import train_test_split
 
-from src.exceptions import BaseException
-from src.validator import check_valid_input_data
-from src.file_handler import import_dataset, import_taxonomy_tree, \
-    export_dataset
 from settings import DATASET_PATH, TAXO_TREE_PATH, EDP, STEPS, \
     IGNORE_CHECK, LOG_LEVEL, LOG_FILE, COVERED_TRAIN_PATH, COVERED_TEST_PATH, \
     TRAIN_DATA_SIZE, TRAIN_PATH, TEST_PATH
-from src.coverer.routine import generate_dp_dataset, apply_generalization
 from src.classifier.routine import calculate_classification_accuracy, \
     calculate_lower_bound_accuracy, extract_group_dataset, print_accuracy_result
+from src.coverer.routine import generate_dp_dataset, apply_generalization
+from src.exceptions import BaseException
+from src.file_handler import import_dataset, import_taxonomy_tree, \
+    export_dataset
+from src.validator import check_valid_input_data
+
 
 try:
     logging.basicConfig(filename=LOG_FILE, filemode='w',level=LOG_LEVEL)

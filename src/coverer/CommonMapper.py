@@ -1,6 +1,6 @@
 import logging
-from typing import Tuple
 from bisect import bisect
+from typing import Tuple
 
 from settings import TAXO_NODE_NAME, TAXO_NODE_CHILD
 from src.utility import interval_to_str
