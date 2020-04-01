@@ -80,5 +80,5 @@ class TaxoTreeCoverageException(BaseException):
 
 class NumberOfClassValuesException(BaseException):
     code = 500
-    detail = "Training dataset has less than 2 classifying values. \
-        Re-run program may solve the problem"
+    detail = "Training dataset has less than 2 classifying values. " \ 
+        "Re-run program may solve the problem"
