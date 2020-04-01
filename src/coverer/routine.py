@@ -11,21 +11,21 @@ def generate_dp_dataset(
     dataset:List[dict], taxo_tree:dict, edp:float, steps:int
     ) -> Tuple[List[dict], ValueMapperSet, list]:
     float_att_cnt = count_float_attribute(dataset)
-    single_edp = edp / 2 / (float_att_cnt + 2*steps)
-    logging.debug("edp' =  %f", single_edp)
+    edp_s = edp / 2 / (float_att_cnt + 2*steps)
+    logging.debug("edp' =  %f", edp_s)
     data_root = DatasetNode(dataset)
     cut_set = CutCandidateSet(taxo_tree, data_root)
-    cut_set.determine_new_splits(single_edp)
+    cut_set.determine_new_splits(edp_s)
     cut_set.calculate_candidate_score()
     for i in range(steps):
         logging.debug("Specializing, step %d", i+1)
-        index = cut_set.select_candidate(single_edp)
-        if index == -1:
+        index = cut_set.select_candidate(edp_s)
+        if index < 0:
             logging.warn("No more candidate to specialize. Step %d", i+1)
             break
         logging.info("Chosen candidate index: %d", index)
         cut_set.specialize_candidate(index)
-        cut_set.determine_new_splits(single_edp)
+        cut_set.determine_new_splits(edp_s)
         cut_set.calculate_candidate_score()
     cut_set.transfer_candidate_values()
     return (
