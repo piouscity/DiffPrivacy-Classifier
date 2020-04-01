@@ -1,7 +1,7 @@
-import numpy
+import numpy, logging
 from typing import List, Iterator
 
-from settings import CLASS_ATTRIBUTE
+from settings import CLASS_ATTRIBUTE, LOG_NOISE_LEN
 from src.utility import RecordCounter
 
 
@@ -45,6 +45,7 @@ class DatasetNode:
             yield item
 
     def export_dataset(self, edp:float, class_list:list) -> List[dict]:
+        noise_list = []
         ex_dataset = []
         leafs = self.get_all_leafs()
         for leaf in leafs:
@@ -54,8 +55,10 @@ class DatasetNode:
                 counter.record(item[CLASS_ATTRIBUTE])
             zero_case = True
             for cls in counter.count:
-                cnt = counter.count[cls]
-                cnt += numpy.random.laplace(scale=1/edp)
+                noise = numpy.random.laplace(scale=1/edp)
+                if len(noise_list) < LOG_NOISE_LEN:
+                    noise_list.append(noise)
+                cnt = counter.count[cls] + noise
                 if cnt < 0:
                     cnt = 0
                 else:
@@ -66,4 +69,5 @@ class DatasetNode:
                 ex_item[header] = cnt
             if not zero_case:
                 ex_dataset.append(ex_item)
+        logging.info("Laplacian noises: %s ...", str(noise_list))
         return ex_dataset

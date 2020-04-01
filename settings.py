@@ -2,6 +2,7 @@
 import logging
 LOG_LEVEL = logging.INFO
 LOG_FILE = "logger/logging.txt"
+LOG_NOISE_LEN = 32
 
 # File paths
 DATASET_PATH = "data/ds/adult.csv"
