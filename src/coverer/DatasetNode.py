@@ -52,7 +52,12 @@ class DatasetNode:
             ex_item = leaf.represent.copy()
             counter = RecordCounter(class_list)
             for item in leaf.get_all_items():
-                counter.record(item[CLASS_ATTRIBUTE])
+                cls = item[CLASS_ATTRIBUTE]
+                if not (cls in counter.count):
+                    logging.warn(
+                        "Classify value %s not present in train dataset", cls
+                        )
+                counter.record(cls)
             zero_case = True
             for cls in counter.count:
                 noise = numpy.random.laplace(scale=1/edp)
