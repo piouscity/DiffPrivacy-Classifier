@@ -99,10 +99,9 @@ class CutCandidateSet:
             "Candidate %s is chosen to be specialize", 
             chosen_candidate.export_value()
             )
-        if index < len(self.candidate_list)-1:  # Not the last
-            self.candidate_list[index] = self.candidate_list.pop()
-        else:   # Is the last
-            self.candidate_list.pop()
+        last_candidate = self.candidate_list.pop()
+        if index < len(self.candidate_list)-1:  # Index is not the last
+            self.candidate_list[index] = last_candidate
         # Commit
         child_candidates = chosen_candidate.specialize(
             self.mapper_set.get_mapper_by_att(chosen_candidate.attribute)
