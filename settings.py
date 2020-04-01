@@ -6,8 +6,10 @@ LOG_FILE = "logger/logging.txt"
 # File paths
 DATASET_PATH = "data/ds/adult.csv"
 TAXO_TREE_PATH = "data/taxos/adult.json"
-RECORD_TRAIN_PATH = "data/export/adult-train.csv"
-RECORD_TEST_PATH = "data/export/adult-test.csv"
+TRAIN_PATH = "data/export/adult-train.csv"
+TEST_PATH = "data/export/adult-test.csv"
+COVERED_TRAIN_PATH = "data/export/covered-adult-train.csv"
+COVERED_TEST_PATH = "data/export/covered-adult-test.csv"
 
 # Dataset setting
 CLASS_ATTRIBUTE = "class"

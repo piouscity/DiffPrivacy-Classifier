@@ -6,8 +6,8 @@ from src.validator import check_valid_taxonomy_tree
 from src.file_handler import import_dataset, import_taxonomy_tree, \
     export_dataset
 from settings import DATASET_PATH, TAXO_TREE_PATH, EDP, STEPS, \
-    IGNORE_CHECK, LOG_LEVEL, LOG_FILE, RECORD_TRAIN_PATH, RECORD_TEST_PATH, \
-    TRAIN_DATA_SIZE
+    IGNORE_CHECK, LOG_LEVEL, LOG_FILE, COVERED_TRAIN_PATH, COVERED_TEST_PATH, \
+    TRAIN_DATA_SIZE, TRAIN_PATH, TEST_PATH
 from src.coverer.routine import generate_dp_dataset, apply_generalization
 from src.classifier.routine import calculate_classification_accuracy, \
     calculate_lower_bound_accuracy, extract_group_dataset, print_accuracy_result
@@ -24,6 +24,8 @@ try:
     train_dataset, test_dataset = train_test_split(
         dataset, train_size=TRAIN_DATA_SIZE
         )
+    export_dataset(TRAIN_PATH, train_dataset)
+    export_dataset(TEST_PATH, test_dataset)
     # Anonymize
     print("Anonymizing dataset...")
     private_train_dataset, mapper_set, class_list = generate_dp_dataset(
@@ -32,8 +34,8 @@ try:
     private_test_dataset = apply_generalization(
         test_dataset, mapper_set, class_list, EDP/2
         )
-    export_dataset(RECORD_TRAIN_PATH, private_train_dataset)
-    export_dataset(RECORD_TEST_PATH, private_test_dataset)
+    export_dataset(COVERED_TRAIN_PATH, private_train_dataset)
+    export_dataset(COVERED_TEST_PATH, private_test_dataset)
     # Classify
     print("Classifying and calculating...")
     raw_accuracy = calculate_classification_accuracy(
