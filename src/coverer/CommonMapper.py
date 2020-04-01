@@ -98,4 +98,3 @@ class IntervalMapper(CommonMapper):
 
     def clean_up(self):
         self.split_values = sorted(self.split_values)
-
