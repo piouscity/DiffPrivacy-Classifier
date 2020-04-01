@@ -55,7 +55,8 @@ class DatasetNode:
                 cls = item[CLASS_ATTRIBUTE]
                 if not (cls in counter.count):
                     logging.warn(
-                        "Classify value %s not present in train dataset", cls
+                        "Classifying value %s not present in train dataset", 
+                        cls
                         )
                 counter.record(cls)
             zero_case = True
