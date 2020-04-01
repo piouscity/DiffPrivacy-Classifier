@@ -1,4 +1,6 @@
-import logging, random, math
+import logging
+import math
+import random
 from typing import Iterator, List
 
 from settings import TAXO_NODE_NAME, TAXO_NODE_CHILD, CLASS_ATTRIBUTE, DIGIT, \

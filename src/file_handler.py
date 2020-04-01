@@ -1,4 +1,6 @@
-import os, csv, json
+import csv
+import json
+import os
 
 from settings import MISSING_VALUE
 from src.exceptions import OpenFileException, UnsupportedFileTypeException

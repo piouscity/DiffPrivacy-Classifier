@@ -1,4 +1,6 @@
-import math, logging, random
+import logging
+import math
+import random
 from itertools import chain
 from typing import Iterator
 

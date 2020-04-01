@@ -1,4 +1,5 @@
-import traceback, logging
+import logging
+import traceback
 from sklearn.model_selection import train_test_split
 
 from settings import DATASET_PATH, TAXO_TREE_PATH, EDP, STEPS, \

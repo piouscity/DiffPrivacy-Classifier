@@ -1,4 +1,5 @@
-import numpy, logging
+import logging
+import numpy
 from typing import List, Iterator
 
 from settings import CLASS_ATTRIBUTE, LOG_NOISE_LEN
