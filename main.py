@@ -2,7 +2,7 @@ import traceback, logging
 from sklearn.model_selection import train_test_split
 
 from src.exceptions import BaseException
-from src.validator import check_valid_taxonomy_tree
+from src.validator import check_valid_input_data
 from src.file_handler import import_dataset, import_taxonomy_tree, \
     export_dataset
 from settings import DATASET_PATH, TAXO_TREE_PATH, EDP, STEPS, \
@@ -19,7 +19,7 @@ try:
     dataset = import_dataset(DATASET_PATH)
     taxo_tree = import_taxonomy_tree(TAXO_TREE_PATH)
     if not IGNORE_CHECK:
-        check_valid_taxonomy_tree(taxo_tree, dataset)
+        check_valid_input_data(taxo_tree, dataset)
     # Split data
     train_dataset, test_dataset = train_test_split(
         dataset, train_size=TRAIN_DATA_SIZE

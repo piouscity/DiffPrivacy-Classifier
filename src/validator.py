@@ -46,9 +46,14 @@ def get_all_leaf_values(node, trace_path):
     return result
 
 
-def check_valid_taxonomy_tree(taxo_tree, dataset):
+def check_valid_input_data(taxo_tree, dataset):
     if len(dataset) < 1:
         return
+    # Check dataset
+    for item in dataset:
+        if not item.get(CLASS_ATTRIBUTE):
+            raise DatasetMissingAttributeException(CLASS_ATTRIBUTE)
+    # Check taxonomy tree
     for attribute in dataset[0]:
         if attribute == CLASS_ATTRIBUTE:
             continue
@@ -94,6 +99,7 @@ def check_valid_taxonomy_tree(taxo_tree, dataset):
                     continue
                 if not leaf_value_record.get(item_att):
                     raise TaxoTreeCoverageException(attribute, item_att)
+    # Remove reduntdant part of taxonomy tree
     redundant_atts = taxo_tree.keys() - dataset[0].keys()
     for att in redundant_atts:
         taxo_tree.pop(att)

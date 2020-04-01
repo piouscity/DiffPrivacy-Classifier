@@ -1,3 +1,5 @@
+IGNORE_CHECK = False    # Only ignore if input data is ensured to be valid
+
 # Logging
 import logging
 LOG_LEVEL = logging.INFO
@@ -18,7 +20,6 @@ MISSING_VALUE = "?"
 TRAIN_DATA_SIZE = 0.8
 
 # Taxonomy tree setting
-IGNORE_CHECK = False    # Only ignore if taxonomy tree is ensured to be valid
 TAXO_FROM = "min"
 TAXO_TO = "max"
 TAXO_ROOT = "root"
