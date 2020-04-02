@@ -27,7 +27,7 @@ class CutCandidateSet:
         self.class_list = list(general_count.count.keys())
         # Sensitivity (greater than 0)
         if UTILITY_FUNCTION == information_gain:
-            if len(class_list) <= 1:
+            if len(self.class_list) <= 1:
                 raise NumberOfClassValuesException()
             # sensi > 0 <=> len of class_list > 1
             self.sensi = math.log2(len(self.class_list))
@@ -102,7 +102,7 @@ class CutCandidateSet:
             chosen_candidate.export_value()
             )
         last_candidate = self.candidate_list.pop()
-        if index < len(self.candidate_list)-1:  # Index is not the last
+        if index < len(self.candidate_list):  # Index is not the last
             self.candidate_list[index] = last_candidate
         # Commit
         child_candidates = chosen_candidate.specialize(
