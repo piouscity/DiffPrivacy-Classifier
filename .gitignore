@@ -339,6 +339,10 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 
+# Visual studio project
+*.sln
+*.pyproj
+
 # Environments
 env/*
 
