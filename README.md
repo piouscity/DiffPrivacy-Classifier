@@ -26,6 +26,8 @@ Output of the program:
 
 ## Prerequisite
 
+This is a **Python 3** project.
+
 Create/Open a _Python virtual environment_ if needed.
 
 Install prerequisite packages:
@@ -37,7 +39,7 @@ pip install -r requirements.txt
 
 It is simple. Just run `main.py` file (no parameters required):
 ```
-python3 main.py
+python main.py
 ```
 The result would be something like this
 
