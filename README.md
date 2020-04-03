@@ -87,7 +87,7 @@ and modify its constants:
 See the existing taxonomy tree file `data/taxos/*` for more intuitive approach.
 
 It is a `Json` file containing 1 dictionary like this:
-```json
+```
 {
 	"<attribute X>": <A dictionary>,
 	"<attribute Y>": <A dictionary>,
@@ -100,7 +100,7 @@ of the respective attribute.
 ### Numeric attribute
 
 Value of a numeric attribute key is something like this:
-```json
+```
 {
 	"min": <X>,
 	"max": <Y>
@@ -111,13 +111,13 @@ It means the domain of the attribute is `[X, Y)`
 ### Category attribute
 
 Value of a category attribute key is something like this:
-```json
+```
 {
 	"root": <A node>
 }
 ```
 A **node** is a dictionary, represent a value. It would be something like this:
-```json
+```
 {
 	"value": <value>,
 	"childs": [<Node U>, <Node V>, ...]
