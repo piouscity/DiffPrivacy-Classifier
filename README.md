@@ -1,6 +1,27 @@
 # DiffPrivacy-Classifier
 
-Differential privacy on releasing data
+An implementation of the **DiffGen** algorithm in:
+
+>N.Mohammed, R.Chen, B.C.M.Fung, and P.S.Yu. 
+>Differentially private data release for data mining. 
+>In 7th SIGKDD International Conference on Knowledge Discovery and Data Mining. 
+>ACM, New York, New York, USA, pages 493-501, 2011.
+
+Basic steps of the program:
+
+- Import *dataset* and *taxonomy tree*
+- Split the dataset into *training* set and *testing* set
+- *Anonymize* both training set and testing set
+- Run *classifier* on plain dataset and anonymized dataset
+- *Compare* the result between 2 cases
+
+Output of the program:
+
+- **Classification Accuracy (CA)**: Accuracy of classifying anonymized dataset
+- **Baseline Accuracy (BA)**: Accuracy of classifying plain dataset
+- **Lower bound Accuracy (LA)**: Accuracy on the raw data with all attributes (except for the class attribute) removed
+- **Cost quality**: `BA - CA`
+- **Benefit**: `CA - LA`
 
 ## Prerequisite
 
