@@ -81,3 +81,48 @@ and modify its constants:
 - **DIGIT**: Rounding digit of numeric attributes when specializing (DiffGen)
 - **EDP**: e (in e-DP)
 - **STEPS**: Number of specializations (DiffGen)
+
+## Taxonomy tree file structure
+
+See the existing taxonomy tree file `data/taxos/*` for more intuitive approach.
+
+It is a `Json` file containing 1 dictionary like this:
+```json
+{
+	"<attribute X>": <A dictionary>,
+	"<attribute Y>": <A dictionary>,
+	...
+}
+```
+Each key of the dictionary is an attribute (for example, "age"). Value of each key depends on type
+of the respective attribute.
+
+### Numeric attribute
+
+Value of a numeric attribute key is something like this:
+```json
+{
+	"min": <X>,
+	"max": <Y>
+}
+```
+It means the domain of the attribute is `[X, Y)`
+
+### Category attribute
+
+Value of a category attribute key is something like this:
+```json
+{
+	"root": <A node>
+}
+```
+A **node** is a dictionary, represent a value. It would be something like this:
+```json
+{
+	"value": <value>,
+	"childs": [<Node U>, <Node V>, ...]
+}
+```
+`<value>` is the value of the node. It is usually a string. 
+`<Node U>`, `<Node V>`, ... are *child nodes* of the current node.
+If current node is a leaf node, its childs should be `[]` (blank list).
