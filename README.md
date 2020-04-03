@@ -78,6 +78,6 @@ and modify its constants:
 - **TRAIN_DATA_SIZE**: Ratio of splitting dataset into training and testing set
 - **UTILITY_FUNCTION**: Utility function to be used in DiffGen. Choices are:
 `information_gain`, `max_gain`
-- **DIGIT**: Rounding digit of numeric attributes when splitting
+- **DIGIT**: Rounding digit of numeric attributes when specializing (DiffGen)
 - **EDP**: e (in e-DP)
-- **STEPS**: Number of specializations
+- **STEPS**: Number of specializations (DiffGen)
