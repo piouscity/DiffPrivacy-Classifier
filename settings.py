@@ -7,8 +7,8 @@ LOG_FILE = "logger/logging.txt"
 LOG_NOISE_LEN = 32
 
 # File paths
-DATASET_PATH = "data/ds/adult.csv"
-TAXO_TREE_PATH = "data/taxos/adult.json"
+DATASET_PATH = "data/ds/adult-full.csv"
+TAXO_TREE_PATH = "data/taxos/adult-full.json"
 TRAIN_PATH = "data/export/adult-train.csv"
 TEST_PATH = "data/export/adult-test.csv"
 COVERED_TRAIN_PATH = "data/export/covered-adult-train.csv"

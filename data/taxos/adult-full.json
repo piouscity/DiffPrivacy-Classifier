@@ -3,6 +3,26 @@
     "min": 17,
     "max": 91
   },
+  "fnlwgt": {
+    "min": 12285,
+    "max": 1484706
+  },
+  "education-num": {
+    "min": 1,
+    "max": 17
+  },
+  "capital-gain": {
+    "min": 0,
+    "max": 100000
+  },
+  "capital-loss": {
+    "min": 0,
+    "max": 4357
+  },
+  "hours-per-week": {
+    "min": 1,
+    "max": 100
+  },
   "workclass": {
     "root": {
       "value": "Any-workclass",
@@ -168,6 +188,56 @@
       ]
     }
   },
+  "martial-status": {
+    "root": {
+      "value": "Any-status",
+      "childs": [
+        {
+          "value": "Married",
+          "childs": [
+            {
+              "value": "partner-present",
+              "childs": [
+                {
+                  "value": "Married-civ-spouse",
+                  "childs": []
+                },
+                {
+                  "value": "Married-AF-spouse",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "partner-absent",
+              "childs": [
+                {
+                  "value": "Divorced",
+                  "childs": []
+                },
+                {
+                  "value": "Separated",
+                  "childs": []
+                },
+                {
+                  "value": "Widowed",
+                  "childs": []
+                },
+                {
+                  "value": "Married-spouse-absent",
+                  "childs": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "value": "Never-married",
+          "childs": []
+        }
+      ]
+    }
+  },
   "occupation": {
     "root": {
       "value": "Any-occupation",
@@ -262,6 +332,89 @@
               ]
             }
           ]
+        }
+      ]
+    }
+  },
+  "relationship": {
+    "root": {
+      "value": "Any-relation",
+      "childs": [
+        {
+          "value": "In-family",
+          "childs": [
+            {
+              "value": "Wife",
+              "childs": []
+            },
+            {
+              "value": "Husband",
+              "childs": []
+            },
+            {
+              "value": "Own-child",
+              "childs": []
+            }
+          ]
+        },
+        {
+          "value": "Not-in-family",
+          "childs": []
+        },
+        {
+          "value": "Unmarried",
+          "childs": []
+        },
+        {
+          "value": "Other-relative",
+          "childs": []
+        }
+      ]
+    }
+  },
+  "race": {
+    "root": {
+      "value": "Any-race",
+      "childs": [
+        {
+          "value": "White",
+          "childs": []
+        },
+        {
+          "value": "Colored",
+          "childs": [
+            {
+              "value": "Asian-Pac-Islander",
+              "childs": []
+            },
+            {
+              "value": "Amer-Indian-Eskimo",
+              "childs": []
+            },
+            {
+              "value": "Other",
+              "childs": []
+            },
+            {
+              "value": "Black",
+              "childs": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "sex": {
+    "root": {
+      "value": "Any-sex",
+      "childs": [
+        {
+          "value": "Male",
+          "childs": []
+        },
+        {
+          "value": "Female",
+          "childs": []
         }
       ]
     }
