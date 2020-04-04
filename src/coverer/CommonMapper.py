@@ -31,7 +31,8 @@ class TaxonomyMapper(CommonMapper):
             logging.debug("Next parent of %s is %s", str(leafs), node_value)
             for leaf in leafs:
                 self.current_parent[leaf] = root_value
-            self.leaf_list[node_value] = leafs
+            if child[TAXO_NODE_CHILD]:  # this node is not leaf
+                self.leaf_list[node_value] = leafs
 
     def __scan_tree(self, node:dict) -> list:
         node_value = node[TAXO_NODE_NAME]
