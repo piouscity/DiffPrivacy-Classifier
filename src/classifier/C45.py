@@ -77,7 +77,7 @@ class C45:
                             best_split_value = split_value
                 less_equal = []
                 greater = []
-                if best_split_value:
+                if selected_attr == attribute:
                     for item in cur_dataset:
                         if item[attribute] <= best_split_value:
                             less_equal.append(item)
@@ -102,6 +102,7 @@ class C45:
         ):
         # current data is empty, return previous most frequent decision
         if len(cur_dataset) == 0:
+            logging.info("Append decision ~: %s", most_frequent_decision)
             return DecisionNode(
                 None, None, cur_attr_value, most_frequent_decision
                 )
@@ -111,11 +112,13 @@ class C45:
         # in current data, return current most frequent decision
         if len(cur_attributes) == 0 \
             or same_attribute_values(cur_dataset, cur_attributes):
+            logging.info("Append decision: %s", most_frequent_decision)
             return DecisionNode(
                 None, None, cur_attr_value, most_frequent_decision
                 )
         decision = check_decision(cur_dataset)
         if decision:
+            logging.info("Found decision: %s", decision)
             return DecisionNode(None, None, cur_attr_value, decision)
         split_attribute, split_data, split_value = self.find_split_attribute(
             cur_dataset, cur_attributes
@@ -126,7 +129,7 @@ class C45:
             )
         new_attributes = cur_attributes[:]
         node = DecisionNode(split_attribute, split_value, cur_attr_value, None)
-        if not split_value:
+        if split_value is None:
             new_attributes.remove(split_attribute)
             node.children = [
                 self.recursive_generate_tree(
@@ -171,7 +174,7 @@ class C45:
         node = self.tree
         while not node.decision:
             attribute = node.attribute
-            if not node.split_value:
+            if node.split_value is None:
                 for child in node.children:
                     if child.attr_value == object[attribute]:
                         node = child
