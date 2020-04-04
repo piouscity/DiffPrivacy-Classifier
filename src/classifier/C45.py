@@ -124,7 +124,6 @@ class C45:
             "Split attribute: %s, split_value: %s", 
             split_attribute, split_value
             )
-        logging.info("Split data: %s", str(split_data))
         new_attributes = cur_attributes[:]
         node = DecisionNode(split_attribute, split_value, cur_attr_value, None)
         if not split_value:
