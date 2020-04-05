@@ -1,0 +1,678 @@
+{
+  "age": {
+    "min": 17,
+    "max": 91
+  },
+  "fnlwgt": {
+    "min": 12285,
+    "max": 1484706
+  },
+  "education-num": {
+    "min": 1,
+    "max": 17
+  },
+  "capital-gain": {
+    "min": 0,
+    "max": 100000
+  },
+  "capital-loss": {
+    "min": 0,
+    "max": 4357
+  },
+  "hours-per-week": {
+    "min": 1,
+    "max": 100
+  },
+  "workclass": {
+    "root": {
+      "value": "Any-workclass",
+      "childs": [
+        {
+          "value": "Worked",
+          "childs": [
+            {
+              "value": "With-Pay",
+              "childs": [
+                {
+                  "value": "Private",
+                  "childs": []
+                },
+                {
+                  "value": "Self-emp",
+                  "childs": [
+                    {
+                      "value": "Self-emp-not-inc",
+                      "childs": []
+                    },
+                    {
+                      "value": "Self-emp-inc",
+                      "childs": []
+                    }
+                  ]
+                },
+                {
+                  "value": "Gov",
+                  "childs": [
+                    {
+                      "value": "Federal-gov",
+                      "childs": []
+                    },
+                    {
+                      "value": "Local-gov",
+                      "childs": []
+                    },
+                    {
+                      "value": "State-gov",
+                      "childs": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "Without-pay",
+              "childs": []
+            }
+          ]
+        },
+        {
+          "value": "Never-worked",
+          "childs": []
+        }
+      ]
+    }
+  },
+  "education": {
+    "root": {
+      "value": "Any-educated",
+      "childs": [
+        {
+          "value": "Without-post-secondary",
+          "childs": [
+            {
+              "value": "Preschool",
+              "childs": []
+            },
+            {
+              "value": "Elementary",
+              "childs": [
+                {
+                  "value": "1st-4th",
+                  "childs": []
+                },
+                {
+                  "value": "5th-6th",
+                  "childs": []
+                },
+                {
+                  "value": "7th-8th",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "Secondary",
+              "childs": [
+                {
+                  "value": "Junior-Secondary",
+                  "childs": [
+                    {
+                      "value": "9th",
+                      "childs": []
+                    },
+                    {
+                      "value": "10th",
+                      "childs": []
+                    }
+                  ]
+                },
+                {
+                  "value": "Senior-Secondary",
+                  "childs": [
+                    {
+                      "value": "11th",
+                      "childs": []
+                    },
+                    {
+                      "value": "12th",
+                      "childs": []
+                    },
+                    {
+                      "value": "HS-grad",
+                      "childs": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "value": "Post-secondary",
+          "childs": [
+            {
+              "value": "Some-college",
+              "childs": []
+            },
+            {
+              "value": "Assoc",
+              "childs": [
+                {
+                  "value": "Assoc-acdm",
+                  "childs": []
+                },
+                {
+                  "value": "Assoc-voc",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "University",
+              "childs": [
+                {
+                  "value": "Bachelors",
+                  "childs": []
+                },
+                {
+                  "value": "Prof-school",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "Post-grad",
+              "childs": [
+                {
+                  "value": "Masters",
+                  "childs": []
+                },
+                {
+                  "value": "Doctorate",
+                  "childs": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "martial-status": {
+    "root": {
+      "value": "Any-status",
+      "childs": [
+        {
+          "value": "Married",
+          "childs": [
+            {
+              "value": "partner-present",
+              "childs": [
+                {
+                  "value": "Married-civ-spouse",
+                  "childs": []
+                },
+                {
+                  "value": "Married-AF-spouse",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "partner-absent",
+              "childs": [
+                {
+                  "value": "Divorced",
+                  "childs": []
+                },
+                {
+                  "value": "Separated",
+                  "childs": []
+                },
+                {
+                  "value": "Widowed",
+                  "childs": []
+                },
+                {
+                  "value": "Married-spouse-absent",
+                  "childs": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "value": "Never-married",
+          "childs": []
+        }
+      ]
+    }
+  },
+  "occupation": {
+    "root": {
+      "value": "Any-occupation",
+      "childs": [
+        {
+          "value": "White-collar",
+          "childs": [
+            {
+              "value": "Exec-managerial",
+              "childs": []
+            },
+            {
+              "value": "Prof-specialty",
+              "childs": []
+            },
+            {
+              "value": "Sales",
+              "childs": []
+            },
+            {
+              "value": "Adm-clerical",
+              "childs": []
+            }
+          ]
+        },
+        {
+          "value": "Blue-collar",
+          "childs": [
+            {
+              "value": "Tech-support",
+              "childs": []
+            },
+            {
+              "value": "Craft-repair",
+              "childs": []
+            },
+            {
+              "value": "Machine-op-inspct",
+              "childs": []
+            },
+            {
+              "value": "Handlers-cleaners",
+              "childs": []
+            },
+            {
+              "value": "Transport-moving",
+              "childs": []
+            },
+            {
+              "value": "Priv-house-serv",
+              "childs": []
+            }
+          ]
+        },
+        {
+          "value": "Other-occupation",
+          "childs": [
+            {
+              "value": "Protective-serv",
+              "childs": []
+            },
+            {
+              "value": "Armed-Forces",
+              "childs": []
+            },
+            {
+              "value": "Farming-fishing",
+              "childs": []
+            },
+            {
+              "value": "Other-service",
+              "childs": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "relationship": {
+    "root": {
+      "value": "Any-relation",
+      "childs": [
+        {
+          "value": "In-family",
+          "childs": [
+            {
+              "value": "Wife",
+              "childs": []
+            },
+            {
+              "value": "Husband",
+              "childs": []
+            },
+            {
+              "value": "Own-child",
+              "childs": []
+            }
+          ]
+        },
+        {
+          "value": "Not-in-family",
+          "childs": []
+        },
+        {
+          "value": "Unmarried",
+          "childs": []
+        },
+        {
+          "value": "Other-relative",
+          "childs": []
+        }
+      ]
+    }
+  },
+  "race": {
+    "root": {
+      "value": "Any-race",
+      "childs": [
+        {
+          "value": "White",
+          "childs": []
+        },
+        {
+          "value": "Colored",
+          "childs": [
+            {
+              "value": "Asian-Pac-Islander",
+              "childs": []
+            },
+            {
+              "value": "Amer-Indian-Eskimo",
+              "childs": []
+            },
+            {
+              "value": "Other",
+              "childs": []
+            },
+            {
+              "value": "Black",
+              "childs": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "sex": {
+    "root": {
+      "value": "Any-sex",
+      "childs": [
+        {
+          "value": "Male",
+          "childs": []
+        },
+        {
+          "value": "Female",
+          "childs": []
+        }
+      ]
+    }
+  },
+  "native-country": {
+    "root": {
+      "value": "Any-country",
+      "childs": [
+        {
+          "value": "Asia",
+          "childs": [
+            {
+              "value": "South-East-Asia",
+              "childs": [
+                {
+                  "value": "Cambodia",
+                  "childs": []
+                },
+                {
+                  "value": "Philippines",
+                  "childs": []
+                },
+                {
+                  "value": "Vietnam",
+                  "childs": []
+                },
+                {
+                  "value": "Laos",
+                  "childs": []
+                },
+                {
+                  "value": "Thailand",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "East-Asia",
+              "childs": [
+                {
+                "value": "Japan",
+                "childs": []
+                },
+                {
+                  "value": "China",
+                  "childs": []
+                },
+                {
+                  "value": "Hong",
+                  "childs": []
+                },
+                {
+                  "value": "Taiwan",
+                  "childs": []
+                },
+                {
+                  "value": "South",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "South-Asia",
+              "childs": [
+                {
+                  "value": "India",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "Middle-East-Asia",
+              "childs": [
+                {
+                  "value": "Iran",
+                  "childs": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "value": "Europe",
+          "childs": [
+            {
+              "value": "West-EU",
+              "childs": [
+                {
+                  "value": "England",
+                  "childs": []
+                },
+                {
+                  "value": "Ireland",
+                  "childs": []
+                },
+                {
+                  "value": "Scotland",
+                  "childs": []
+                },
+                {
+                  "value": "Holand-Netherlands",
+                  "childs": []
+                },
+                {
+                  "value": "France",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "South-EU",
+              "childs": [
+                {
+                  "value": "Italy",
+                  "childs": []
+                },
+                {
+                  "value": "Greece",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "South-West-EU",
+              "childs": [
+                {
+                  "value": "Portugal",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "South-East-EU",
+              "childs": [
+                {
+                  "value": "Yugoslavia",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "Central-EU",
+              "childs": [
+                {
+                  "value": "Hungary",
+                  "childs": []
+                },
+                {
+                  "value": "Germany",
+                  "childs": []
+                },
+                {
+                  "value": "Poland",
+                  "childs": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "value": "America",
+          "childs": [
+            {
+              "value": "South-America",
+              "childs": [
+                {
+                  "value": "West-South-America",
+                  "childs": [
+                    {
+                    "value": "Ecuador",
+                    "childs": []
+                    },
+                    {
+                      "value": "Peru",
+                      "childs": []
+                    }
+                  ]
+                },
+                {
+                  "value": "North-South-America",
+                  "childs": [
+                    {
+                      "value": "Columbia",
+                      "childs": []
+                    }
+                  ]
+                },
+                {
+                  "value": "Caribe",
+                  "childs": [
+                    {
+                      "value": "Cuba",
+                      "childs": []
+                    },
+                    {
+                      "value": "Haiti",
+                      "childs": []
+                    },
+                    {
+                      "value": "Dominican-Republic",
+                      "childs": []
+                    },
+                    {
+                      "value": "Jamaica",
+                      "childs": []
+                    },
+                    {
+                      "value": "Trinadad&Tobago",
+                      "childs": []
+                    },
+                    {
+                      "value": "Puerto-Rico",
+                      "childs": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "North-America",
+              "childs": [
+                {
+                  "value": "USA",
+                  "childs": [
+                    {
+                      "value": "United-States",
+                      "childs": []
+                    },
+                    {
+                      "value": "Outlying-US(Guam-USVI-etc)",
+                      "childs": []
+                    }
+                  ]
+                },
+                {
+                  "value": "Canada",
+                  "childs": []
+                }
+              ]
+            },
+            {
+              "value": "Middle-America",
+              "childs": [
+                {
+                  "value": "Mexico",
+                  "childs": []
+                },
+                {
+                  "value": "Honduras",
+                  "childs": []
+                },
+                {
+                  "value": "Guatemala",
+                  "childs": []
+                },
+                {
+                  "value": "Nicaragua",
+                  "childs": []
+                },
+                {
+                  "value": "El-Salvador",
+                  "childs": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
