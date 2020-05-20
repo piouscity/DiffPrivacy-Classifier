@@ -57,3 +57,8 @@ def apply_generalization(
             new_leaf_list.extend(data_node.get_all_leafs())
         leaf_list = new_leaf_list
     return data_root.export_dataset(edp, class_list)
+
+
+def generate_dp_matrix(matrix:List[list], new_dim:int, eps:float) \
+    -> List[list]:
+    return matrix
