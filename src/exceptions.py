@@ -78,6 +78,7 @@ class TaxoTreeCoverageException(BaseException):
     def __init__(self, att, value):
         self.detail = self.detail.format(att=att, val=value)
 
+
 class NumberOfClassValuesException(BaseException):
     code = 500
     detail = "Training dataset has less than 2 classifying values. "\

@@ -33,5 +33,9 @@ DIGIT = 0   # Rounding
 EDP = 2
 STEPS = 16
 
+# Matrix release setting
+ALPHA = 1
+MIN_ENSURE = 0.85
+
 # classification setting
 PRUNING_RATE = 0.8
