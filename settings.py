@@ -14,6 +14,9 @@ TEST_PATH = "data/export/adult-test.csv"
 COVERED_TRAIN_PATH = "data/export/covered-adult-train.csv"
 COVERED_TEST_PATH = "data/export/covered-adult-test.csv"
 
+MATRIX_PATH = "data/ds/Radius-Queries.csv"
+COVERED_MATRIX_PATH = "data/export/Radius-Queries.csv"
+
 # Dataset setting
 CLASS_ATTRIBUTE = "class"
 MISSING_VALUE = "?"
@@ -34,6 +37,7 @@ EDP = 2
 STEPS = 16
 
 # Matrix release setting
+NEW_DIM = 2
 ALPHA = 1
 MIN_ENSURE = 0.85
 

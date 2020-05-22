@@ -74,3 +74,11 @@ def import_json_taxonomy_tree(file_path):
     except IOError:
         raise OpenFileException(file_path)
     return taxo_tree
+
+
+def import_matrix(file_path):
+    return []
+
+
+def export_matrix(file_path, matrix):
+    pass

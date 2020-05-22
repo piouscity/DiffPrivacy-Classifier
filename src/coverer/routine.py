@@ -62,7 +62,7 @@ def apply_generalization(
     return data_root.export_dataset(edp, class_list)
 
 
-def generate_dp_matrix(matrix:List[list], new_dim:int, eps:float) \
+def generate_dp_matrix(matrix:List[list], new_dim:int, edp:float) \
     -> List[list]:
     org_matrix = numpy.array(matrix)        # n x d
     org_rows, org_dim = org_matrix.shape     
@@ -75,7 +75,7 @@ def generate_dp_matrix(matrix:List[list], new_dim:int, eps:float) \
     logging.info("Param t = %f", t_param)
     logging.debug("Param c = %f", c_param)
     noise_matrix = numpy.random.laplace(            # n x k
-        scale=c_param/eps, size=(org_rows, new_dim)
+        scale=c_param/edp, size=(org_rows, new_dim)
         )
     res_matrix = reduced_matrix + noise_matrix
     return res_matrix.tolist()
