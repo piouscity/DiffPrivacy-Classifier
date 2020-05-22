@@ -37,7 +37,7 @@ pip install -r requirements.txt
 
 ## Run
 
-It is simple. Just run `main.py` file (no parameters required):
+It is simple. Just run `diffgen.py` file (no parameters required):
 ```
 python main.py
 ```
