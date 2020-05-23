@@ -5,6 +5,7 @@ import logging
 LOG_LEVEL = logging.INFO
 LOG_FILE = "logger/logging.txt"
 LOG_NOISE_LEN = 32
+LOG_NOISE_ROW = 5
 
 # File paths
 DATASET_PATH = "data/ds/adult-full.csv"
@@ -15,7 +16,7 @@ COVERED_TRAIN_PATH = "data/export/covered-adult-train.csv"
 COVERED_TEST_PATH = "data/export/covered-adult-test.csv"
 
 MATRIX_PATH = "data/ds/Radius-Queries.csv"
-COVERED_MATRIX_PATH = "data/export/Radius-Queries.csv"
+COVERED_MATRIX_PATH = "data/export/Covered-Radius-Queries.csv"
 
 # Dataset setting
 CLASS_ATTRIBUTE = "class"
@@ -38,7 +39,7 @@ STEPS = 16
 
 # Matrix release setting
 NEW_DIM = 2
-ALPHA = 1
+ALPHA = 3
 MIN_ENSURE = 0.85
 
 # classification setting

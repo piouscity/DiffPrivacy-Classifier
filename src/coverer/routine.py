@@ -3,7 +3,7 @@ import math
 import numpy
 from typing import List, Tuple
 
-from settings import ALPHA, MIN_ENSURE
+from settings import ALPHA, MIN_ENSURE, LOG_NOISE_ROW
 from src.validator import count_float_attribute
 from .CutCandidateSet import CutCandidateSet
 from .DatasetNode import DatasetNode
@@ -67,8 +67,9 @@ def generate_dp_matrix(matrix:List[list], new_dim:int, edp:float) \
     org_matrix = numpy.array(matrix)        # n x d
     org_rows, org_dim = org_matrix.shape     
     projection = numpy.random.normal(       # d x k
-        scale=1/math.sqrt(new_dim), size=(old_dim, new_dim)
+        scale=1/math.sqrt(new_dim), size=(org_dim, new_dim)
         )
+    logging.info("Projection matrix: \n%s", projection)
     reduced_matrix = org_matrix.dot(projection)     # n x k
     t_param = math.sqrt(ALPHA*2/new_dim*math.log(2*new_dim/(1-MIN_ENSURE)))
     c_param = new_dim * t_param
@@ -76,6 +77,10 @@ def generate_dp_matrix(matrix:List[list], new_dim:int, edp:float) \
     logging.debug("Param c = %f", c_param)
     noise_matrix = numpy.random.laplace(            # n x k
         scale=c_param/edp, size=(org_rows, new_dim)
+        )
+    logging.info(
+        "First rows of noise matrix: \n%s", 
+        noise_matrix[:LOG_NOISE_ROW]
         )
     res_matrix = reduced_matrix + noise_matrix
     return res_matrix.tolist()
