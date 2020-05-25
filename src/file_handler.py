@@ -1,5 +1,6 @@
 import csv
 import json
+import numpy
 import os
 
 from settings import MISSING_VALUE
@@ -76,30 +77,15 @@ def import_json_taxonomy_tree(file_path):
     return taxo_tree
 
 
-def import_csv_matrix(file_path):
+def import_csv_matrix(file_path) -> numpy.array:
     reader = csv.reader(open(file_path), delimiter=",")
     data = list(reader)
-    return [[float(item) for item in row] for row in data]
+    return numpy.array([[float(item) for item in row] for row in data])
 
 
-def import_matrix(file_path):
+def import_matrix(file_path) -> numpy.array:
     file_name, file_ext = os.path.splitext(file_path)
     if file_ext == CSV_EXT:
         return import_csv_matrix(file_path)
     raise UnsupportedFileTypeException(file_path)
 
-
-def export_csv_matrix(file_path, matrix):
-    try:
-        with open(file_path, 'w', newline='') as csv_file:
-            csv_writer = csv.writer(csv_file)
-            csv_writer.writerows(matrix)
-    except IOError:
-        raise OpenFileException(file_path)
-
-
-def export_matrix(file_path, matrix):
-    file_name, file_ext = os.path.splitext(file_path)
-    if file_ext == CSV_EXT:
-        return export_csv_matrix(file_path, matrix)
-    raise UnsupportedFileTypeException(file_path)
