@@ -17,7 +17,6 @@ COVERED_TEST_PATH = "data/export/covered-adult-test.csv"
 
 MATRIX_PATH = "data/export/org-matrix.csv"
 COVERED_MATRIX_PATH = "data/export/covered-matrix.csv"
-CLUSTER_PATH = "data/export/org-cluster.csv"
 
 # Dataset setting
 CLASS_ATTRIBUTE = "class"
