@@ -89,3 +89,21 @@ def import_matrix(file_path) -> numpy.array:
         return import_csv_matrix(file_path)
     raise UnsupportedFileTypeException(file_path)
 
+
+def export_csv_matrix(file_path, matrix:numpy.array, cluster:numpy.array):
+    try:
+        with open(file_path, 'w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            for i in range(matrix.shape[0]):
+                row = matrix[i].tolist()
+                row.append(str(cluster[i]))
+                csv_writer.writerow(row)
+    except IOError:
+        raise OpenFileException(file_path)
+
+
+def export_matrix(file_path, matrix:numpy.array, cluster:numpy.array):
+    file_name, file_ext = os.path.splitext(file_path)
+    if file_ext == CSV_EXT:
+        return export_csv_matrix(file_path, matrix, cluster)
+    raise UnsupportedFileTypeException(file_path)

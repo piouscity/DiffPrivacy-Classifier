@@ -1,11 +1,11 @@
 import logging
-import numpy
 import traceback
 
 from sklearn.datasets import make_blobs
 from settings import MATRIX_PATH, COVERED_MATRIX_PATH, LOG_FILE, LOG_LEVEL, \
     NEW_DIM, EDP, SAMPLES, ORG_DIM, CLUSTERS, DEVIATION, BOX
 from src.exceptions import BaseException
+from src.file_handler import export_matrix
 from src.coverer.routine import generate_dp_matrix
 
 
@@ -19,11 +19,8 @@ try:
         center_box=(-BOX, BOX)
         )
     dp_matrix = generate_dp_matrix(matrix, NEW_DIM, EDP)
-    tp_cluster = numpy.matrix(cluster).transpose()
-    matrix = numpy.append(matrix, tp_cluster, axis=1)
-    dp_matrix = numpy.append(dp_matrix, tp_cluster, axis=1)
-    numpy.savetxt(MATRIX_PATH, matrix, delimiter=',', fmt='%f')
-    numpy.savetxt(COVERED_MATRIX_PATH, dp_matrix, delimiter=',', fmt='%f')
+    export_matrix(MATRIX_PATH, matrix, cluster)
+    export_matrix(COVERED_MATRIX_PATH, dp_matrix, cluster)
     print("Process completed")
 except BaseException as e:
     print("{} - {}".format(e.code, e.detail))
