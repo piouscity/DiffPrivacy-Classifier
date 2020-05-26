@@ -96,7 +96,7 @@ def export_csv_matrix(file_path, matrix:numpy.array, cluster:numpy.array):
             csv_writer = csv.writer(csv_file)
             for i in range(matrix.shape[0]):
                 row = matrix[i].tolist()
-                row.append(str(cluster[i]))
+                row.append('c'+str(cluster[i]))
                 csv_writer.writerow(row)
     except IOError:
         raise OpenFileException(file_path)
