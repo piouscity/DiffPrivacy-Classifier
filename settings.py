@@ -34,17 +34,17 @@ TAXO_NODE_CHILD = "childs"
 from src.utility import information_gain, max_gain
 UTILITY_FUNCTION = information_gain
 DIGIT = 0   # Rounding
-EDP = 2
+EDP = 4
 STEPS = 16
 
 # Matrix release setting
 CLUSTERS = 2
 SAMPLES = 2000
 DEVIATION = 1
-BOX = 2
+BOX = 2.5
 ORG_DIM = 3
 NEW_DIM = 2
-ALPHA = 2
+ALPHA = 1
 MIN_ENSURE = 0.85
 
 # classification setting

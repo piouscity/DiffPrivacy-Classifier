@@ -1,4 +1,5 @@
 import math
+import matplotlib.pyplot as plt
 from typing import Dict, Any
 
 
@@ -90,3 +91,14 @@ def exp_mechanism(edp:float, sensi:float, score:float) -> float:
 
 def interval_to_str(from_value:float, to_value:float) -> str:
     return "[{0},{1})".format(from_value, to_value)
+
+
+def scatter_plot(matrix):    
+    if matrix.shape[1] == 3:
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        ax.scatter(matrix[:,0], matrix[:,1], matrix[:,2], marker='.')
+        plt.show()
+    elif matrix.shape[1] == 2:
+        plt.scatter(matrix[:,0], matrix[:,1], marker='.')
+        plt.show()

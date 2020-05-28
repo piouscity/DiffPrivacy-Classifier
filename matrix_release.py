@@ -7,6 +7,7 @@ from settings import MATRIX_PATH, COVERED_MATRIX_PATH, LOG_FILE, LOG_LEVEL, \
 from src.exceptions import BaseException
 from src.file_handler import export_matrix
 from src.coverer.routine import generate_dp_matrix
+from src.utility import scatter_plot
 
 
 try:
@@ -18,7 +19,9 @@ try:
         cluster_std=DEVIATION,
         center_box=(-BOX, BOX)
         )
+    scatter_plot(matrix)
     dp_matrix = generate_dp_matrix(matrix, NEW_DIM, EDP)
+    scatter_plot(dp_matrix)
     export_matrix(MATRIX_PATH, matrix, cluster)
     export_matrix(COVERED_MATRIX_PATH, dp_matrix, cluster)
     print("Process completed")
