@@ -38,10 +38,9 @@ EDP = 4
 STEPS = 16
 
 # Matrix release setting
-CLUSTERS = 2
 SAMPLES = 2000
 DEVIATION = 1
-BOX = 2.5
+BOX = 2
 ORG_DIM = 3
 NEW_DIM = 2
 ALPHA = 1
