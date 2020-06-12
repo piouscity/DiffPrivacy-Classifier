@@ -156,6 +156,7 @@ class IntervalCutCandidate(CutCandidate):
             self.splittable = False
             return
         # Prepare weight
+        freedom = edp is None
         if not self.from_value in value_counter:
             value_counter[self.from_value] = RecordCounter(class_list)
         value_counter[self.to_value] = RecordCounter(class_list)
@@ -166,34 +167,48 @@ class IntervalCutCandidate(CutCandidate):
         for value in value_counter:
             part_counter[self.RIGHT] += value_counter[value]
         sorted_values = sorted(value_counter.keys())
-        weights = []
-        intervals = []
         pre_value = sorted_values[0]
+        if freedom:
+            split_value = None
+            max_score = -1
+        else:
+            weights = []
+            intervals = []     
         # Weight calculation
         for value in sorted_values[1:]:
             part_counter[self.LEFT] += value_counter[pre_value]
             part_counter[self.RIGHT] -= value_counter[pre_value]
-            intervals.append((pre_value, value))
             score = UTILITY_FUNCTION(self.counter, part_counter)
-            w = exp_mechanism(edp, sensi, score)*(value-pre_value)
-            weights.append(w)
+            if freedom:
+                if score > max_score:
+                    if value != sorted_values[-1]:
+                        split_value = value
+                        max_score = score
+                    elif value-pre_value > SMALLEST_SEG:
+                        split_value = pre_value + SMALLEST_SEG
+                        max_score = score
+            else:
+                intervals.append((pre_value, value))
+                w = exp_mechanism(edp, sensi, score)*(value-pre_value)
+                weights.append(w)
             pre_value = value
-        logging.info("List of splitting intervals: %s", str(intervals))
-        logging.info("List of corresponding weights: %s", str(weights))
-        # Exp choose
-        while True:
-            interval = random.choices(intervals, weights=weights)[0]
-            if (interval != intervals[-1]) \
-                or (interval[1]-interval[0] > SMALLEST_SEG):   # Okay
-                break
-        while True:
-            split_value = random.uniform(interval[0], interval[1])
-            split_value = round(split_value, DIGIT)
-            if split_value > interval[1]:
-                split_value = interval[1]
-            if (split_value > interval[0]) \
-                and (split_value != self.to_value):  # Okay
-                break
+        if not freedom:
+            logging.info("List of splitting intervals: %s", str(intervals))
+            logging.info("List of corresponding weights: %s", str(weights))
+            # Exp choose
+            while True:
+                interval = random.choices(intervals, weights=weights)[0]
+                if (interval != intervals[-1]) \
+                    or (interval[1]-interval[0] > SMALLEST_SEG):   # Okay
+                    break
+            while True:
+                split_value = random.uniform(interval[0], interval[1])
+                split_value = round(split_value, DIGIT)
+                if split_value > interval[1]:
+                    split_value = interval[1]
+                if (split_value > interval[0]) \
+                    and (split_value != self.to_value):  # Okay
+                    break
         logging.info("Split value is %f", split_value)
         # Re-count
         self.split_value = split_value

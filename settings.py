@@ -21,7 +21,7 @@ COVERED_MATRIX_PATH = "data/export/covered-matrix.csv"
 # Dataset setting
 CLASS_ATTRIBUTE = "class"
 MISSING_VALUE = "?"
-TRAIN_DATA_SIZE = 0.8
+TRAIN_DATA_SIZE = 0.67
 
 # Taxonomy tree setting
 TAXO_FROM = "min"
@@ -32,10 +32,10 @@ TAXO_NODE_CHILD = "childs"
 
 # eps-DP setting
 from src.utility import information_gain, max_gain
-UTILITY_FUNCTION = information_gain
+UTILITY_FUNCTION = max_gain
 DIGIT = 0   # Rounding
-EDP = 4
-STEPS = 16
+EDP = 1
+STEPS = 7
 
 # Matrix release setting
 SAMPLES = 2000
