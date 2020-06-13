@@ -82,15 +82,25 @@ class CutCandidateSet:
     def select_candidate(self, edp:float) -> int:
         if not self.candidate_list:
             return -1
-        weights = [
-            exp_mechanism(edp, self.sensi, score) 
-            for score in self.get_score_list()
-            ]
-        logging.info("Candidate weights: %s", str(weights))
-        chosen_index = random.choices(
-            list(range(len(weights))), 
-            weights=weights
-            )[0]
+        if edp is None:
+            chosen_index = -1
+            max_score = -1
+            index = 0
+            for score in self.get_score_list():
+                if score > max_score:
+                    chosen_index = index
+                    max_score = score
+                index += 1
+        else:
+            weights = [
+                exp_mechanism(edp, self.sensi, score) 
+                for score in self.get_score_list()
+                ]
+            logging.info("Candidate weights: %s", str(weights))
+            chosen_index = random.choices(
+                list(range(len(weights))), 
+                weights=weights
+                )[0]
         return chosen_index
 
     def specialize_candidate(self, index:int):
