@@ -57,6 +57,19 @@ class DatasetNode:
         for item in self.dataset:
             yield item
 
+    def predict_noise_impact(self, noise_sd:float, class_list:list) -> float:
+        leafs = self.get_all_leafs()
+        sum = 0
+        n = 0
+        for leaf in leafs:
+            counter = leaf.statistic(class_list)
+            for cls in class_list:
+                val = counter.count[cls]
+                impact = noise_sd/val if val != 0 else noise_sd*2
+                sum += impact
+                n += 1
+        return sum/n if n != 0 else 0
+
     def export_dataset(self, edp:float, class_list:list) -> List[dict]:
         noise_list = []
         ex_dataset = []
