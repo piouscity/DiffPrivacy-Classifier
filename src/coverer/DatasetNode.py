@@ -30,6 +30,18 @@ class DatasetNode:
     def insert_represent_value(self, att, value):
         self.represent[att] = value
 
+    def statistic(self, class_list:list) -> RecordCounter:
+        counter = RecordCounter(class_list)
+        for item in self.get_all_items():
+            cls = item[CLASS_ATTRIBUTE]
+            if not (cls in counter.count):
+                logging.warn(
+                    "Classifying value %s not present in train dataset", 
+                    cls
+                    )
+            counter.record(cls)
+        return counter
+
     def is_leaf(self) -> bool:
         return not self.childs
 
@@ -51,15 +63,7 @@ class DatasetNode:
         leafs = self.get_all_leafs()
         for leaf in leafs:
             ex_item = leaf.represent.copy()
-            counter = RecordCounter(class_list)
-            for item in leaf.get_all_items():
-                cls = item[CLASS_ATTRIBUTE]
-                if not (cls in counter.count):
-                    logging.warn(
-                        "Classifying value %s not present in train dataset", 
-                        cls
-                        )
-                counter.record(cls)
+            counter = leaf.statistic(class_list)
             zero_case = True
             for cls in counter.count:
                 noise = numpy.random.laplace(scale=1/edp)
