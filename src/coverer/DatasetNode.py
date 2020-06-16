@@ -65,7 +65,6 @@ class DatasetNode:
         for leaf in leafs:
             counter = leaf.statistic(class_list)
             top_cls = max(counter.count, key=counter.count.get)
-            sum_cnt = 0
             for cls in counter.count:
                 noise = numpy.random.laplace(scale=1/edp)
                 cnt = counter.count[cls] + noise
@@ -74,11 +73,10 @@ class DatasetNode:
                 else:
                     cnt = round(cnt)
                 counter.count[cls] = cnt
-                sum_cnt += cnt
             new_top_val = max(counter.count.values())
             if counter.count[top_cls] < new_top_val:
-                sum_differ += sum_cnt
-            items += sum_cnt
+                sum_differ += 1
+            items += 1
         if items:
             sum_differ /= items
         return sum_differ
