@@ -34,7 +34,7 @@ TAXO_NODE_CHILD = "childs"
 from src.utility import information_gain, max_gain
 UTILITY_FUNCTION = max_gain
 DIGIT = 0   # Rounding
-EDP = 1
+EDP = 0.5
 STEPS = 7
 
 # Matrix release setting
