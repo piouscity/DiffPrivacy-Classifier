@@ -22,6 +22,9 @@ for i in range(MAX_STEP):
         break
     cut_set.specialize_candidate(index)
     impact = data_root.predict_noise_impact(EDP/2, cut_set.class_list)
-    print("Level {0}, noise impact is {1}".format(i+1, impact))
+    leafs = len(data_root.get_all_leafs())
+    print("Level {0}, noise impact is {1}, size of leafs is {2}".format(
+        i+1, impact, leafs
+        ))
     cut_set.determine_new_splits(None)
     cut_set.calculate_candidate_score()
