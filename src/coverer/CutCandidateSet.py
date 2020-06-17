@@ -47,10 +47,14 @@ class CutCandidateSet:
             candidate.add_data_node(root, general_count)
         self.category_count_childs()
 
-    def determine_new_splits(self, edp:float):
+    def determine_new_splits(self, edp:float) -> int:
+        affects = 0
         for candidate in self.new_float_cands:
             if (candidate.splittable) and (not candidate.split_value):
                 candidate.find_split_value(self.class_list, self.sensi, edp)
+                if candidate.splittable:
+                    affects += 1
+        return affects
 
     def category_count_childs(self):
         for candidate in self.new_category_cands:
@@ -129,7 +133,12 @@ class CutCandidateSet:
             )
 
     def transfer_candidate_values(self):
-        for candidate in chain(self.candidate_list, self.unsplittable_list):
+        for candidate in chain(
+            self.candidate_list, 
+            self.unsplittable_list,
+            self.new_category_cands,
+            self.new_float_cands
+            ):
             candidate.transfer_value()
 
     def export_mapper_set(self) -> ValueMapperSet:

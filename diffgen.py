@@ -5,7 +5,8 @@ from settings import TAXO_TREE_PATH, EDP, STEPS, TRAIN_PATH, TEST_PATH, \
     IGNORE_CHECK, LOG_LEVEL, LOG_FILE, COVERED_TRAIN_PATH, COVERED_TEST_PATH
 from src.classifier.routine import calculate_classification_accuracy, \
     calculate_lower_bound_accuracy, extract_group_dataset, print_accuracy_result
-from src.coverer.routine import generate_dp_dataset, apply_generalization
+from src.coverer.routine import generate_dp_dataset, apply_generalization, \
+    generate_dp_dataset_auto_steps
 from src.exceptions import BaseException
 from src.file_handler import import_dataset, import_taxonomy_tree, \
     export_dataset
@@ -25,7 +26,9 @@ try:
     print("Anonymizing dataset...")
     private_train_dataset, mapper_set, class_list = generate_dp_dataset(
         train_dataset, taxo_tree, EDP, STEPS
-        )
+        ) if STEPS > 0 else generate_dp_dataset_auto_steps(
+            train_dataset, taxo_tree, EDP
+            )
     private_test_dataset = apply_generalization(
         test_dataset, mapper_set, class_list, EDP/2
         )
