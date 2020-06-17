@@ -1,10 +1,8 @@
 import logging
 import traceback
-from sklearn.model_selection import train_test_split
 
-from settings import DATASET_PATH, TAXO_TREE_PATH, EDP, STEPS, \
-    IGNORE_CHECK, LOG_LEVEL, LOG_FILE, COVERED_TRAIN_PATH, COVERED_TEST_PATH, \
-    TRAIN_DATA_SIZE, TRAIN_PATH, TEST_PATH
+from settings import TAXO_TREE_PATH, EDP, STEPS, TRAIN_PATH, TEST_PATH, \
+    IGNORE_CHECK, LOG_LEVEL, LOG_FILE, COVERED_TRAIN_PATH, COVERED_TEST_PATH
 from src.classifier.routine import calculate_classification_accuracy, \
     calculate_lower_bound_accuracy, extract_group_dataset, print_accuracy_result
 from src.coverer.routine import generate_dp_dataset, apply_generalization
@@ -18,16 +16,11 @@ try:
     logging.basicConfig(filename=LOG_FILE, filemode='w',level=LOG_LEVEL)
     # Import and check
     print("Importing dataset...")
-    dataset = import_dataset(DATASET_PATH)
+    train_dataset = import_dataset(TRAIN_PATH)
+    test_dataset = import_dataset(TEST_PATH)
     taxo_tree = import_taxonomy_tree(TAXO_TREE_PATH)
     if not IGNORE_CHECK:
-        check_valid_input_data(taxo_tree, dataset)
-    # Split data
-    train_dataset, test_dataset = train_test_split(
-        dataset, train_size=TRAIN_DATA_SIZE
-        )
-    export_dataset(TRAIN_PATH, train_dataset)
-    export_dataset(TEST_PATH, test_dataset)
+        check_valid_input_data(taxo_tree, train_dataset+test_dataset)
     # Anonymize
     print("Anonymizing dataset...")
     private_train_dataset, mapper_set, class_list = generate_dp_dataset(
