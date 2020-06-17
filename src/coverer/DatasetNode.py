@@ -12,6 +12,7 @@ class DatasetNode:
         self.represent = {}
         self.childs = []
         self.counter = None
+        self.diversion = None
         if not dataset:
             self.dataset = []
         else:
@@ -62,23 +63,26 @@ class DatasetNode:
             yield item
 
     def predict_noise_impact(self, edp:float, class_list:list) -> float:
+        if self.is_leaf():
+            if self.diversion is None:
+                counter = self.statistic(class_list).count.copy()
+                top_cls = max(counter, key=counter.get)
+                for cls in counter:
+                    noise = numpy.random.laplace(scale=1/edp)
+                    cnt = counter[cls] + noise
+                    if cnt < 0:
+                        cnt = 0
+                    else:
+                        cnt = round(cnt)
+                    counter[cls] = cnt
+                new_top_val = max(counter.values())
+                self.diversion = int(counter[top_cls] < new_top_val)
+            return self.diversion
         leafs = self.get_all_leafs()
         sum_differ = 0
         items = 0
         for leaf in leafs:
-            counter = leaf.statistic(class_list)
-            top_cls = max(counter.count, key=counter.count.get)
-            for cls in counter.count:
-                noise = numpy.random.laplace(scale=1/edp)
-                cnt = counter.count[cls] + noise
-                if cnt < 0:
-                    cnt = 0
-                else:
-                    cnt = round(cnt)
-                counter.count[cls] = cnt
-            new_top_val = max(counter.count.values())
-            if counter.count[top_cls] < new_top_val:
-                sum_differ += 1
+            sum_differ += leaf.predict_noise_impact(edp, class_list)
             items += 1
         if items:
             sum_differ /= items
