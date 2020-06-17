@@ -11,7 +11,6 @@ class DatasetNode:
     def __init__(self, dataset:List[dict]=None):
         self.represent = {}
         self.childs = []
-        self.counter = None
         if not dataset:
             self.dataset = []
         else:
@@ -20,23 +19,29 @@ class DatasetNode:
 
     def insert_item(self, item:dict):
         self.dataset.append(item)
-        self.counter.record(item[CLASS_ATTRIBUTE])
 
     def insert_child(self, child_node:'DatasetNode'):
         child_node.represent.update(self.represent)
-        child_node.counter = RecordCounter(self.counter.count.keys())
         self.childs.append(child_node)
 
     def clean_up(self):
         self.dataset = []
         self.represent = {}
-        self.counter = None
 
     def insert_represent_value(self, att, value):
         self.represent[att] = value
 
-    def insert_statistic(self, counter:RecordCounter):
-        self.counter = counter
+    def statistic(self, class_list:list) -> RecordCounter:
+        counter = RecordCounter(class_list)
+        for item in self.get_all_items():
+            cls = item[CLASS_ATTRIBUTE]
+            if not (cls in counter.count):
+                logging.warn(
+                    "Classifying value %s not present in train dataset", 
+                    cls
+                    )
+            counter.record(cls)
+        return counter
 
     def is_leaf(self) -> bool:
         return not self.childs
@@ -58,18 +63,18 @@ class DatasetNode:
         sum_differ = 0
         items = 0
         for leaf in leafs:
-            counter = leaf.counter.count.copy()
-            top_cls = max(counter, key=counter.get)
-            for cls in counter:
+            counter = leaf.statistic(class_list)
+            top_cls = max(counter.count, key=counter.count.get)
+            for cls in counter.count:
                 noise = numpy.random.laplace(scale=1/edp)
-                cnt = counter[cls] + noise
+                cnt = counter.count[cls] + noise
                 if cnt < 0:
                     cnt = 0
                 else:
                     cnt = round(cnt)
-                counter[cls] = cnt
-            new_top_val = max(counter.values())
-            if counter[top_cls] < new_top_val:
+                counter.count[cls] = cnt
+            new_top_val = max(counter.count.values())
+            if counter.count[top_cls] < new_top_val:
                 sum_differ += 1
             items += 1
         if items:

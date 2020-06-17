@@ -25,7 +25,6 @@ class CutCandidateSet:
         for item in root.get_all_items():
             general_count.record(item[CLASS_ATTRIBUTE])
         self.class_list = list(general_count.count.keys())
-        root.insert_statistic(general_count)
         # Sensitivity (greater than 0)
         if UTILITY_FUNCTION == information_gain:
             if len(self.class_list) <= 1:
