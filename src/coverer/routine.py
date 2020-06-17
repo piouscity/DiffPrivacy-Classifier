@@ -11,12 +11,13 @@ from .ValueMapperSet import ValueMapperSet
 
 
 def determine_max_steps(dataset):
-    return math.log2(len(dataset))
+    return round(math.log2(len(dataset)))
 
 
 def generate_dp_dataset_auto_steps(
     dataset:List[dict], taxo_tree:dict, edp:float
     ) -> Tuple[List[dict], ValueMapperSet, list]:
+    logging.info("Running diffgen with auto steps")
     steps = determine_max_steps(dataset)
     budget = edp
     float_att_cnt = count_float_attribute(dataset)
@@ -39,6 +40,7 @@ def generate_dp_dataset_auto_steps(
         cut_set.specialize_candidate(index)
         impact = data_root.predict_noise_impact(budget, cut_set.class_list)
         if impact >= MAX_IMPACT:
+            logging.info("Specialization stops at impact %f", impact)
             break
         affects = cut_set.determine_new_splits(edp_s)
         if affects:
@@ -55,6 +57,7 @@ def generate_dp_dataset_auto_steps(
 def generate_dp_dataset(
     dataset:List[dict], taxo_tree:dict, edp:float, steps:int
     ) -> Tuple[List[dict], ValueMapperSet, list]:
+    logging.info("Running the original diffgen")
     float_att_cnt = count_float_attribute(dataset)
     edp_s = edp / 2 / (float_att_cnt + 2*steps)
     logging.debug("edp' =  %f", edp_s)
