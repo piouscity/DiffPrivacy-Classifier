@@ -11,6 +11,7 @@ class DatasetNode:
     def __init__(self, dataset:List[dict]=None):
         self.represent = {}
         self.childs = []
+        self.counter = None
         if not dataset:
             self.dataset = []
         else:
@@ -27,21 +28,23 @@ class DatasetNode:
     def clean_up(self):
         self.dataset = []
         self.represent = {}
+        self.counter = None
 
     def insert_represent_value(self, att, value):
         self.represent[att] = value
 
     def statistic(self, class_list:list) -> RecordCounter:
-        counter = RecordCounter(class_list)
-        for item in self.get_all_items():
-            cls = item[CLASS_ATTRIBUTE]
-            if not (cls in counter.count):
-                logging.warn(
-                    "Classifying value %s not present in train dataset", 
-                    cls
-                    )
-            counter.record(cls)
-        return counter
+        if self.counter is None:
+            self.counter = RecordCounter(class_list)
+            for item in self.get_all_items():
+                cls = item[CLASS_ATTRIBUTE]
+                if not (cls in self.counter.count):
+                    logging.warn(
+                        "Classifying value %s not present in train dataset", 
+                        cls
+                        )
+                self.counter.record(cls)
+        return self.counter
 
     def is_leaf(self) -> bool:
         return not self.childs
