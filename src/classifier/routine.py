@@ -1,12 +1,16 @@
 from typing import List
 
-from settings import CLASS_ATTRIBUTE
+from settings import CLASS_ATTRIBUTE, CLASS_COUNTER
 from src.utility import RecordCounter
 from .C45 import C45
 
 
 def extract_group_dataset(dataset:List[dict]) -> List[dict]:
     attributes = list(dataset[0].keys())
+    if CLASS_ATTRIBUTE in attributes:
+        for row in dataset:
+            row[CLASS_COUNTER] = 1
+        return dataset
     class_values = []
     append_attributes = []
     for item in attributes:
@@ -21,9 +25,11 @@ def extract_group_dataset(dataset:List[dict]) -> List[dict]:
             for attribute in append_attributes
         }
         for class_value in class_values:
-            new_item = item_common_part.copy()
-            new_item[CLASS_ATTRIBUTE] = class_value
-            for i in range(item[CLASS_ATTRIBUTE + ':' + class_value]):
+            cls_counter = item[CLASS_ATTRIBUTE + ':' + class_value]
+            if cls_counter > 0:
+                new_item = item_common_part.copy()
+                new_item[CLASS_ATTRIBUTE] = class_value
+                new_item[CLASS_COUNTER] = cls_counter
                 trans_data.append(new_item)
     return trans_data
 
@@ -33,12 +39,13 @@ def calculate_classification_accuracy(
     ) -> float:
     model = C45(train_dataset)
     model.generate_decision_tree()
-    test_records = len(test_dataset)
+    test_records = 0
     accurate_records = 0
     for item in test_dataset:
+        test_records += item[CLASS_COUNTER]
         prediction = model.get_prediction(item)
         if prediction == item[CLASS_ATTRIBUTE]:
-            accurate_records += 1
+            accurate_records += item[CLASS_COUNTER]
     return accurate_records / test_records
 
 
@@ -47,13 +54,14 @@ def calculate_lower_bound_accuracy(
     ) -> float:
     counter = RecordCounter()
     for item in train_dataset:
-        counter.record(item[CLASS_ATTRIBUTE])
+        counter.record(item[CLASS_ATTRIBUTE], item[CLASS_COUNTER])
     decision = counter.get_most_frequent_class()
-    test_records = len(test_dataset)
+    test_records = 0
     accurate_records = 0
     for item in test_dataset:
+        test_records += item[CLASS_COUNTER]
         if item[CLASS_ATTRIBUTE] == decision:
-            accurate_records += 1
+            accurate_records += item[CLASS_COUNTER]
     return accurate_records / test_records
 
 

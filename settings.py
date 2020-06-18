@@ -20,6 +20,7 @@ COVERED_MATRIX_PATH = "data/export/covered-matrix.csv"
 
 # Dataset setting
 CLASS_ATTRIBUTE = "class"
+CLASS_COUNTER = "class_counter"
 MISSING_VALUE = "?"
 TRAIN_DATA_SIZE = 0.67
 
