@@ -219,9 +219,10 @@ def get_most_frequent_decision(dataset):
 def check_decision(dataset):
     # check if the most frequent decision / total records >= PRUNING_RATE
     counter = RecordCounter()
+    total_records = 0
     for item in dataset:
+        total_records += item[CLASS_COUNTER]
         counter.record(item[CLASS_ATTRIBUTE], item[CLASS_COUNTER])
-    total_records = len(dataset)
     for key, value in counter.count.items():
         if value / total_records >= PRUNING_RATE:
             return key
