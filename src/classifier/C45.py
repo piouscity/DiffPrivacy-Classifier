@@ -1,7 +1,7 @@
 import logging
 from typing import List
 
-from settings import CLASS_ATTRIBUTE, PRUNING_RATE
+from settings import CLASS_ATTRIBUTE, CLASS_COUNTER, PRUNING_RATE
 from src.utility import RecordCounter, information_gain
 
 
@@ -19,6 +19,7 @@ class C45:
         self.data = dataset
         self.attributes = list(dataset[0].keys())
         self.attributes.remove(CLASS_ATTRIBUTE)
+        self.attributes.remove(CLASS_COUNTER)
         self.attr_values = {
             attribute: set()
             for attribute in self.attributes
@@ -27,7 +28,8 @@ class C45:
         self.counter = None
         for row in dataset:
             for key, value in row.items():
-                if not isinstance(value, float) and key != CLASS_ATTRIBUTE:
+                if not isinstance(value, float) and key != CLASS_ATTRIBUTE \
+                        and key != CLASS_COUNTER:
                     self.attr_values[key].add(value)
         for attr in self.attributes:
             self.attr_values[attr] = list(self.attr_values[attr])
@@ -51,7 +53,7 @@ class C45:
                 cur_dataset = sorted(cur_dataset, key=lambda k: k[attribute])
                 counter = RecordCounter()
                 for item in cur_dataset:
-                    counter.record(item[CLASS_ATTRIBUTE])
+                    counter.record(item[CLASS_ATTRIBUTE], item[CLASS_COUNTER])
                 less_equal_counter = RecordCounter(list(counter.count.keys()))
                 index = 0
                 while index < len(cur_dataset)-1:
@@ -59,7 +61,8 @@ class C45:
                     while index < len(cur_dataset) \
                         and cur_dataset[index][attribute] == split_value:
                         less_equal_counter.record(
-                            cur_dataset[index][CLASS_ATTRIBUTE]
+                            cur_dataset[index][CLASS_ATTRIBUTE],
+                            cur_dataset[index][CLASS_COUNTER]
                             )
                         index += 1
                     if index < len(cur_dataset):
@@ -70,7 +73,7 @@ class C45:
                                 'left': less_equal_counter, 
                                 'right': greater_counter
                             }
-                            )
+                        )
                         if infogain_attr > best_infogain:
                             best_infogain = infogain_attr
                             selected_attr = attribute
@@ -163,8 +166,9 @@ class C45:
         }
         for item in dataset:
             cls = item[CLASS_ATTRIBUTE]
-            value_counter.record(cls)
-            child_counter[item[attribute]].record(cls)
+            cls_count = item[CLASS_COUNTER]
+            value_counter.record(cls, cls_count)
+            child_counter[item[attribute]].record(cls, cls_count)
             for i in range(len(self.attr_values[attribute])):
                 if item[attribute] == self.attr_values[attribute][i]:
                     sub_data[i].append(item)
@@ -207,7 +211,7 @@ def same_numeric_attribute_value(cur_dataset, attribute):
 def get_most_frequent_decision(dataset):
     counter = RecordCounter()
     for item in dataset:
-        counter.record(item[CLASS_ATTRIBUTE])
+        counter.record(item[CLASS_ATTRIBUTE], item[CLASS_COUNTER])
     most_frequent_class = counter.get_most_frequent_class()
     return most_frequent_class
 
@@ -216,7 +220,7 @@ def check_decision(dataset):
     # check if the most frequent decision / total records >= PRUNING_RATE
     counter = RecordCounter()
     for item in dataset:
-        counter.record(item[CLASS_ATTRIBUTE])
+        counter.record(item[CLASS_ATTRIBUTE], item[CLASS_COUNTER])
     total_records = len(dataset)
     for key, value in counter.count.items():
         if value / total_records >= PRUNING_RATE:

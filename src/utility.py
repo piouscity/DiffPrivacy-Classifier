@@ -14,13 +14,13 @@ class RecordCounter:
         else:
             self.count = {}
     
-    def record(self, cls):
+    def record(self, cls, cnt=1):
         assert not (cls is None)
-        self.count_all += 1
+        self.count_all += cnt
         if cls in self.count:
-            self.count[cls] += 1
+            self.count[cls] += cnt
         else:
-            self.count[cls] = 1
+            self.count[cls] = cnt
 
     def get_most_frequent_class(self):
         result = None

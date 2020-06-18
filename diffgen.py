@@ -41,7 +41,8 @@ try:
     # Classify
     print("Classifying and calculating...")
     raw_accuracy = calculate_classification_accuracy(
-        train_dataset, test_dataset
+        extract_group_dataset(train_dataset),
+        extract_group_dataset(test_dataset)
         )
     anonymized_accuracy = calculate_classification_accuracy(
         extract_group_dataset(private_train_dataset),

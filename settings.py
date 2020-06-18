@@ -20,6 +20,7 @@ COVERED_MATRIX_PATH = "data/export/covered-matrix.csv"
 
 # Dataset setting
 CLASS_ATTRIBUTE = "class"
+CLASS_COUNTER = "class_counter"
 MISSING_VALUE = "?"
 TRAIN_DATA_SIZE = 0.8
 
@@ -34,7 +35,7 @@ TAXO_NODE_CHILD = "childs"
 from src.utility import information_gain, max_gain
 UTILITY_FUNCTION = information_gain
 DIGIT = 0   # Rounding
-EDP = 4
+EDP = 0.1
 STEPS = 16
 
 # Matrix release setting
