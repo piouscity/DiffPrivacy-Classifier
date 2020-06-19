@@ -3,7 +3,7 @@ import math
 import numpy
 from typing import List, Tuple
 
-from settings import ALPHA, MIN_ENSURE, LOG_NOISE_ROW, MAX_IMPACT, JUMP
+from settings import ALPHA, MIN_ENSURE, LOG_NOISE_ROW, JUMP
 from src.validator import count_float_attribute
 from .CutCandidateSet import CutCandidateSet
 from .DatasetNode import DatasetNode
