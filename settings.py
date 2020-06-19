@@ -38,7 +38,7 @@ DIGIT = 0   # Rounding
 EDP = 0.5
 STEPS = 0   # Set STEPS=0 for auto-steps
 JUMP = 4    # Only affects auto-steps
-SEED = 1/20 # Only affects auto-steps
+SEED = 1/80 # Only affects auto-steps
 
 # Matrix release setting
 SAMPLES = 2000

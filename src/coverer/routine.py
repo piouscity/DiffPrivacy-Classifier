@@ -12,7 +12,7 @@ from .ValueMapperSet import ValueMapperSet
 
 def determine_max_steps(dataset, edp, full_budget):
     len_data = round(len(dataset) + numpy.random.laplace(scale=1/edp))
-    return round(math.log(len_data*full_budget/4/math.sqrt(2)))
+    return round(math.log(len_data*full_budget/8/math.sqrt(2)))
 
 
 def generate_dp_dataset_auto_steps(

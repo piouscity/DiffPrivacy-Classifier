@@ -65,7 +65,7 @@ class DatasetNode:
     def noise_missed(self, sd:float, class_list:list) -> bool:
         counter = self.statistic(class_list)
         vals = counter.count.values()
-        return max(vals) - min(vals) <= sd
+        return max(vals) - min(vals) <= sd * 2
 
     def should_stop(self, edp:float, sd:float, class_list:list) -> bool:
         leafs = self.get_all_leafs()
