@@ -42,6 +42,7 @@ def generate_dp_dataset_auto_steps(
             if data_root.should_stop(
                 edp_s, math.sqrt(2)/budget, cut_set.class_list
                 ):
+                logging.info("Specialization stop at step %d", i+1)
                 break
         affects = cut_set.determine_new_splits(edp_s)
         if affects:
