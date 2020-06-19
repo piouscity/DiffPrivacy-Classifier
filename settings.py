@@ -10,8 +10,8 @@ LOG_NOISE_ROW = 5
 # File paths
 DATASET_PATH = "data/ds/adult-full.csv"
 TAXO_TREE_PATH = "data/taxos/adult-full.json"
-TRAIN_PATH = "data/export/adult-train.csv"
-TEST_PATH = "data/export/adult-test.csv"
+TRAIN_PATH = "data/ds/adult-train-sample.csv"
+TEST_PATH = "data/ds/adult-test-sample.csv"
 COVERED_TRAIN_PATH = "data/export/covered-adult-train.csv"
 COVERED_TEST_PATH = "data/export/covered-adult-test.csv"
 
