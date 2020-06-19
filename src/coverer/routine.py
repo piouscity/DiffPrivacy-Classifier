@@ -3,7 +3,7 @@ import math
 import numpy
 from typing import List, Tuple
 
-from settings import ALPHA, MIN_ENSURE, LOG_NOISE_ROW, MAX_IMPACT
+from settings import ALPHA, MIN_ENSURE, LOG_NOISE_ROW, MAX_IMPACT, JUMP
 from src.validator import count_float_attribute
 from .CutCandidateSet import CutCandidateSet
 from .DatasetNode import DatasetNode
@@ -18,16 +18,15 @@ def generate_dp_dataset_auto_steps(
     dataset:List[dict], taxo_tree:dict, edp:float
     ) -> Tuple[List[dict], ValueMapperSet, list]:
     logging.info("Running diffgen with auto steps")
-    steps = determine_max_steps(dataset)
+    steps = determine_max_steps(dataset)    # TODO: privacy-budget consuming
     budget = edp
     float_att_cnt = count_float_attribute(dataset)
-    edp_s = edp / 2 / (float_att_cnt + 2*steps)
+    edp_s = edp / 2 / (float_att_cnt + 2*steps + (steps-1)//JUMP)
     logging.debug("edp' =  %f", edp_s)
     data_root = DatasetNode(dataset)
     cut_set = CutCandidateSet(taxo_tree, data_root)
-    affects = cut_set.determine_new_splits(edp_s)
-    logging.debug("Determine the split of %d fields", affects)
-    budget -= edp_s * affects
+    cut_set.determine_new_splits(edp_s)
+    budget -= edp_s * float_att_cnt
     cut_set.calculate_candidate_score()
     for i in range(steps):
         logging.debug("Specializing, step %d", i+1)
@@ -38,10 +37,12 @@ def generate_dp_dataset_auto_steps(
             break
         logging.info("Chosen candidate index: %d", index)
         cut_set.specialize_candidate(index)
-        impact = data_root.predict_noise_impact(budget, cut_set.class_list)
-        if impact >= MAX_IMPACT:
-            logging.info("Specialization stops at impact %f", impact)
-            break
+        if (i+1 < steps) and ((i+1)%JUMP == 0):
+            budget -= edp_s
+            if data_root.should_stop(
+                edp_s, math.sqrt(2)/budget, cut_set.class_list
+                ):
+                break
         affects = cut_set.determine_new_splits(edp_s)
         if affects:
             budget -= edp_s

@@ -37,6 +37,7 @@ UTILITY_FUNCTION = max_gain
 DIGIT = 0   # Rounding
 EDP = 0.5
 STEPS = 7   # Set STEPS=0 for auto-steps
+JUMP = 4    # Only affects auto-steps
 MAX_IMPACT = 0.3
 
 # Matrix release setting

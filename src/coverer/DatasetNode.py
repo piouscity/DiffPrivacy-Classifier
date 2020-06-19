@@ -1,10 +1,11 @@
 import logging
 import math
 import numpy
+import random
 from typing import List, Iterator
 
 from settings import CLASS_ATTRIBUTE, LOG_NOISE_LEN
-from src.utility import RecordCounter
+from src.utility import RecordCounter, exp_mechanism
 
 
 class DatasetNode:
@@ -61,29 +62,23 @@ class DatasetNode:
         for item in self.dataset:
             yield item
 
-    def predict_noise_impact(self, edp:float, class_list:list) -> float:
-        if self.is_leaf():
-            counter = self.statistic(class_list).count.copy()
-            top_cls = max(counter, key=counter.get)
-            for cls in counter:
-                noise = numpy.random.laplace(scale=1/edp)
-                cnt = counter[cls] + noise
-                if cnt < 0:
-                    cnt = 0
-                else:
-                    cnt = round(cnt)
-                counter[cls] = cnt
-            new_top_val = max(counter.values())
-            return int(counter[top_cls] < new_top_val)
+    def noise_missed(self, sd:float, class_list:list) -> bool:
+        counter = self.statistic(class_list)
+        vals = counter.count.values()
+        return max(vals) - min(vals) <= sd
+
+    def should_stop(self, edp:float, sd:float, class_list:list) -> bool:
         leafs = self.get_all_leafs()
-        sum_differ = 0
-        items = 0
+        miss = 0
+        hit = 0
         for leaf in leafs:
-            sum_differ += leaf.predict_noise_impact(edp, class_list)
-            items += 1
-        if items:
-            sum_differ /= items
-        return sum_differ
+            if leaf.noise_missed(sd, class_list):
+                miss += 1
+            else:
+                hit += 1
+        miss = exp_mechanism(edp, 1, miss)
+        hit = exp_mechanism(edp, 1, hit)
+        return random.choices([True, False], weights=[miss, hit])[0]
 
     def export_dataset(self, edp:float, class_list:list) -> List[dict]:
         noise_list = []
