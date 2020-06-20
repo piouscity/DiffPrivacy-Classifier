@@ -3,7 +3,7 @@ import math
 import numpy
 from typing import List, Tuple
 
-from settings import ALPHA, MIN_ENSURE, LOG_NOISE_ROW, JUMP, SEED
+from settings import ALPHA, MIN_ENSURE, LOG_NOISE_ROW, JUMP, SEED, BUDGET_SPLIT
 from src.validator import count_float_attribute
 from .CutCandidateSet import CutCandidateSet
 from .DatasetNode import DatasetNode
@@ -25,7 +25,7 @@ def generate_dp_dataset_auto_steps(
     budget -= edp*SEED
     logging.info("Top steps is %d", steps)
     float_att_cnt = count_float_attribute(dataset)
-    edp_s = budget / 2 / (float_att_cnt + 2*steps + (steps-1)//JUMP)
+    edp_s = (budget - (budget*BUDGET_SPLIT)) / (float_att_cnt + 2*steps + (steps-1)//JUMP)
     logging.debug("edp' =  %f", edp_s)
     data_root = DatasetNode(dataset)
     cut_set = CutCandidateSet(taxo_tree, data_root)
@@ -53,8 +53,9 @@ def generate_dp_dataset_auto_steps(
             budget -= edp_s
         cut_set.calculate_candidate_score()
     cut_set.transfer_candidate_values()
+    logging.info("@@@@@@@@@@@@@@@    Budget left of {}: {}".format(edp, budget))
     return (
-        data_root.export_dataset(budget, cut_set.class_list),
+        data_root.export_dataset(budget * BUDGET_SPLIT, cut_set.class_list),
         cut_set.export_mapper_set(),
         cut_set.class_list
         )
