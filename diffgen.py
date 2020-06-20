@@ -1,7 +1,7 @@
 import logging
 import traceback
 
-from settings import TAXO_TREE_PATH, EDP, STEPS, BUDGET_SPLIT, TRAIN_PATH, TEST_PATH, \
+from settings import TAXO_TREE_PATH, EDP, STEPS, TRAIN_PATH, TEST_PATH, \
     IGNORE_CHECK, LOG_LEVEL, LOG_FILE, COVERED_TRAIN_PATH, COVERED_TEST_PATH
 from src.classifier.routine import calculate_classification_accuracy, \
     calculate_lower_bound_accuracy, extract_group_dataset, print_accuracy_result
@@ -30,7 +30,7 @@ try:
             train_dataset, taxo_tree, EDP
             )
     private_test_dataset = apply_generalization(
-        test_dataset, mapper_set, class_list, EDP * BUDGET_SPLIT
+        test_dataset, mapper_set, class_list, EDP
         )
     export_dataset(COVERED_TRAIN_PATH, private_train_dataset)
     export_dataset(COVERED_TEST_PATH, private_test_dataset)
