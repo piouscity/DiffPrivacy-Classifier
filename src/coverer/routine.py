@@ -12,7 +12,7 @@ from .ValueMapperSet import ValueMapperSet
 
 def determine_max_steps(dataset, edp, full_budget):
     len_data = round(len(dataset) + numpy.random.laplace(scale=1/edp))
-    return round(math.log(len_data*full_budget/8/math.sqrt(2)))
+    return round(math.log(len_data*full_budget*BUDGET_SPLIT/(2*math.sqrt(2))))
 
 
 def generate_dp_dataset_auto_steps(
@@ -55,7 +55,7 @@ def generate_dp_dataset_auto_steps(
     cut_set.transfer_candidate_values()
     logging.info("@@@@@@@@@@@@@@@    Budget left of {}: {}".format(edp, budget))
     return (
-        data_root.export_dataset(budget * BUDGET_SPLIT, cut_set.class_list),
+        data_root.export_dataset(budget, cut_set.class_list),
         cut_set.export_mapper_set(),
         cut_set.class_list
         )
