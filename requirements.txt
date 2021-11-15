@@ -1,4 +1,4 @@
-pip==19.2.3
+pip==21.1
 setuptools==41.2.0
 numpy==1.18.1
 scikit-learn==0.22.2.post1
